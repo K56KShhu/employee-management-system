@@ -13,6 +13,13 @@ public class DepartmentPo {
 
     }
 
+    public DepartmentPo(int deptId, String deptName, String deptDesc, Date builtDate) {
+        this.deptId = deptId;
+        this.deptName = deptName;
+        this.deptDesc = deptDesc;
+        this.builtDate = builtDate;
+    }
+
     public DepartmentPo(int deptId, String deptName, int deptPopulation, String deptDesc, Date builtDate) {
         this.deptId = deptId;
         this.deptName = deptName;

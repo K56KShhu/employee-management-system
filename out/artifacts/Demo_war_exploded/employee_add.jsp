@@ -65,7 +65,7 @@
         </tr>
         <tr>
             <td align="right">就职日期:</td>
-            <td><input type="text" name="date" size="30" maxlength="20" value="yyyy-MM-dd"></td>
+            <td><input type="text" name="date" size="30" maxlength="20" value="<%= new java.sql.Date(System.currentTimeMillis()) %>"></td>
         </tr>
     </table>
     <input type="submit" value="提交">

@@ -6,6 +6,7 @@ import com.zkyyo.www.po.DepartmentPo;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.List;
 
 public class DepartmentDao {
     private static volatile DepartmentDao INSTANCE = null;
@@ -22,6 +23,46 @@ public class DepartmentDao {
             }
         }
         return INSTANCE;
+    }
+
+    public boolean isAvailableId(int id) {
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
+
+        try {
+            conn = DbConn.getConn();
+            String sql = "SELECT dept_id FROM department WHERE dept_id=?";
+            pstmt = conn.prepareStatement(sql);
+            pstmt.setInt(1, id);
+            rs = pstmt.executeQuery();
+            return !rs.next();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            DbClose.close(conn, pstmt, rs);
+        }
+        return false;
+    }
+
+    public boolean isAvailableName(String name) {
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
+
+        try {
+            conn = DbConn.getConn();
+            String sql = "SELECT dept_name FROM department WHERE dept_name=?";
+            pstmt = conn.prepareStatement(sql);
+            pstmt.setString(1, name);
+            rs = pstmt.executeQuery();
+            return !rs.next();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            DbClose.close(conn, pstmt, rs);
+        }
+        return false;
     }
 
     public boolean addDepartment(DepartmentPo newDept) {
@@ -190,11 +231,11 @@ public class DepartmentDao {
         return null;
     }
 
-    public ArrayList<DepartmentPo> selectPossibleDepartmentsByDeptId(int searchedDeptId) {
+    public List<DepartmentPo> selectPossibleDepartmentsByDeptId(int searchedDeptId) {
         Connection conn = null;
         PreparedStatement pstmt = null;
         ResultSet rs = null;
-        ArrayList<DepartmentPo> depts = new ArrayList<>();
+        List<DepartmentPo> depts = new ArrayList<>();
 
         try {
             conn = DbConn.getConn();
@@ -220,11 +261,11 @@ public class DepartmentDao {
         return depts;
     }
 
-    public ArrayList<DepartmentPo> selectPossibleDepartmentByDeptName(String searcheDdeptName) {
+    public List<DepartmentPo> selectPossibleDepartmentByDeptName(String searcheDdeptName) {
         Connection conn = DbConn.getConn();
         PreparedStatement pstmt = null;
         ResultSet rs = null;
-        ArrayList<DepartmentPo> depts = new ArrayList<>();
+        List<DepartmentPo> depts = new ArrayList<>();
 
         try {
             conn = DbConn.getConn();
@@ -250,11 +291,11 @@ public class DepartmentDao {
         return depts;
     }
 
-    public ArrayList<DepartmentPo> selectDepartments() {
+    public List<DepartmentPo> selectDepartments() {
         Connection conn = null;
         Statement stmt = null;
         ResultSet rs = null;
-        ArrayList<DepartmentPo> depts = new ArrayList<>();
+        List<DepartmentPo> depts = new ArrayList<>();
 
         try {
             conn = DbConn.getConn();
@@ -288,6 +329,7 @@ public class DepartmentDao {
 
         try {
             conn = DbConn.getConn();
+            conn.setAutoCommit(false);
             //删除部门
             String sql = "DELETE FROM department WHERE dept_id=?";
             stmt = conn.prepareStatement(sql);

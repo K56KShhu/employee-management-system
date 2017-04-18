@@ -32,14 +32,16 @@ public class DepartmentAddServlet extends HttpServlet {
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.setCharacterEncoding("UTF-8");
-        String name = request.getParameter("name");
-        String departmentId = request.getParameter("departmentId");
-        String buildDate = request.getParameter("buildDate");
-        String description = request.getParameter("description");
+        String name = request.getParameter("name").trim();
+        String departmentId = request.getParameter("departmentId").trim();
+        String buildDate = request.getParameter("buildDate").trim();
+        String desc = request.getParameter("description").trim();
 
         List<String> errors = new ArrayList<>();
         DepartmentService departmentService = DepartmentService.getInstance();
-        /*
+        if (!departmentService.isValidName(name)) {
+            errors.add("部门名输入有误或已经被注册");
+        }
         if (!departmentService.isValidId(departmentId)) {
             errors.add("部门号输入有误或已经被注册");
         }
@@ -50,8 +52,8 @@ public class DepartmentAddServlet extends HttpServlet {
         if (!errors.isEmpty()) {
             request.setAttribute("errors", errors);
         } else {
-            Integer newId = departmentId.addDepartment(name, departmentId, buildDate, description);
-            if (newId == null) {
+            Integer newDeptId = departmentService.addDepartment(name, departmentId, buildDate, desc);
+            if (newDeptId == null) {
                 errors.add("数据库发生错误,无法创建部门");
                 request.setAttribute("errors", errors);
             } else {
@@ -60,7 +62,6 @@ public class DepartmentAddServlet extends HttpServlet {
         }
 
         request.getRequestDispatcher("department_add.jsp").forward(request, response);
-        */
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

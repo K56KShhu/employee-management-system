@@ -17,12 +17,14 @@
     if (status != null) {
         if (status.equals("fail")) {
             out.println("<h1>删除员工失败</h1>");
-        } else {
+        } else if (status.equals("ok")) {
             out.println("<h1>删除员工成功</h1>");
         }
     }
 %>
-<h>查询员工</h>
+<a href="${pageContext.request.contextPath}/logout.do">注销</a>
+<a href="${pageContext.request.contextPath}/functions.jsp">返回</a><br/>
+<h1>查询员工</h1>
 <form method="get" action="${pageContext.request.contextPath}/employee_find.do">
     <select name="way">
         <option value="all">查询所有</option>

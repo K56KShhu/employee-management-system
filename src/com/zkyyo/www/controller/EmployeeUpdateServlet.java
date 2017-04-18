@@ -17,58 +17,58 @@ public class EmployeeUpdateServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.setCharacterEncoding("UTF-8");
         String userId = request.getParameter("userId");
-        String name = request.getParameter("name");
-        String mobile = request.getParameter("mobile");
-        String email = request.getParameter("email");
+        String name = request.getParameter("name").trim();
+        String mobile = request.getParameter("mobile").trim();
+        String email = request.getParameter("email").trim();
         String password = request.getParameter("password");
         String confirmedPaswword = request.getParameter("confirmedPassword");
-        String departmendId = request.getParameter("departmentId");
-        String salary = request.getParameter("salary");
-        String date = request.getParameter("date");
+        String departmendId = request.getParameter("departmentId").trim();
+        String salary = request.getParameter("salary").trim();
+        String date = request.getParameter("date").trim();
 
         List<String> errors = new ArrayList<>();
         EmployeeService employeeService = EmployeeService.getInstance();
         EmployeePo updatedEp = new EmployeePo();
         updatedEp.setUserId(Integer.valueOf(userId));
-        if (name.trim().length() > 0) {
+        if (name.length() > 0) {
             if (!employeeService.isValidName(name)) {
                 errors.add("姓名输入有误");
             } else {
                 updatedEp.setUserName(name);
             }
         }
-        if (mobile.trim().length() > 0) {
+        if (mobile.length() > 0) {
             if (!employeeService.isValidMobile(mobile)) {
                 errors.add("手机号输入有误");
             } else {
                 updatedEp.setMobile(mobile);
             }
         }
-        if (email.trim().length() > 0) {
+        if (email.length() > 0) {
             if (!employeeService.isValidEmail(email)) {
                 errors.add("邮箱输入有误");
             } else {
                 updatedEp.setEmail(email);
             }
         }
-        if (password.trim().length() > 0) {
+        if (password.length() > 0) {
             if (!employeeService.isValidPassword(password, confirmedPaswword)) {
                 errors.add("第二次密码输入有误");
             } else {
                 updatedEp.setPassword(password);
             }
         }
-        if (departmendId.trim().length() > 0) {
+        if (departmendId.length() > 0) {
             updatedEp.setDeptId(Integer.valueOf(departmendId));
         }
-        if (salary.trim().length() > 0) {
+        if (salary.length() > 0) {
             if (!employeeService.isValidSalary(salary)) {
                 errors.add("薪水输入有误");
             } else {
                 updatedEp.setSalary(Double.valueOf(salary));
             }
         }
-        if (date.trim().length() > 0) {
+        if (date.length() > 0) {
             if (!employeeService.isValidDate(date)) {
                 errors.add("就职日期输入有误");
             } else {

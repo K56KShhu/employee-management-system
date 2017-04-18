@@ -1,5 +1,12 @@
 package com.zkyyo.www.service;
 
+import com.zkyyo.www.dao.DepartmentDao;
+import com.zkyyo.www.po.DepartmentPo;
+
+import java.util.Calendar;
+import java.util.GregorianCalendar;
+import java.util.List;
+import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -26,14 +33,93 @@ public class DepartmentService {
         String regex = "^[\\d]{1,10}$";
 
         if (deptId != null) {
-            deptId = deptId.trim();
             p = Pattern.compile(regex);
             m = p.matcher(deptId);
             if (m.matches()) {
-                return true;
+                DepartmentDao departmentDao = DepartmentDao.getInstance();
+                if (departmentDao.isAvailableId(Integer.valueOf(deptId))) {
+                    return true;
+                }
             }
         }
         return false;
+    }
+
+    public boolean isValidName(String name) {
+        if (name.length() > 0) {
+            DepartmentDao departmentDao = DepartmentDao.getInstance();
+            return departmentDao.isAvailableName(name);
+        } else {
+            return false;
+        }
+    }
+
+    public boolean isValidDate(String date) {
+        Pattern p = null;
+        Matcher m = null;
+        String regex = "^\\d{4}-\\d{1,2}-\\d{1,2}";
+
+        if (date != null) {
+            p = Pattern.compile(regex);
+            m = p.matcher(date);
+            if (m.matches()) {
+                String[] yearMonthDay = date.split("-");
+                int year = Integer.valueOf(yearMonthDay[0]);
+                int month = Integer.valueOf(yearMonthDay[1]);
+                int day = Integer.valueOf(yearMonthDay[2]);
+                if (month >= 1 && month <= 12) {
+                    Calendar mycal = new GregorianCalendar(year, month - 1, 1); //起始月份为0
+                    int daysInMonth = mycal.getActualMaximum(Calendar.DAY_OF_MONTH);
+                    if (day < daysInMonth) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
+    public Integer addDepartment(String name, String deptId, String buildDate, String desc) {
+        int id = Integer.valueOf(deptId);
+        java.sql.Date date = java.sql.Date.valueOf(buildDate);
+        String newStr = desc.replaceAll("(\r\n|\r|\n|\n\r)", "<br>");
+
+        DepartmentPo newDept = new DepartmentPo(id, name, newStr, date);
+        DepartmentDao departmentDao = DepartmentDao.getInstance();
+        boolean isAdded = departmentDao.addDepartment(newDept);
+        if (isAdded) {
+            return id;
+        } else {
+            return null;
+        }
+    }
+
+    public boolean deleteDepartment(int deptId) {
+        DepartmentDao departmentDao = DepartmentDao.getInstance();
+        return departmentDao.deleteDept(deptId);
+    }
+
+    public List<DepartmentPo> fuzzyFindDepartmentByDeptId(int deptId) {
+        DepartmentDao departmentDao = DepartmentDao.getInstance();
+        return departmentDao.selectPossibleDepartmentsByDeptId(deptId);
+    }
+
+    public List<DepartmentPo> fuzzyFindDepartmentByDeptName(String name) {
+        DepartmentDao departmentDao = DepartmentDao.getInstance();
+        return departmentDao.selectPossibleDepartmentByDeptName(name);
+    }
+
+    public List<DepartmentPo> findDepartments() {
+        DepartmentDao departmentDao = DepartmentDao.getInstance();
+        return departmentDao.selectDepartments();
+    }
+
+
+    public static void main(String[] args) {
+        DepartmentService departmentService = DepartmentService.getInstance();
+        do {
+            System.out.println(departmentService.isValidId(new Scanner(System.in).nextLine()));
+        } while (true);
     }
 }
 

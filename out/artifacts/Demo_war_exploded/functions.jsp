@@ -22,7 +22,7 @@
 <br/>
 <h2>部门管理</h2>
 <ul>
-    <li><a href="${pageContext.request.contextPath}/department_add.jsp">创建部门</a>"</li>
+    <li><a href="${pageContext.request.contextPath}/department_add.jsp">创建部门</a></li>
     <li><a href="${pageContext.request.contextPath}/departments.jsp">查询部门</a></li>
 </ul>
 

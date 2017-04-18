@@ -41,7 +41,6 @@ public class EmployeeService {
         String regex = "^[\\u4e00-\\u9fa5]+$|^[A-Za-z]+$";
 
         if (name != null) {
-            name = name.trim();
             p = Pattern.compile(regex);
             m = p.matcher(name);
             if (m.matches()) {
@@ -68,7 +67,6 @@ public class EmployeeService {
         String regex = "^\\d{4}-\\d{1,2}-\\d{1,2}";
 
         if (date != null) {
-            date = date.trim();
             p = Pattern.compile(regex);
             m = p.matcher(date);
             if (m.matches()) {
@@ -94,7 +92,6 @@ public class EmployeeService {
         String regex = "^[\\w.+-]+@[\\w.+-]+\\.[\\w.+-]+$";
 
         if (email != null) {
-            email = email.trim();
             p = Pattern.compile(regex);
             m = p.matcher(email);
             if (m.matches()) {
@@ -110,7 +107,6 @@ public class EmployeeService {
         String regex = "^\\d{1,13}\\.?[05]?0?$";
 
         if (salary != null) {
-            salary = salary.trim();
             p = Pattern.compile(regex);
             m = p.matcher(salary);
             if (m.matches()) {
@@ -128,7 +124,6 @@ public class EmployeeService {
         String regex = "^0{0,2}((\\+86)|(86))?1[0-9]{10}$";
 
         if (mobile != null) {
-            mobile = mobile.trim();
             p = Pattern.compile(regex);
             m = p.matcher(mobile);
             if (m.matches()) {
@@ -139,15 +134,7 @@ public class EmployeeService {
     }
 
     public Integer addEmployee(String name, String mobile, String email, String password,
-                            String departmentId, String salary, String date) {
-        name = name.trim();
-        mobile = mobile.trim();
-        email = email.trim();
-        password = password.trim();
-        departmentId = departmentId.trim();
-        salary = salary.trim();
-        date = date.trim();
-
+                               String departmentId, String salary, String date) {
         EmployeeDao employeeDao = EmployeeDao.getInstance();
         int employeeId = employeeDao.createEmployeeId();
         int deptId = Integer.valueOf(departmentId);
@@ -184,9 +171,41 @@ public class EmployeeService {
 
     public boolean updateEmployee(EmployeePo updatedEp) {
         EmployeeDao employeeDao = EmployeeDao.getInstance();
-        EmployeePo initialEp  = employeeDao.selectEmployeeByUserId(updatedEp.getUserId());
-        boolean isUpdated;
+        EmployeePo initialEp = employeeDao.selectEmployeeByUserId(updatedEp.getUserId());
+        List<Integer> updatedTypes = new ArrayList<>();
 
+        //姓名
+        if (updatedEp.getUserName() != null && !initialEp.getUserName().equals(updatedEp.getUserName())) {
+            updatedTypes.add(EmployeeDao.UPDATE_NAME);
+        }
+        //密码
+        if (updatedEp.getPassword() != null && !initialEp.getPassword().equals(updatedEp.getPassword())) {
+            updatedTypes.add(EmployeeDao.UPDATE_PASSWORD);
+        }
+        //邮箱
+        if (updatedEp.getEmail() != null && !initialEp.getEmail().equals(updatedEp.getEmail())) {
+            updatedTypes.add(EmployeeDao.UPDATE_EMAIL);
+        }
+        //手机号
+        if (updatedEp.getMobile() != null && !initialEp.getMobile().equals(updatedEp.getMobile())) {
+            updatedTypes.add(EmployeeDao.UPDATE_MOBILE);
+        }
+        //部门号
+        if (updatedEp.getDeptId() != 0 && initialEp.getDeptId() != updatedEp.getDeptId()) {
+            updatedTypes.add(EmployeeDao.UPDATE_DEPARTMENT_ID);
+        }
+        //薪水
+        if (updatedEp.getSalary() != 0.0 && initialEp.getSalary() != updatedEp.getSalary()) {
+            updatedTypes.add(EmployeeDao.UPDATE_SALARY);
+        }
+        //就职日期
+        if (updatedEp.getEmployDate() != null && !initialEp.getEmployDate().equals(updatedEp.getEmployDate())) {
+            updatedTypes.add(EmployeeDao.UPDATE_EMPLOYEE_DATE);
+        }
+
+        return employeeDao.updateEmployee(updatedTypes, updatedEp);
+
+        /*
         //姓名
         if (updatedEp.getUserName() != null && !initialEp.getUserName().equals(updatedEp.getUserName())) {
             isUpdated = employeeDao.updateEmployee(EmployeeDao.UPDATE_NAME, updatedEp);
@@ -237,6 +256,7 @@ public class EmployeeService {
             }
         }
         return true;
+        */
     }
 
     public boolean deleteEmployee(int userId) {

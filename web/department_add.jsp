@@ -33,23 +33,25 @@
 <a href="${pageContext.request.contextPath}/functions.jsp">返回</a>
 
 <h1>创建部门</h1>
-<form method="post" action="${pageContext.request.contextPath}/employee_add.do">
+<form method="post" action="${pageContext.request.contextPath}/department_add.do">
     <table border="1">
-        <tr>
-            <td align="right">部门名:</td>
-            <td><input type="text" name="name" size="30" maxlength="20"></td>
-        </tr>
         <tr>
             <td align="right">部门号:</td>
             <td><input type="text" name="departmentId" size="30" maxlength="20"></td>
         </tr>
         <tr>
+            <td align="right">部门名:</td>
+            <td><input type="text" name="name" size="30" maxlength="20"></td>
+        </tr>
+
+        <tr>
             <td align="right">创建日期:</td>
-            <td><input type="text" name="buildDate" size="30" maxlength="20" value="<%= new java.sql.Date(System.currentTimeMillis()) %>"></td>
+            <td><input type="text" name="buildDate" size="30" maxlength="20"
+                       value="<%= new java.sql.Date(System.currentTimeMillis()) %>"></td>
         </tr>
         <tr>
             <td align="right">描述:</td>
-            <td><textarea name="description" rows="10" cols="30"></textarea></td>
+            <td><textarea name="description" rows="10" cols="30" maxlength="300"></textarea></td>
         </tr>
     </table>
     <input type="submit" value="提交">

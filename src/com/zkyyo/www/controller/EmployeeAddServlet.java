@@ -31,14 +31,14 @@ public class EmployeeAddServlet extends HttpServlet {
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.setCharacterEncoding("UTF-8");
-        String name = request.getParameter("name");
-        String mobile = request.getParameter("mobile");
-        String email = request.getParameter("email");
+        String name = request.getParameter("name").trim();
+        String mobile = request.getParameter("mobile").trim();
+        String email = request.getParameter("email").trim();
         String password = request.getParameter("password");
         String confirmedPassword = request.getParameter("confirmedPassword");
-        String departmentId = request.getParameter("departmentId");
-        String salary = request.getParameter("salary");
-        String date = request.getParameter("date");
+        String departmentId = request.getParameter("departmentId").trim();
+        String salary = request.getParameter("salary").trim();
+        String date = request.getParameter("date").trim();
 
         List<String> errors = new ArrayList<>();
         EmployeeService employeeService = EmployeeService.getInstance();
@@ -64,12 +64,12 @@ public class EmployeeAddServlet extends HttpServlet {
         if (!errors.isEmpty()) {
             request.setAttribute("errors", errors);
         } else {
-            Integer newId = employeeService.addEmployee(name, mobile, email, password, departmentId, salary, date);
-            if (newId == null) {
+            Integer newUserId = employeeService.addEmployee(name, mobile, email, password, departmentId, salary, date);
+            if (newUserId == null) {
                 errors.add("数据库发生错误,无法添加新员工");
                 request.setAttribute("errors", errors);
             } else {
-                request.setAttribute("newId", newId);
+                request.setAttribute("newId", newUserId);
             }
         }
 

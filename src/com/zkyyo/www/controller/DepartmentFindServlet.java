@@ -1,6 +1,8 @@
 package com.zkyyo.www.controller;
 
+import com.zkyyo.www.po.DepartmentPo;
 import com.zkyyo.www.po.EmployeePo;
+import com.zkyyo.www.service.DepartmentService;
 import com.zkyyo.www.service.EmployeeService;
 
 import javax.servlet.ServletException;
@@ -13,17 +15,17 @@ import java.io.IOException;
 import java.util.List;
 
 @WebServlet(
-        name = "EmployeeFindServlet",
-        urlPatterns = {"/employee_find.do"},
+        name = "DepartmentFindServlet",
+        urlPatterns = {"/department_find.do"},
         initParams = {
-                @WebInitParam(name = "EMPLOYEE_VIEW", value = "employees.jsp"),
+                @WebInitParam(name = "DEPARTMENTS_VIEW", value = "departments.jsp"),
         }
 )
-public class EmployeeFindServlet extends HttpServlet {
-    private String EMPLOYEE_VIEW;
+public class DepartmentFindServlet extends HttpServlet {
+    private String DEPARTMENTS_VIEW;
 
     public void init() throws ServletException {
-        EMPLOYEE_VIEW = getServletConfig().getInitParameter("EMPLOYEE_VIEW");
+        DEPARTMENTS_VIEW = getServletConfig().getInitParameter("DEPARTMENTS_VIEW");
     }
 
 
@@ -34,28 +36,25 @@ public class EmployeeFindServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String way = request.getParameter("way");
         String info = request.getParameter("info");
-        List<EmployeePo> result = null;
-//        EmployeeService employeeService = EmployeeService.getInstance();
-        EmployeeService employeeService = (EmployeeService) getServletContext().getAttribute("employeeService");
+        List<DepartmentPo> result = null;
+        DepartmentService departmentService = DepartmentService.getInstance();
+//        EmployeeService employeeService = (EmployeeService) getServletContext().getAttribute("employeeService");
         info = info.trim();
 
         if (way.length() > 0 && info.length() > 0) {
-            if (way.equals("by_user_id")) {
-                result = employeeService.fuzzyFindEmployeeByUserId(Integer.valueOf(info));
-            }
-            if (way.equals("by_user_name")) {
-                result = employeeService.fuzzyFindEmployeeByUserName(info);
-            }
             if (way.equals("by_dept_id")) {
-                result = employeeService.findEmployeeByDeptId(Integer.valueOf(info));
+                result = departmentService.fuzzyFindDepartmentByDeptId(Integer.valueOf(info));
+            }
+            if (way.equals("by_dept_name")) {
+                result = departmentService.fuzzyFindDepartmentByDeptName(info);
             }
             if (way.equals("all")) {
-                result = employeeService.findEmployees();
+                result = departmentService.findDepartments();
             }
         } else {
-            result = employeeService.findEmployees();
+            result = departmentService.findDepartments();
         }
         request.setAttribute("result", result);
-        request.getRequestDispatcher(EMPLOYEE_VIEW).forward(request, response);
+        request.getRequestDispatcher(DEPARTMENTS_VIEW).forward(request, response);
     }
 }
