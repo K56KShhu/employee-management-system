@@ -7,25 +7,25 @@ public class DepartmentPo {
     private String deptName;
     private int deptPopulation = 0;
     private String deptDesc;
-    private Date builtDate;
+    private Date buildDate;
 
     public DepartmentPo() {
 
     }
 
-    public DepartmentPo(int deptId, String deptName, String deptDesc, Date builtDate) {
+    public DepartmentPo(int deptId, String deptName, String deptDesc, Date buildDate) {
         this.deptId = deptId;
         this.deptName = deptName;
         this.deptDesc = deptDesc;
-        this.builtDate = builtDate;
+        this.buildDate = buildDate;
     }
 
-    public DepartmentPo(int deptId, String deptName, int deptPopulation, String deptDesc, Date builtDate) {
+    public DepartmentPo(int deptId, String deptName, int deptPopulation, String deptDesc, Date buildDate) {
         this.deptId = deptId;
         this.deptName = deptName;
         this.deptPopulation = deptPopulation;
         this.deptDesc = deptDesc;
-        this.builtDate = builtDate;
+        this.buildDate = buildDate;
     }
 
     public int getDeptId() { return deptId; }
@@ -36,8 +36,8 @@ public class DepartmentPo {
     public void setDeptPopulation(int deptPopulation) { this.deptPopulation = deptPopulation; }
     public String getDeptDesc() { return deptDesc; }
     public void setDeptDesc(String deptDesc) { this.deptDesc = deptDesc; }
-    public Date getBuiltDate() { return builtDate; }
-    public void setBuiltDate(Date builtDate) { this.builtDate = builtDate; }
+    public Date getBuildDate() { return buildDate; }
+    public void setBuildDate(Date buildDate) { this.buildDate = buildDate; }
 
     @Override
     public String toString() {
@@ -46,7 +46,7 @@ public class DepartmentPo {
                 ", deptName='" + deptName + '\'' +
                 ", deptPopulation=" + deptPopulation +
                 ", deptDesc='" + deptDesc + '\'' +
-                ", builtDate=" + builtDate +
+                ", buildDate=" + buildDate +
                 '}';
     }
 }

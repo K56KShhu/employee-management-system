@@ -26,6 +26,7 @@ public class DepartmentUpdateServlet extends HttpServlet {
         DepartmentPo updateDept = new DepartmentPo();
         updateDept.setDeptId(Integer.valueOf(departmentId));
 
+        //部门名
         if (name.length() > 0) {
             if (!departmentService.isValidName(name)) {
                 errors.add("部门名输入有误或已被注册");
@@ -33,37 +34,32 @@ public class DepartmentUpdateServlet extends HttpServlet {
                 updateDept.setDeptName(name);
             }
         }
-        if (departmentId.length() > 0) {
-            if (!departmentService.isValidId(departmentId)) {
-                errors.add("部门号输入有误或已被注册");
-            } else {
-                updateDept.setDeptId(Integer.valueOf(departmentId));
-            }
-        }
+        //创建日期
         if (buildDate.length() > 0) {
             if (!departmentService.isValidDate(buildDate)) {
                 errors.add(buildDate);
             } else {
-                updateDept.setBuiltDate(java.sql.Date.valueOf(buildDate));
+                updateDept.setBuildDate(java.sql.Date.valueOf(buildDate));
             }
         }
+        //描述
         if (desc.length() > 0) {
             updateDept.setDeptDesc(desc);
         }
 
-//        if (!errors.isEmpty()) {
-//            request.setAttribute("errors", errors);
-//        } else {
-//            boolean isUpdated = departmentService.updateDepartment(updateDept);
-//            if (isUpdated) {
-//                request.setAttribute("status", "ok");
-//            } else {
-//                errors.add("数据库更新错误");
-//                request.setAttribute("errors", errors);
-//            }
-//        }
-//
-//        request.getRequestDispatcher("department_update.jsp").forward(request, response);
+        if (!errors.isEmpty()) {
+            request.setAttribute("errors", errors);
+        } else {
+            boolean isUpdated = departmentService.updateDepartment(updateDept);
+            if (isUpdated) {
+                request.setAttribute("status", "ok");
+            } else {
+                errors.add("数据库更新错误");
+                request.setAttribute("errors", errors);
+            }
+        }
+
+        request.getRequestDispatcher("department_update.jsp").forward(request, response);
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

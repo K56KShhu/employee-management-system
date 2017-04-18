@@ -3,10 +3,7 @@ package com.zkyyo.www.service;
 import com.zkyyo.www.dao.DepartmentDao;
 import com.zkyyo.www.po.DepartmentPo;
 
-import java.util.Calendar;
-import java.util.GregorianCalendar;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -112,6 +109,24 @@ public class DepartmentService {
     public List<DepartmentPo> findDepartments() {
         DepartmentDao departmentDao = DepartmentDao.getInstance();
         return departmentDao.selectDepartments();
+    }
+
+    public boolean updateDepartment(DepartmentPo updatedDept) {
+        DepartmentDao departmentDao = DepartmentDao.getInstance();
+        DepartmentPo initialDept = departmentDao.selectDepartmentByDeptId(updatedDept.getDeptId());
+        List<Integer> updatedTypes = new ArrayList<>();
+
+        if (updatedDept.getDeptName() != null && !updatedDept.getDeptName().equals(initialDept.getDeptName())) {
+            updatedTypes.add(DepartmentDao.UPDATE_NAME);
+        }
+        if (updatedDept.getBuildDate() != null && !updatedDept.getBuildDate().equals(initialDept.getBuildDate())) {
+            updatedTypes.add(DepartmentDao.UPDATE_BUILD_DATE);
+        }
+        if (updatedDept.getDeptDesc() != null && !updatedDept.getDeptDesc().equals(initialDept.getDeptDesc())) {
+            updatedTypes.add(DepartmentDao.UPDATE_DESC);
+        }
+
+        return departmentDao.updateDept(updatedTypes, updatedDept);
     }
 
 

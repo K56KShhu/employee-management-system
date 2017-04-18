@@ -9,6 +9,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DepartmentDao {
+    public static final int UPDATE_NAME = 1;
+    public static final int UPDATE_DESC = 2;
+    public static final int UPDATE_BUILD_DATE = 3;
     private static volatile DepartmentDao INSTANCE = null;
 
     private DepartmentDao() {
@@ -79,7 +82,7 @@ public class DepartmentDao {
             pstmt.setString(2, newDept.getDeptName());
             pstmt.setInt(3, newDept.getDeptPopulation());
             pstmt.setString(4, newDept.getDeptDesc());
-            pstmt.setDate(5, newDept.getBuiltDate());
+            pstmt.setDate(5, newDept.getBuildDate());
 
             int effects = pstmt.executeUpdate();
             if (effects > 0) {
@@ -359,6 +362,7 @@ public class DepartmentDao {
         return isDeleted;
     }
 
+    /*
     public boolean updateDept(int updateDeptId, int type, DepartmentPo newDept) {
         Connection conn = null;
         PreparedStatement pstmt = null;
@@ -389,7 +393,7 @@ public class DepartmentDao {
                 case 3:
                     sql = "UPDATE department SET built_date=? WHERE dept_id=?";
                     pstmt = conn.prepareStatement(sql);
-                    pstmt.setDate(1, newDept.getBuiltDate());
+                    pstmt.setDate(1, newDept.getBuildDate());
                     pstmt.setInt(2, updateDeptId);
                     effects = pstmt.executeUpdate();
                     break;
@@ -404,5 +408,52 @@ public class DepartmentDao {
         }
         return isUpdated;
     }
+    */
 
+    public boolean updateDept(List<Integer> updatedTypes, DepartmentPo updatedDept) {
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+        boolean isUpdated = false;
+
+        try {
+            conn = DbConn.getConn();
+            conn.setAutoCommit(false);
+            String sql = null;
+            for (int updatedType : updatedTypes) {
+                switch (updatedType) {
+                    //部门名
+                    case UPDATE_NAME:
+                        sql = "UPDATE department SET dept_name=? WHERE dept_id=?";
+                        pstmt = conn.prepareStatement(sql);
+                        pstmt.setString(1, updatedDept.getDeptName());
+                        pstmt.setInt(2, updatedDept.getDeptId());
+                        pstmt.executeUpdate();
+                        break;
+                    //部门描述
+                    case UPDATE_DESC:
+                        sql = "UPDATE department SET description=? WHERE dept_id=?";
+                        pstmt = conn.prepareStatement(sql);
+                        pstmt.setString(1, updatedDept.getDeptDesc());
+                        pstmt.setInt(2, updatedDept.getDeptId());
+                        pstmt.executeUpdate();
+                        break;
+                    //建立时间
+                    case UPDATE_BUILD_DATE:
+                        sql = "UPDATE department SET built_date=? WHERE dept_id=?";
+                        pstmt = conn.prepareStatement(sql);
+                        pstmt.setDate(1, updatedDept.getBuildDate());
+                        pstmt.setInt(2, updatedDept.getDeptId());
+                        pstmt.executeUpdate();
+                        break;
+                }
+            }
+            conn.commit();
+            isUpdated = true;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            DbClose.close(conn, pstmt);
+        }
+        return isUpdated;
+    }
 }

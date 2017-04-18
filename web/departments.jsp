@@ -51,7 +51,7 @@
                 out.println("<td>" + d.getDeptId() + "</td>");
                 out.println("<td>" + d.getDeptName() + "</td>");
                 out.println("<td>" + d.getDeptPopulation() + "</td>");
-                out.println("<td>" + d.getBuiltDate() + "</td>");
+                out.println("<td>" + d.getBuildDate() + "</td>");
                 out.println("<td>" + d.getDeptDesc() + "</td>");
                 out.println("<td><a href='/department_update.jsp?&deptId=" + d.getDeptId() + "'>修改</a>");
                 out.println("<td><a href='/department_delete.do?&deptId=" + d.getDeptId() + "'>删除</a>");

@@ -175,31 +175,31 @@ public class EmployeeService {
         List<Integer> updatedTypes = new ArrayList<>();
 
         //姓名
-        if (updatedEp.getUserName() != null && !initialEp.getUserName().equals(updatedEp.getUserName())) {
+        if (updatedEp.getUserName() != null && !updatedEp.getUserName().equals(initialEp.getUserName())) {
             updatedTypes.add(EmployeeDao.UPDATE_NAME);
         }
         //密码
-        if (updatedEp.getPassword() != null && !initialEp.getPassword().equals(updatedEp.getPassword())) {
+        if (updatedEp.getPassword() != null && !updatedEp.getPassword().equals(initialEp.getPassword())) {
             updatedTypes.add(EmployeeDao.UPDATE_PASSWORD);
         }
         //邮箱
-        if (updatedEp.getEmail() != null && !initialEp.getEmail().equals(updatedEp.getEmail())) {
+        if (updatedEp.getEmail() != null && !updatedEp.getEmail().equals(initialEp.getEmail())) {
             updatedTypes.add(EmployeeDao.UPDATE_EMAIL);
         }
         //手机号
-        if (updatedEp.getMobile() != null && !initialEp.getMobile().equals(updatedEp.getMobile())) {
+        if (updatedEp.getMobile() != null && !updatedEp.getMobile().equals(initialEp.getMobile())) {
             updatedTypes.add(EmployeeDao.UPDATE_MOBILE);
         }
         //部门号
-        if (updatedEp.getDeptId() != 0 && initialEp.getDeptId() != updatedEp.getDeptId()) {
+        if (updatedEp.getDeptId() != 0 && updatedEp.getDeptId() != initialEp.getDeptId()) {
             updatedTypes.add(EmployeeDao.UPDATE_DEPARTMENT_ID);
         }
         //薪水
-        if (updatedEp.getSalary() != 0.0 && initialEp.getSalary() != updatedEp.getSalary()) {
+        if (updatedEp.getSalary() != 0.0 && updatedEp.getSalary() != initialEp.getSalary()) {
             updatedTypes.add(EmployeeDao.UPDATE_SALARY);
         }
         //就职日期
-        if (updatedEp.getEmployDate() != null && !initialEp.getEmployDate().equals(updatedEp.getEmployDate())) {
+        if (updatedEp.getEmployDate() != null && !updatedEp.getEmployDate().equals(initialEp.getEmployDate())) {
             updatedTypes.add(EmployeeDao.UPDATE_EMPLOYEE_DATE);
         }
 
