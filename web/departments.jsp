@@ -8,8 +8,8 @@
 <body>
 
 <%
-    Integer employeeId = (Integer) request.getSession().getAttribute("login");
-    if (employeeId == null) {
+    Integer userId = (Integer) request.getSession().getAttribute("login");
+    if (userId == null) {
         response.sendRedirect("index.jsp");
         return;
     }
@@ -36,6 +36,10 @@
 </form>
 
 <table border="1">
+    <%
+        List<DepartmentPo> result = (List<DepartmentPo>) request.getAttribute("result");
+        if (result != null) {
+    %>
     <tr>
         <td>部门号</td>
         <td>部门名</td>
@@ -44,18 +48,24 @@
         <td>描述</td>
     </tr>
     <%
-        List<DepartmentPo> result = (List<DepartmentPo>) request.getAttribute("result");
-        if (result != null) {
-            for (DepartmentPo d : result) {
-                out.println("<tr>");
-                out.println("<td>" + d.getDeptId() + "</td>");
-                out.println("<td>" + d.getDeptName() + "</td>");
-                out.println("<td>" + d.getDeptPopulation() + "</td>");
-                out.println("<td>" + d.getBuildDate() + "</td>");
-                out.println("<td>" + d.getDeptDesc() + "</td>");
-                out.println("<td><a href='/department_update.jsp?&deptId=" + d.getDeptId() + "'>修改</a>");
-                out.println("<td><a href='/department_delete.do?&deptId=" + d.getDeptId() + "'>删除</a>");
-                out.println("</tr>");
+        for (DepartmentPo d : result) {
+    %>
+    <tr>
+        <td><%= d.getDeptId() %>
+        </td>
+        <td><%= d.getDeptName() %>
+        </td>
+        <td><%= d.getDeptPopulation() %>
+        </td>
+        <td><%= d.getBuildDate() %>
+        </td>
+        <td><%= d.getDeptDesc() %>
+        </td>
+        <td><a href="/department_detail.do?&deptId=<%= d.getDeptId() %>">详细</a></td>
+        <td><a href="/department_update.jsp?&deptId=<%= d.getDeptId() %>">修改</a></td>
+        <td><a href="/department_delete.do?&deptId=<%= d.getDeptId() %>">删除</a></td>
+    </tr>
+    <%
             }
         }
     %>

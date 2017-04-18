@@ -8,8 +8,8 @@
 <body>
 
 <%
-    Integer employeeId = (Integer) request.getSession().getAttribute("login");
-    if (employeeId == null) {
+    Integer userId = (Integer) request.getSession().getAttribute("login");
+    if (userId == null) {
         response.sendRedirect("index.jsp");
         return;
     }
@@ -37,6 +37,10 @@
 </form>
 
 <table border="1">
+    <%
+        List<EmployeePo> result = (List<EmployeePo>) request.getAttribute("result");
+        if (result != null) {
+    %>
     <tr>
         <td>员工号</td>
         <td>姓名</td>
@@ -47,24 +51,31 @@
         <td>邮箱</td>
     </tr>
     <%
-        List<EmployeePo> result = (List<EmployeePo>) request.getAttribute("result");
-        if (result != null) {
-            for (EmployeePo e : result) {
-                out.println("<tr>");
-                out.println("<td>" + e.getUserId() + "</td>");
-                out.println("<td>" + e.getUserName() + "</td>");
-                out.println("<td>" + e.getDeptId() + "</td>");
-                out.println("<td>" + e.getSalary() + "</td>");
-                out.println("<td>" + e.getEmployDate() + "</td>");
-                out.println("<td>" + e.getMobile() + "</td>");
-                out.println("<td>" + e.getEmail() + "</td>");
-                out.println("<td><a href='/employee_update.jsp?&userId=" + e.getUserId() + "'>修改</a>");
-                out.println("<td><a href='/employee_delete.do?&userId=" + e.getUserId() + "'>删除</a>");
-                out.println("</tr>");
+        for (EmployeePo e : result) {
+    %>
+
+    <tr>
+        <td><%= e.getUserId() %>
+        </td>
+        <td><%= e.getUserName() %>
+        </td>
+        <td><a href="/department_detail.do?&deptId=<%= e.getDeptId() %>"><%= e.getDeptId() %></a></td>
+        <td><%= e.getSalary() %>
+        </td>
+        <td><%= e.getEmployDate() %>
+        </td>
+        <td><%= e.getMobile() %>
+        </td>
+        <td><%= e.getEmail() %>
+        </td>
+        <td><a href="/employee_evaluate.jsp?&beEvaluatedId=<%= e.getUserId() %>">评价</a></td>
+        <td><a href="/employee_update.jsp?&userId=<%= e.getUserId() %>">修改</a></td>
+        <td><a href="/employee_delete.do?&userId=<%= e.getUserId() %>">删除</a></td>
+    </tr>
+    <%
             }
         }
     %>
 </table>
-
 </body>
 </html>

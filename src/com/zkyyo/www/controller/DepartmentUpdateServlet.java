@@ -17,7 +17,7 @@ public class DepartmentUpdateServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.setCharacterEncoding("UTF-8");
         String name = request.getParameter("name").trim();
-        String departmentId = request.getParameter("departmentId").trim();
+        String departmentId = request.getParameter("deptId").trim();
         String buildDate = request.getParameter("buildDate").trim();
         String desc = request.getParameter("description").trim();
 

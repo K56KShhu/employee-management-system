@@ -6,8 +6,8 @@
 </head>
 <body>
 <%
-    Integer employeeId = (Integer) request.getSession().getAttribute("login");
-    if (employeeId == null) {
+    Integer userId = (Integer) request.getSession().getAttribute("login");
+    if (userId == null) {
         response.sendRedirect("index.jsp");
         return;
     }

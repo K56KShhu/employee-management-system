@@ -6,8 +6,8 @@
 <body>
 
 <%
-    Integer employeeId = (Integer) request.getSession().getAttribute("login");
-    if (employeeId == null) {
+    Integer userId = (Integer) request.getSession().getAttribute("login");
+    if (userId == null) {
         response.sendRedirect("index.jsp");
         return;
     }
@@ -25,7 +25,6 @@
     <li><a href="${pageContext.request.contextPath}/department_add.jsp">创建部门</a></li>
     <li><a href="${pageContext.request.contextPath}/departments.jsp">查询部门</a></li>
 </ul>
-
 <h2>评价管理</h2>
 
 </body>

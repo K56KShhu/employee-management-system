@@ -111,6 +111,11 @@ public class DepartmentService {
         return departmentDao.selectDepartments();
     }
 
+    public DepartmentPo findDepartment(int deptId) {
+        DepartmentDao departmentDao = DepartmentDao.getInstance();
+        return departmentDao.selectDepartmentByDeptId(deptId);
+    }
+
     public boolean updateDepartment(DepartmentPo updatedDept) {
         DepartmentDao departmentDao = DepartmentDao.getInstance();
         DepartmentPo initialDept = departmentDao.selectDepartmentByDeptId(updatedDept.getDeptId());

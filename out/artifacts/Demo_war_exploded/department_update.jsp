@@ -6,8 +6,8 @@
 </head>
 <body>
 <%
-    Integer employeeId = (Integer) request.getSession().getAttribute("login");
-    if (employeeId == null) {
+    Integer userId = (Integer) request.getSession().getAttribute("login");
+    if (userId == null) {
         response.sendRedirect("index.jsp");
         return;
     }
@@ -44,7 +44,7 @@
         </tr>
         <tr>
             <td align="right">创建日期:</td>
-            <td><input type="text" name="buildDate" size="30" maxlength="20">"></td>
+            <td><input type="text" name="buildDate" size="30" maxlength="20"></td>
         </tr>
         <tr>
             <td align="right">描述:</td>
