@@ -45,7 +45,7 @@ public class DepartmentService {
     public boolean isValidName(String name) {
         if (name.length() > 0) {
             DepartmentDao departmentDao = DepartmentDao.getInstance();
-            return departmentDao.isAvailableName(name);
+            return departmentDao.isNameExisted(name);
         } else {
             return false;
         }

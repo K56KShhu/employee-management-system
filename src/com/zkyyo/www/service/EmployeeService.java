@@ -35,6 +35,27 @@ public class EmployeeService {
         return false;
     }
 
+    public boolean isValidId(String id) {
+        Pattern p = null;
+        Matcher m = null;
+        String regex = "^\\d{1,10}$";
+
+        if (id != null) {
+            p = Pattern.compile(regex);
+            m = p.matcher(id);
+            if (m.matches()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean isUserExisted(int id) {
+        EmployeeDao employeeDao = EmployeeDao.getInstance();
+        EmployeePo foundEp = employeeDao.selectEmployeeByUserId(id);
+        return foundEp != null;
+    }
+
     public boolean isValidName(String name) {
         Pattern p = null;
         Matcher m = null;

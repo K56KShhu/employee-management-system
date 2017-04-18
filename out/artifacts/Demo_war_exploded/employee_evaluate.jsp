@@ -1,3 +1,4 @@
+<%@ page import="java.util.List" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
@@ -11,14 +12,29 @@
         return;
     }
     String beEvaluatedId = request.getParameter("beEvaluatedId");
+    List<String> errors = (List<String>) request.getAttribute("errors");
+    if (errors != null) {
+        out.println("<h1>错误信息如下<h1>");
+        out.println("<ul>");
+        for (String error : errors) {
+            out.println("<li>" + error + "</li>");
+        }
+        out.println("</ul>");
+    }
+    String status = (String) request.getAttribute("status");
+    if (status != null) {
+        if (status.equals("ok")) {
+            out.println("<h1>评价失败</h1>");
+        }
+    }
 %>
 
 <h1>评价员工</h1>
-<form method="get" action="employee_evaluate.do">
+<form method="post" action="employee_evaluate.do">
     <table border="1">
         <tr>
             <td>评价内容(300字以内):</td>
-            <td><textarea name="evaluation" rows="10" cols="30" maxlength="300"></textarea></td>
+            <td><textarea name="comment" rows="10" cols="30" maxlength="300"></textarea></td>
         </tr>
     </table>
     评价等级(1-10):

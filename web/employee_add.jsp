@@ -15,7 +15,7 @@
     }
     List<String> errors = (List<String>) request.getAttribute("errors");
     if (errors != null) {
-        out.println("<h1>错误信息如下<h1>");
+        out.println("<h1>错误信息如下</h1>");
         out.println("<ul>");
         for (String error : errors) {
             out.println("<li>" + error + "</li>");
@@ -24,7 +24,7 @@
     }
     Integer newId = (Integer) request.getAttribute("newId");
     if (newId != null) {
-        out.println("<h1>添加员工成功<h1><br/>");
+        out.println("<h1>添加员工成功</h1><br/>");
         out.println("<p>新员工号为: " + newId + "<p><br/>");
     }
 %>

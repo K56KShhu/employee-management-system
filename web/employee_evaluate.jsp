@@ -1,3 +1,4 @@
+<%@ page import="java.util.List" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
@@ -11,6 +12,21 @@
         return;
     }
     String beEvaluatedId = request.getParameter("beEvaluatedId");
+    List<String> errors = (List<String>) request.getAttribute("errors");
+    if (errors != null) {
+        out.println("<h1>错误信息如下<h1>");
+        out.println("<ul>");
+        for (String error : errors) {
+            out.println("<li>" + error + "</li>");
+        }
+        out.println("</ul>");
+    }
+    String status = (String) request.getAttribute("status");
+    if (status != null) {
+        if (status.equals("ok")) {
+            out.println("<h1>评价成功</h1>");
+        }
+    }
 %>
 
 <h1>评价员工</h1>

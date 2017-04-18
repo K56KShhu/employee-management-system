@@ -48,7 +48,7 @@ public class DepartmentDao {
         return false;
     }
 
-    public boolean isAvailableName(String name) {
+    public boolean isNameExisted(String name) {
         Connection conn = null;
         PreparedStatement pstmt = null;
         ResultSet rs = null;
