@@ -24,13 +24,13 @@
     String status = (String) request.getAttribute("status");
     if (status != null) {
         if (status.equals("ok")) {
-            out.println("<h1>评价失败</h1>");
+            out.println("<h1>评价成功</h1>");
         }
     }
 %>
 
 <h1>评价员工</h1>
-<form method="post" action="employee_evaluate.do">
+<form method="post" action="/evaluation_add.do">
     <table border="1">
         <tr>
             <td>评价内容(300字以内):</td>

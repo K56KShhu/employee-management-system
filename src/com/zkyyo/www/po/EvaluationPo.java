@@ -1,5 +1,7 @@
 package com.zkyyo.www.po;
 
+import java.sql.Timestamp;
+
 public class EvaluationPo {
     private int evaluationId;
     private int beEvaluatedId;

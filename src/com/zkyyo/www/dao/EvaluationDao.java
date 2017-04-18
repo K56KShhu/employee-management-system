@@ -5,6 +5,8 @@ import com.zkyyo.www.db.DbConn;
 import com.zkyyo.www.po.EvaluationPo;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -48,29 +50,25 @@ public class EvaluationDao {
         return isAdded;
     }
 
-    public Map<Integer, EvaluationPo> selectEvaluationMapByEvaluatorId(int evaluatorId) {
+    public List<EvaluationPo> selectSendedEvaluations(int userId) {
         Connection conn = null;
         PreparedStatement pstmt = null;
         ResultSet rs = null;
-        Map<Integer, EvaluationPo> evals = new TreeMap<>();
+        List<EvaluationPo> evals = new ArrayList<>();
 
         try {
             conn = DbConn.getConn();
             String sql = "SELECT * FROM evaluation WHERE evaluator_id=?";
             pstmt = conn.prepareStatement(sql);
-            pstmt.setInt(1, evaluatorId);
+            pstmt.setInt(1, userId);
             rs = pstmt.executeQuery();
 
-            int index = 1;
             while (rs.next()) {
                 int evaluationId = rs.getInt("test_evaluation_id");
                 int beEvaluatedId = rs.getInt("be_evaluated_id");
                 int starLevel = rs.getInt("star_level");
                 String comment = rs.getString("comment");
-
-                EvaluationPo eval = new EvaluationPo(evaluationId, evaluatorId, beEvaluatedId, starLevel, comment);
-                evals.put(index, eval);
-                index++;
+                evals.add(new EvaluationPo(evaluationId, userId, beEvaluatedId, starLevel, comment));
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -80,29 +78,25 @@ public class EvaluationDao {
         return evals;
     }
 
-    public Map<Integer, EvaluationPo> selectEvaluationMapByBeEvaluatedId(int beEvaluatedId) {
+    public List<EvaluationPo> selectReceivedEvaluations(int userId) {
         Connection conn = null;
         PreparedStatement pstmt = null;
         ResultSet rs = null;
-        Map<Integer, EvaluationPo> evals = new TreeMap<>();
+        List<EvaluationPo> evals = new ArrayList<>();
 
         try {
             conn = DbConn.getConn();
             String sql = "SELECT * FROM evaluation WHERE be_evaluated_id=?";
             pstmt = conn.prepareStatement(sql);
-            pstmt.setInt(1, beEvaluatedId);
+            pstmt.setInt(1, userId);
             rs = pstmt.executeQuery();
 
-            int index = 1;
             while (rs.next()) {
                 int evaluationId = rs.getInt("test_evaluation_id");
                 int evaluatorId = rs.getInt("evaluator_id");
                 int starLevel = rs.getInt("star_level");
                 String comment = rs.getString("comment");
-
-                EvaluationPo eval = new EvaluationPo(evaluationId, evaluatorId, beEvaluatedId, starLevel, comment);
-                evals.put(index, eval);
-                index++;
+                evals.add(new EvaluationPo(evaluationId, evaluatorId, userId, starLevel, comment));
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -112,29 +106,25 @@ public class EvaluationDao {
         return evals;
     }
 
-    public Map<Integer, EvaluationPo> selectEvaluationMap() {
-        Map<Integer, EvaluationPo> evals = new TreeMap<>();
-        Connection conn = DbConn.getConn();
+    public List<EvaluationPo> selectEvaluations() {
+        Connection conn = null;
         Statement stmt = null;
         ResultSet rs = null;
+        List<EvaluationPo> evals = new ArrayList<>();
 
         try {
             conn = DbConn.getConn();
             String sql = "SELECT * FROM evaluation";
             stmt = conn.createStatement();
             rs = stmt.executeQuery(sql);
-
-            int index = 1;
             while (rs.next()) {
+                //将数据库中的主键作为评价的唯一标识id
                 int evaluationId = rs.getInt("test_evaluation_id");
                 int beEvaluatedId = rs.getInt("be_evaluated_id");
                 int evaluatorId = rs.getInt("evaluator_id");
                 int starLevel = rs.getInt("star_level");
                 String comment = rs.getString("comment");
-
-                EvaluationPo eval = new EvaluationPo(evaluationId, evaluatorId, beEvaluatedId, starLevel, comment);
-                evals.put(index, eval);
-                index++;
+                evals.add(new EvaluationPo(evaluationId, evaluatorId, beEvaluatedId, starLevel, comment));
             }
         } catch (SQLException e) {
             e.printStackTrace();

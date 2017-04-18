@@ -13,11 +13,11 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-@WebServlet("/employee_evaluate.do")
-public class EmployeeEvaluateServlet extends HttpServlet {
+@WebServlet("/evaluation_add.do")
+public class EvaluationAddServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        request.setCharacterEncoding("UTF-8");
         int userId = (Integer) request.getSession().getAttribute("login");
-
         String evaluatorId = request.getParameter("evaluatorId").trim();
         String beEvaluatedId = request.getParameter("beEvaluatedId").trim();
         String stars = request.getParameter("stars").trim();
@@ -50,7 +50,7 @@ public class EmployeeEvaluateServlet extends HttpServlet {
             }
         }
 
-        request.getRequestDispatcher("employee_evaluate.jsp").forward(request, response);
+        request.getRequestDispatcher("evaluation_add.jsp").forward(request, response);
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

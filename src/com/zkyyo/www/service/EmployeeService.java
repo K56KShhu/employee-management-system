@@ -185,6 +185,11 @@ public class EmployeeService {
         return employeeDao.selectEmployeesByDeptId(deptId);
     }
 
+    public EmployeePo findEmployee(int userId) {
+        EmployeeDao employeeDao = EmployeeDao.getInstance();
+        return employeeDao.selectEmployeeByUserId(userId);
+    }
+
     public List<EmployeePo> findEmployees() {
         EmployeeDao employeeDao = EmployeeDao.getInstance();
         return employeeDao.selectEmployees();

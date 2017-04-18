@@ -68,7 +68,8 @@
         </td>
         <td><%= e.getEmail() %>
         </td>
-        <td><a href="/employee_evaluate.jsp?&beEvaluatedId=<%= e.getUserId() %>">评价</a></td>
+        <td><a href="/employee_detail.do?&userId=<%= e.getUserId() %>">详细</a></td>
+        <td><a href="/evaluation_add.jsp?&beEvaluatedId=<%= e.getUserId() %>">评价</a></td>
         <td><a href="/employee_update.jsp?&userId=<%= e.getUserId() %>">修改</a></td>
         <td><a href="/employee_delete.do?&userId=<%= e.getUserId() %>">删除</a></td>
     </tr>

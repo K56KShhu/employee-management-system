@@ -4,6 +4,7 @@ import com.zkyyo.www.dao.EvaluationDao;
 import com.zkyyo.www.po.EmployeePo;
 import com.zkyyo.www.po.EvaluationPo;
 
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -53,5 +54,20 @@ public class EvaluationService {
         EvaluationPo eval = new EvaluationPo(eEvaluatorId, eBeEvaluatedId, eStars, eComment);
         EvaluationDao evaluationDao = EvaluationDao.getInstance();
         return evaluationDao.addEvaluation(eval);
+    }
+
+    public boolean deleteEvaluation(int evalId) {
+        EvaluationDao evaluationDao = EvaluationDao.getInstance();
+        return evaluationDao.deleteEvaluation(evalId);
+    }
+
+    public List<EvaluationPo> findSendedEvaluations(int userId) {
+        EvaluationDao evaluationDao = EvaluationDao.getInstance();
+        return evaluationDao.selectSendedEvaluations(userId);
+    }
+
+    public List<EvaluationPo> findReceivedEvaluations(int userId) {
+        EvaluationDao evaluationDao = EvaluationDao.getInstance();
+        return evaluationDao.selectReceivedEvaluations(userId);
     }
 }
