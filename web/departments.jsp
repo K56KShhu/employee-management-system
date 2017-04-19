@@ -4,9 +4,18 @@
 <html>
 <head>
     <title>查询员工</title>
+    <style type="text/css">
+        body {
+            margin: auto;
+            text-align: center
+        }
+    </style>
 </head>
 <body>
-
+<div style="text-align: right">
+    <a href="${pageContext.request.contextPath}/functions.jsp">首页</a>
+    <a href="${pageContext.request.contextPath}/logout.do">注销&nbsp;</a>
+</div>
 <%
     Integer userId = (Integer) request.getSession().getAttribute("login");
     if (userId == null) {
@@ -14,9 +23,9 @@
         return;
     }
 %>
-<a href="${pageContext.request.contextPath}/logout.do">注销</a>
-<a href="${pageContext.request.contextPath}/functions.jsp">返回</a><br/>
-<h1>查询部门</h1>
+<h2>查询部门</h2>
+<hr/>
+
 <form method="get" action="${pageContext.request.contextPath}/department_find.do">
     <select name="way">
         <option value="all">查询所有</option>
@@ -35,7 +44,7 @@
     <input type="radio" name="reverse" value="true">倒序
 </form>
 
-<table border="1">
+<table border="1" align="center">
     <%
         List<DepartmentPo> result = (List<DepartmentPo>) request.getAttribute("result");
         if (result != null) {

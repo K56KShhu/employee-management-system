@@ -4,9 +4,18 @@
 <html>
 <head>
     <title>查询员工</title>
+    <style type="text/css">
+        body {
+            margin: auto;
+            text-align: center
+        }
+    </style>
 </head>
 <body>
-
+<div style="text-align: right">
+    <a href="${pageContext.request.contextPath}/functions.jsp">首页</a>
+    <a href="${pageContext.request.contextPath}/logout.do">注销&nbsp;</a>
+</div>
 <%
     Integer userId = (Integer) request.getSession().getAttribute("login");
     if (userId == null) {
@@ -14,10 +23,9 @@
         return;
     }
 %>
+<h2>查询员工</h2>
+<hr/>
 
-<a href="${pageContext.request.contextPath}/logout.do">注销</a>
-<a href="${pageContext.request.contextPath}/functions.jsp">返回</a><br/>
-<h1>查询员工</h1>
 <form method="get" action="${pageContext.request.contextPath}/employee_find.do">
     <select name="way">
         <option value="all">查询所有</option>
@@ -39,19 +47,19 @@
 
 </form>
 
-<table border="1">
+<table border="1" align="center">
     <%
         List<EmployeePo> result = (List<EmployeePo>) request.getAttribute("result");
         if (result != null) {
     %>
     <tr>
-        <td>员工号</td>
-        <td>姓名</td>
-        <td>部门号</td>
-        <td>薪水</td>
-        <td>就职日期</td>
-        <td>手机号</td>
-        <td>邮箱</td>
+        <th>员工号</th>
+        <th>姓名</th>
+        <th>部门号</th>
+        <th>薪水</th>
+        <th>就职日期</th>
+        <th>手机号</th>
+        <th>邮箱</th>
     </tr>
     <%
         for (EmployeePo e : result) {

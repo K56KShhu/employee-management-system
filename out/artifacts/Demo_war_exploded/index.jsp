@@ -5,19 +5,21 @@
 </head>
 <body>
 
-<h1>员工登录</h1>
+<h2 style="text-align: center">员工登录</h2>
 <form method="post" action="login.do">
-    <tr>
-        <td>员工号: </td>
-        <td><input type="text" name="employeeId"></td>
-    </tr>
-    <tr>
-        <td>密码:</td>
-        <td><input type="password" name="password"></td>
-    </tr>
-    <tr>
-        <td><input type="submit" value="登录"></td>
-    </tr>
+    <table align="center">
+        <tr>
+            <td style="text-align: right">员工号:</td>
+            <td><input type="text" name="employeeId"></td>
+        </tr>
+        <tr>
+            <td style="text-align: right">密码:</td>
+            <td><input type="password" name="password"></td>
+        </tr>
+    </table><br/>
+    <div style="text-align: center">
+        <input type="submit" value="登录">
+    </div>
 </form>
 
 </body>

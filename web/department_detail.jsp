@@ -5,8 +5,18 @@
 <html>
 <head>
     <title>部门详细信息</title>
+    <style type="text/css">
+        body {
+            margin: auto;
+            text-align: center
+        }
+    </style>
 </head>
 <body>
+<div style="text-align: right">
+    <a href="${pageContext.request.contextPath}/functions.jsp">首页</a>
+    <a href="${pageContext.request.contextPath}/logout.do">注销&nbsp;</a>
+</div>
 <%
     Integer userId = (Integer) request.getSession().getAttribute("login");
     if (userId == null) {
@@ -20,44 +30,46 @@
         return;
     }
 %>
-<h1>部门详细信息</h1>
-<table border="1">
+<h2>部门详细信息</h2>
+<hr/>
+
+<table border="1" align="center">
     <tr>
-        <td>部门号</td>
+        <th>部门号</th>
         <td><%= department.getDeptId() %>
         </td>
     </tr>
     <tr>
-        <td>部门名</td>
+        <th>部门名</th>
         <td><%= department.getDeptName() %>
         </td>
     </tr>
     <tr>
-        <td>人数</td>
+        <th>人数</th>
         <td><%= department.getDeptPopulation() %>
         </td>
     </tr>
     <tr>
-        <td>建立日期</td>
+        <th>建立日期</th>
         <td><%= department.getBuildDate() %>
         </td>
     </tr>
     <tr>
-        <td>描述</td>
+        <th>描述</th>
         <td><%= department.getDeptDesc() %>
         </td>
     </tr>
     <tr>
-        <td>组成人员</td>
+        <th>组成人员</th>
         <td>
             <table border="1">
                 <tr>
-                    <td>员工号</td>
-                    <td>姓名</td>
-                    <td>薪水</td>
-                    <td>就职日期</td>
-                    <td>手机号</td>
-                    <td>邮箱</td>
+                    <th>员工号</th>
+                    <th>姓名</th>
+                    <th>薪水</th>
+                    <th>就职日期</th>
+                    <th>手机号</th>
+                    <th>邮箱</th>
                 </tr>
                 <%
                     for (EmployeePo e : employees) {
