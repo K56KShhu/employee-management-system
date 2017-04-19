@@ -55,12 +55,21 @@ public class EvaluationFindServlet extends HttpServlet {
         if (result != null) {
             //升序
             if (reverse.equals("false")) {
-                if (order.equals("stars")) {
-                    result = evaluationService.sort(result, EvaluationService.ORDER_BY_STARS, false);
+                switch (order) {
+                    case "stars":
+                        result = evaluationService.sort(result, EvaluationService.ORDER_BY_STARS, false);
+                        break;
+                    default:
+                        break;
                 }
-            } else {
-                if (order.equals("stars")) {
-                    result = evaluationService.sort(result, EvaluationService.ORDER_BY_STARS, true);
+            }
+            if (reverse.equals("true")) {
+                switch (order) {
+                    case "stars":
+                        result = evaluationService.sort(result, EvaluationService.ORDER_BY_STARS, false);
+                        break;
+                    default:
+                        break;
                 }
             }
         }

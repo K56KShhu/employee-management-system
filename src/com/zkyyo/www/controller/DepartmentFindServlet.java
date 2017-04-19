@@ -36,6 +36,8 @@ public class DepartmentFindServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String way = request.getParameter("way");
         String info = request.getParameter("info");
+        String order = request.getParameter("order");
+        String reverse = request.getParameter("reverse");
         List<DepartmentPo> result = null;
         DepartmentService departmentService = DepartmentService.getInstance();
 //        EmployeeService employeeService = (EmployeeService) getServletContext().getAttribute("employeeService");
@@ -53,6 +55,39 @@ public class DepartmentFindServlet extends HttpServlet {
             }
         } else {
             result = departmentService.findDepartments();
+        }
+
+        if (result != null) {
+            if (reverse.equals("false")) {
+                switch (order) {
+                    case "id":
+                        result = departmentService.sort(result, DepartmentService.ORDER_BY_ID, false);
+                        break;
+                    case "pop":
+                        result = departmentService.sort(result, DepartmentService.ORDER_BY_POPULATION, false);
+                        break;
+                    case "date":
+                        result = departmentService.sort(result, DepartmentService.ORDER_BY_DATE, false);
+                        break;
+                    default:
+                        break;
+                }
+            }
+            if (reverse.equals("true")) {
+                switch (order) {
+                    case "id":
+                        result = departmentService.sort(result, DepartmentService.ORDER_BY_ID, true);
+                        break;
+                    case "pop":
+                        result = departmentService.sort(result, DepartmentService.ORDER_BY_POPULATION, true);
+                        break;
+                    case "date":
+                        result = departmentService.sort(result, DepartmentService.ORDER_BY_DATE, true);
+                        break;
+                    default:
+                        break;
+                }
+            }
         }
         request.setAttribute("result", result);
         request.getRequestDispatcher(DEPARTMENTS_VIEW).forward(request, response);

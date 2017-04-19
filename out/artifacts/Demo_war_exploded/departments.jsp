@@ -24,7 +24,15 @@
         <option value="by_dept_name">通过部门名</option>
     </select>
     <input type="text" name="info" size="50" maxlength="80">
-    <input type="submit" value="搜索一下">
+    <input type="submit" value="搜索一下"><br/>
+    排序依据
+    <input type="radio" name="order" value="default" checked>默认
+    <input type="radio" name="order" value="id">部门号
+    <input type="radio" name="order" value="pop">部门人数
+    <input type="radio" name="order" value="date">建立时间<br/>
+    排序方式
+    <input type="radio" name="reverse" value="false" checked>升序
+    <input type="radio" name="reverse" value="true">倒序
 </form>
 
 <table border="1">

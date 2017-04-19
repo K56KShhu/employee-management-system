@@ -34,9 +34,10 @@ public class EmployeeFindServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String way = request.getParameter("way");
         String info = request.getParameter("info");
+        String order = request.getParameter("order");
+        String reverse = request.getParameter("reverse");
         List<EmployeePo> result = null;
-//        EmployeeService employeeService = EmployeeService.getInstance();
-        EmployeeService employeeService = (EmployeeService) getServletContext().getAttribute("employeeService");
+        EmployeeService employeeService = EmployeeService.getInstance();
         info = info.trim();
 
         if (way.length() > 0 && info.length() > 0) {
@@ -55,7 +56,47 @@ public class EmployeeFindServlet extends HttpServlet {
         } else {
             result = employeeService.findEmployees();
         }
-        request.setAttribute("result", result);
-        request.getRequestDispatcher(EMPLOYEE_VIEW).forward(request, response);
+
+        if (result != null) {
+            if (reverse.equals("false")) {
+                switch (order) {
+                    case "user_id":
+                        result = employeeService.sort(result, EmployeeService.ORDER_BY_USER_ID, false);
+                        break;
+                    case "dept_id":
+                        result = employeeService.sort(result, EmployeeService.ORDER_BY_DEPT_ID, false);
+                        break;
+                    case "salary":
+                        result = employeeService.sort(result, EmployeeService.ORDER_BY_SALARY, false);
+                        break;
+                    case "date":
+                        result = employeeService.sort(result, EmployeeService.ORDER_BY_DATE, false);
+                        break;
+                    default:
+                        break;
+                }
+            }
+            if (reverse.equals("true")) {
+                switch (order) {
+                    case "user_id":
+                        result = employeeService.sort(result, EmployeeService.ORDER_BY_USER_ID, true);
+                        break;
+                    case "dept_id":
+                        result = employeeService.sort(result, EmployeeService.ORDER_BY_DEPT_ID, true);
+                        break;
+                    case "salary":
+                        result = employeeService.sort(result, EmployeeService.ORDER_BY_SALARY, true);
+                        break;
+                    case "date":
+                        result = employeeService.sort(result, EmployeeService.ORDER_BY_DATE, true);
+                        break;
+                    default:
+                        break;
+                }
+            }
+
+            request.setAttribute("result", result);
+            request.getRequestDispatcher(EMPLOYEE_VIEW).forward(request, response);
+        }
     }
 }
