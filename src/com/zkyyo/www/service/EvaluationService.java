@@ -3,8 +3,7 @@ package com.zkyyo.www.service;
 import com.zkyyo.www.dao.EvaluationDao;
 import com.zkyyo.www.po.EvaluationPo;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -91,6 +90,25 @@ public class EvaluationService {
         return evaluationDao.selectReceivedEvaluations(userId);
     }
 
+    public List<EvaluationPo> findEvaluations() {
+        EvaluationDao evaluationDao = EvaluationDao.getInstance();
+        return evaluationDao.selectEvaluations();
+    }
+
+    public List<EvaluationPo> findEvaluationsByKeyWords(String keys) {
+        String regex = "\\s+";
+        Set<String> keySet = new HashSet<>();
+        Collections.addAll(keySet, keys.trim().split(regex));
+
+        EvaluationDao evaluationDao = EvaluationDao.getInstance();
+        Collection<EvaluationPo> col = evaluationDao.selectEvaluationsByKeyWords(keySet).values();
+        List<EvaluationPo> list = new ArrayList<>();
+        for (EvaluationPo e : col) {
+            list.add(e);
+        }
+        return list;
+    }
+
     public boolean updateEvaluation(EvaluationPo updatedEval) {
         EvaluationDao evaluationDao = EvaluationDao.getInstance();
         EvaluationPo initialEval = evaluationDao.selectEvaluation(updatedEval.getEvaluationId());
@@ -103,5 +121,14 @@ public class EvaluationService {
             updatedTypes.add(EvaluationDao.UPDATE_COMMENT);
         }
         return !updatedTypes.isEmpty() && evaluationDao.updateEvaluation(updatedTypes, updatedEval);
+    }
+
+    public static void main(String[] args) {
+        EvaluationService evaluationService = EvaluationService.getInstance();
+        String str = "2";
+        List<EvaluationPo> list = evaluationService.findEvaluationsByKeyWords(str);
+        for (EvaluationPo e : list) {
+            System.out.println(e);
+        }
     }
 }

@@ -26,6 +26,9 @@
     <li><a href="${pageContext.request.contextPath}/departments.jsp" target="_blank">查询部门</a></li>
 </ul>
 <h2>评价管理</h2>
+<ul>
+    <li><a href="${pageContext.request.contextPath}/evaluations.jsp" target="_blank">查询评价</a></li>
+</ul>
 
 </body>
 </html>

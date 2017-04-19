@@ -5,10 +5,7 @@ import com.zkyyo.www.db.DbConn;
 import com.zkyyo.www.po.EvaluationPo;
 
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
+import java.util.*;
 
 public class EvaluationDao {
     public static final int UPDATE_STARS = 1;
@@ -160,6 +157,39 @@ public class EvaluationDao {
             e.printStackTrace();
         } finally {
             DbClose.close(conn, stmt, rs);
+        }
+        return evals;
+    }
+
+    public Map<Integer, EvaluationPo> selectEvaluationsByKeyWords(Set<String> keys) {
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
+        Map<Integer, EvaluationPo> evals = new HashMap<>();
+
+        try {
+            conn = DbConn.getConn();
+            conn.setAutoCommit(false);
+            for (String key : keys) {
+                String sql = "SELECT * FROM evaluation WHERE comment LIKE ?";
+                pstmt = conn.prepareStatement(sql);
+                pstmt.setString(1, "%" + key + "%");
+                rs = pstmt.executeQuery();
+                while (rs.next()) {
+                    int evaluationId = rs.getInt("test_evaluation_id");
+                    int beEvaluatedId = rs.getInt("be_evaluated_id");
+                    int evaluatorId = rs.getInt("evaluator_id");
+                    int starLevel = rs.getInt("star_level");
+                    String comment = rs.getString("comment");
+                    EvaluationPo eval = new EvaluationPo(evaluationId, evaluatorId, beEvaluatedId, starLevel, comment);
+                    evals.put(evaluationId, eval);
+                }
+            }
+            conn.commit();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            DbClose.close(conn, pstmt, rs);
         }
         return evals;
     }
