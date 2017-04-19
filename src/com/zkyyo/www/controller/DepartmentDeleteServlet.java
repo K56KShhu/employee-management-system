@@ -12,12 +12,11 @@ import java.io.IOException;
 @WebServlet("/department_delete.do")
 public class DepartmentDeleteServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
+        doGet(request, response);
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         int deptId = Integer.valueOf(request.getParameter("deptId"));
-
 
         DepartmentService employeeService = DepartmentService.getInstance();
         boolean isDeleted = employeeService.deleteDepartment(deptId);

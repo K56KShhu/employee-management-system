@@ -13,7 +13,7 @@ import java.io.IOException;
 @WebServlet("/evaluation_delete.do")
 public class EvaluationDeleteServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
+        doGet(request, response);
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

@@ -48,14 +48,16 @@
         for (EvaluationPo e : result) {
     %>
     <tr>
-        <td><%= e.getBeEvaluatedId() %>
-        </td>
+        <td><a href="/employee_detail.do?&userId=<%= e.getBeEvaluatedId() %>"
+               target="_blank"><%= e.getBeEvaluatedId() %>
+        </a></td>
         <td><%= e.getStarLevel() %>
         </td>
         <td><%= e.getComment() %>
         </td>
-        <td><%= e.getEvaluatorId() %>
-        </td>
+        <td><a href="/employee_detail.do?&userId=<%= e.getEvaluatorId() %>"
+               target="_blank"><%= e.getEvaluatorId() %>
+        </a></td>
         <td><a href="evaluation_update.jsp?evalId=<%= e.getEvaluationId() %>" target="_blank">修改</a></td>
         <td>
             <a href="${pageContext.request.contextPath}/evaluation_delete.do?evalId=<%= e.getEvaluationId() %>"

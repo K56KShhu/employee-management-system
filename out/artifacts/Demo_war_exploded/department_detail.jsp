@@ -63,7 +63,8 @@
                     for (EmployeePo e : employees) {
                 %>
                 <tr>
-                    <td><%= e.getUserId() %>
+                    <td><a href="/employee_detail.do?&userId=<%= e.getUserId() %>" target="_blank"><%= e.getUserId() %>
+                    </a></td>
                     </td>
                     <td><%= e.getUserName()%>
                     </td>

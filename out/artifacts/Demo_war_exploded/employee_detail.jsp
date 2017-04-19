@@ -15,7 +15,6 @@
         return;
     }
 %>
-<h1>员工详细信息</h1>
 <%
     EmployeePo employee = (EmployeePo) request.getAttribute("employee");
     DepartmentPo department = (DepartmentPo) request.getAttribute("department");
@@ -23,6 +22,7 @@
     List<EvaluationPo> receivedEvals = (List<EvaluationPo>) request.getAttribute("receivedEvals");
     if (employee != null && department != null && sendedEvals != null && receivedEvals != null) {
 %>
+<h1>员工详细信息</h1>
 <table border="1">
     <tr>
         <td>员工号</td>
@@ -135,6 +135,11 @@
         }
     %>
 </table>
+<%
+    }
+    else {
+%>
+<h1 align="center">该员工不存在, 可能离开我们了吧......</h1>
 <%
     }
 %>
