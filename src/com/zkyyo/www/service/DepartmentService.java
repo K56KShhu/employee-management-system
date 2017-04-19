@@ -8,6 +8,9 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class DepartmentService {
+    public static final int ORDER_BY_ID = 1;
+    public static final int ORDER_BY_POPULATION = 2;
+    public static final int ORDER_BY_DATE = 3;
     private static volatile DepartmentService INSTANCE = null;
 
     private DepartmentService() {
@@ -116,6 +119,26 @@ public class DepartmentService {
         return departmentDao.selectDepartmentByDeptId(deptId);
     }
 
+    public List<DepartmentPo> sort(List<DepartmentPo> list, int orderType, boolean isReverse) {
+        switch (orderType) {
+            case ORDER_BY_ID:
+                Collections.sort(list, new IdCompare());
+                break;
+            case ORDER_BY_POPULATION:
+                Collections.sort(list, new PopulationCompare());
+                break;
+            case ORDER_BY_DATE:
+                Collections.sort(list, new BuildDateCompare());
+                break;
+            default:
+                break;
+        }
+        if (isReverse) {
+            Collections.reverse(list);
+        }
+        return list;
+    }
+
     public boolean updateDepartment(DepartmentPo updatedDept) {
         DepartmentDao departmentDao = DepartmentDao.getInstance();
         DepartmentPo initialDept = departmentDao.selectDepartmentByDeptId(updatedDept.getDeptId());
@@ -135,9 +158,31 @@ public class DepartmentService {
     }
 
 
+    class IdCompare implements Comparator<DepartmentPo> {
+        public int compare(DepartmentPo one, DepartmentPo two) {
+            return one.getDeptId() - two.getDeptId();
+        }
+    }
+
+    class PopulationCompare implements Comparator<DepartmentPo> {
+        public int compare(DepartmentPo one, DepartmentPo two) {
+            return one.getDeptPopulation() - two.getDeptPopulation();
+        }
+    }
+
+    class BuildDateCompare implements Comparator<DepartmentPo> {
+        public int compare(DepartmentPo one, DepartmentPo two) {
+            return one.getBuildDate().compareTo(two.getBuildDate());
+        }
+    }
+
     public static void main(String[] args) {
         DepartmentService departmentService = DepartmentService.getInstance();
-        System.out.println(departmentService.findDepartment(-1));
+        List<DepartmentPo> list = departmentService.findDepartments();
+        List<DepartmentPo> result = departmentService.sort(list, ORDER_BY_DATE, true);
+        for (DepartmentPo d : result) {
+            System.out.println(d);
+        }
     }
 }
 

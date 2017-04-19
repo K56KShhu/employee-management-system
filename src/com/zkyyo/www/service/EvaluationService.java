@@ -8,6 +8,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class EvaluationService {
+    public static final int ORDER_BY_STARS = 1;
     private static final int MAX_STARS = 10;
     private static final int MIN_STARS = 1;
     private static volatile EvaluationService INSTANCE = null;
@@ -53,7 +54,7 @@ public class EvaluationService {
             p = Pattern.compile(regex);
             m = p.matcher(evalId);
             if (m.matches()) {
-                    return true;
+                return true;
             }
         }
         return false;
@@ -109,6 +110,20 @@ public class EvaluationService {
         return list;
     }
 
+    public List<EvaluationPo> sort(List<EvaluationPo> list, int orderType, boolean isReverse) {
+        switch (orderType) {
+            case ORDER_BY_STARS:
+                Collections.sort(list, new StarsCompare());
+                break;
+            default:
+                break;
+        }
+        if (isReverse) {
+            Collections.reverse(list);
+        }
+        return list;
+    }
+
     public boolean updateEvaluation(EvaluationPo updatedEval) {
         EvaluationDao evaluationDao = EvaluationDao.getInstance();
         EvaluationPo initialEval = evaluationDao.selectEvaluation(updatedEval.getEvaluationId());
@@ -123,11 +138,17 @@ public class EvaluationService {
         return !updatedTypes.isEmpty() && evaluationDao.updateEvaluation(updatedTypes, updatedEval);
     }
 
+    class StarsCompare implements Comparator<EvaluationPo> {
+        public int compare(EvaluationPo one, EvaluationPo two) {
+            return one.getStarLevel() - two.getStarLevel();
+        }
+    }
+
     public static void main(String[] args) {
         EvaluationService evaluationService = EvaluationService.getInstance();
-        String str = "2";
-        List<EvaluationPo> list = evaluationService.findEvaluationsByKeyWords(str);
-        for (EvaluationPo e : list) {
+        List<EvaluationPo> list = evaluationService.findEvaluations();
+        List<EvaluationPo> result = evaluationService.sort(list, ORDER_BY_STARS, true);
+        for (EvaluationPo e : result) {
             System.out.println(e);
         }
     }

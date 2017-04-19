@@ -26,7 +26,17 @@
         <option value="by_dept_id">通过部门号</option>
     </select>
     <input type="text" name="info" size="50" maxlength="80">
-    <input type="submit" value="搜索一下">
+    <input type="submit" value="搜索一下"><br/>
+    排序依据
+    <input type="radio" name="order" value="default" checked>默认
+    <input type="radio" name="order" value="user_id">用户号
+    <input type="radio" name="order" value="dept_id">部门号
+    <input type="radio" name="order" value="salary">薪水
+    <input type="radio" name="order" value="date">就职日期<br/>
+    排序方式
+    <input type="radio" name="reverse" value="false" checked>升序
+    <input type="radio" name="reverse" value="true">倒序
+
 </form>
 
 <table border="1">

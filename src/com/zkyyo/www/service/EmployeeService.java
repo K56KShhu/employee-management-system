@@ -8,6 +8,11 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class EmployeeService {
+    public static final int ORDER_BY_USER_ID = 1;
+    public static final int ORDER_BY_DEPT_ID = 2;
+    public static final int ORDER_BY_SALARY = 3;
+    public static final int ORDER_BY_DATE = 4;
+
     private static volatile EmployeeService INSTANCE = null;
 
     private EmployeeService() {
@@ -195,6 +200,30 @@ public class EmployeeService {
         return employeeDao.selectEmployees();
     }
 
+    public List<EmployeePo> sort(List<EmployeePo> list, int orderType, boolean isReverse) {
+        switch (orderType) {
+            case ORDER_BY_USER_ID:
+                Collections.sort(list, new UserIdCompare());
+                break;
+            case ORDER_BY_DEPT_ID:
+                Collections.sort(list, new DeptIdCompare());
+                break;
+            case ORDER_BY_SALARY:
+                Collections.sort(list, new SalaryCompare());
+                break;
+            case ORDER_BY_DATE:
+                Collections.sort(list, new DateCompare());
+                break;
+            default:
+                break;
+        }
+        if (isReverse) {
+            Collections.reverse(list);
+        }
+        return list;
+    }
+
+
     public boolean updateEmployee(EmployeePo updatedEp) {
         EmployeeDao employeeDao = EmployeeDao.getInstance();
         EmployeePo initialEp = employeeDao.selectEmployeeByUserId(updatedEp.getUserId());
@@ -230,59 +259,6 @@ public class EmployeeService {
         }
 
         return !updatedTypes.isEmpty() && employeeDao.updateEmployee(updatedTypes, updatedEp);
-
-        /*
-        //姓名
-        if (updatedEp.getUserName() != null && !initialEp.getUserName().equals(updatedEp.getUserName())) {
-            isUpdated = employeeDao.updateEmployee(EmployeeDao.UPDATE_NAME, updatedEp);
-            if (!isUpdated) {
-                return false;
-            }
-        }
-        //密码
-        if (updatedEp.getPassword() != null && !initialEp.getPassword().equals(updatedEp.getPassword())) {
-            isUpdated = employeeDao.updateEmployee(EmployeeDao.UPDATE_PASSWORD, updatedEp);
-            if (!isUpdated) {
-                return false;
-            }
-        }
-        //邮箱
-        if (updatedEp.getEmail() != null && !initialEp.getEmail().equals(updatedEp.getEmail())) {
-            isUpdated = employeeDao.updateEmployee(EmployeeDao.UPDATE_EMAIL, updatedEp);
-            if (!isUpdated) {
-                return false;
-            }
-        }
-        //手机号
-        if (updatedEp.getMobile() != null && !initialEp.getMobile().equals(updatedEp.getMobile())) {
-            isUpdated = employeeDao.updateEmployee(EmployeeDao.UPDATE_MOBILE, updatedEp);
-            if (!isUpdated) {
-                return false;
-            }
-        }
-        //部门号
-        if (updatedEp.getDeptId() != 0 && initialEp.getDeptId() != updatedEp.getDeptId()) {
-            isUpdated = employeeDao.updateEmployee(EmployeeDao.UPDATE_DEPARTMENT_ID, updatedEp);
-            if (!isUpdated) {
-                return false;
-            }
-        }
-        //薪水
-        if (updatedEp.getSalary() != 0.0 && initialEp.getSalary() != updatedEp.getSalary()) {
-            isUpdated = employeeDao.updateEmployee(EmployeeDao.UPDATE_SALARY, updatedEp);
-            if (!isUpdated) {
-                return false;
-            }
-        }
-        //就职日期
-        if (updatedEp.getEmployDate() != null && !initialEp.getEmployDate().equals(updatedEp.getEmployDate())) {
-            isUpdated = employeeDao.updateEmployee(EmployeeDao.UPDATE_EMPLOYEE_DATE, updatedEp);
-            if (!isUpdated) {
-                return false;
-            }
-        }
-        return true;
-        */
     }
 
     public boolean deleteEmployee(int userId) {
@@ -295,12 +271,38 @@ public class EmployeeService {
         }
     }
 
-    public static void main(String[] args) {
-        EmployeeService employeeService = EmployeeService.getInstance();
-        do {
-            Scanner in = new Scanner(System.in);
-            System.out.println(employeeService.isValidName(in.next()));
-        } while (true);
+    class UserIdCompare implements Comparator<EmployeePo> {
+        public int compare(EmployeePo one, EmployeePo two) {
+            return one.getUserId() - two.getUserId();
+        }
     }
 
+    class DateCompare implements Comparator<EmployeePo> {
+        public int compare(EmployeePo one, EmployeePo two) {
+            return one.getEmployDate().compareTo(two.getEmployDate());
+        }
+    }
+
+    class SalaryCompare implements Comparator<EmployeePo> {
+        public int compare(EmployeePo one, EmployeePo two) {
+            Double d1 = one.getSalary();
+            Double d2 = two.getSalary();
+            return d1.compareTo(d2);
+        }
+    }
+
+    class DeptIdCompare implements Comparator<EmployeePo> {
+        public int compare(EmployeePo one, EmployeePo two) {
+            return one.getDeptId() - two.getDeptId();
+        }
+    }
+
+    public static void main(String[] args) {
+        EmployeeService employeeService = EmployeeService.getInstance();
+        List<EmployeePo> list = employeeService.findEmployees();
+        List<EmployeePo> result = employeeService.sort(list, ORDER_BY_SALARY, true);
+        for (EmployeePo e : result) {
+            System.out.println(e);
+        }
+    }
 }

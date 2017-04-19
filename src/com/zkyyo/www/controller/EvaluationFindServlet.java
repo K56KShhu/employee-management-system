@@ -36,6 +36,8 @@ public class EvaluationFindServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String way = request.getParameter("way");
         String info = request.getParameter("info").trim();
+        String order = request.getParameter("order");
+        String reverse = request.getParameter("reverse");
         List<EvaluationPo> result = null;
         EvaluationService evaluationService = EvaluationService.getInstance();
 
@@ -49,6 +51,20 @@ public class EvaluationFindServlet extends HttpServlet {
         } else {
             result = evaluationService.findEvaluations();
         }
+
+        if (result != null) {
+            //升序
+            if (reverse.equals("false")) {
+                if (order.equals("stars")) {
+                    result = evaluationService.sort(result, EvaluationService.ORDER_BY_STARS, false);
+                }
+            } else {
+                if (order.equals("stars")) {
+                    result = evaluationService.sort(result, EvaluationService.ORDER_BY_STARS, true);
+                }
+            }
+        }
+
         request.setAttribute("result", result);
         request.getRequestDispatcher(EVALUATION_VIEW).forward(request, response);
     }
