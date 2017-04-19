@@ -1,6 +1,7 @@
 package com.zkyyo.www.po;
 
 import java.sql.Date;
+import java.util.Objects;
 
 public class DepartmentPo {
     private int deptId;
@@ -77,5 +78,30 @@ public class DepartmentPo {
                 ", deptDesc='" + deptDesc + '\'' +
                 ", buildDate=" + buildDate +
                 '}';
+    }
+
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        if (!(obj instanceof DepartmentPo)) {
+            return false;
+        }
+        DepartmentPo other = (DepartmentPo) obj;
+        return deptId == other.getDeptId()
+                && deptName.equals(other.getDeptName())
+                && deptPopulation == other.getDeptPopulation()
+                && deptDesc.equals(other.getDeptDesc())
+                && buildDate.equals(other.getBuildDate());
+    }
+    
+    public int hashCode() {
+        return Objects.hash(deptId, deptName, deptPopulation, deptDesc, buildDate);
     }
 }

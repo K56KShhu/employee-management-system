@@ -1,6 +1,6 @@
 package com.zkyyo.www.po;
 
-import java.sql.Timestamp;
+import java.util.Objects;
 
 public class EvaluationPo {
     private int evaluationId;
@@ -20,7 +20,7 @@ public class EvaluationPo {
         this.comment = comment;
     }
 
-    public EvaluationPo(int evaluationId,int evaluatorId, int beEvaluatedId, int starLevel, String comment) {
+    public EvaluationPo(int evaluationId, int evaluatorId, int beEvaluatedId, int starLevel, String comment) {
         this.evaluationId = evaluationId;
         this.beEvaluatedId = beEvaluatedId;
         this.evaluatorId = evaluatorId;
@@ -77,6 +77,31 @@ public class EvaluationPo {
                 ", starLevel=" + starLevel +
                 ", comment='" + comment + '\'' +
                 '}';
+    }
+
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        if (!(obj instanceof EvaluationPo)) {
+            return false;
+        }
+        EvaluationPo other = (EvaluationPo) obj;
+        return evaluatorId == other.evaluatorId
+                && beEvaluatedId == other.getBeEvaluatedId()
+                && evaluatorId == other.getEvaluatorId()
+                && starLevel == other.getStarLevel()
+                && comment.equals(other.getComment());
+    }
+    
+    public int hashCode() {
+        return Objects.hash(evaluationId, beEvaluatedId, evaluatorId, starLevel, comment);
     }
 }
 
