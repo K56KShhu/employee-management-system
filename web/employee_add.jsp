@@ -22,13 +22,15 @@
         }
         out.println("</ul>");
     }
-    Integer newId = (Integer) request.getAttribute("newId");
-    if (newId != null) {
-        out.println("<h1>添加员工成功</h1><br/>");
-        out.println("<p>新员工号为: " + newId + "<p><br/>");
+    String message = (String) request.getAttribute("message");
+    if (message != null) {
+%>
+<script type="text/javascript">
+    alert("<%= message %>");
+</script>
+<%
     }
 %>
-
 <a href="${pageContext.request.contextPath}/logout.do">注销</a>
 <a href="${pageContext.request.contextPath}/functions.jsp">返回</a>
 

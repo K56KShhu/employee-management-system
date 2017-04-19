@@ -2,7 +2,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
-    <title>评价员工</title>
+    <title>修改评价</title>
 </head>
 <body>
 <%
@@ -11,7 +11,6 @@
         response.sendRedirect("index.jsp");
         return;
     }
-    String beEvaluatedId = request.getParameter("beEvaluatedId");
     List<String> errors = (List<String>) request.getAttribute("errors");
     if (errors != null) {
         out.println("<h1>错误信息如下<h1>");
@@ -32,8 +31,8 @@
 %>
 
 
-<h1>评价员工</h1>
-<form method="post" action="/evaluation_add.do">
+<h1>修改评价</h1>
+<form method="post" action="/evaluation_update.do">
     <table border="1">
         <tr>
             <td>评价内容(300字以内):</td>
@@ -41,10 +40,10 @@
         </tr>
     </table>
     评价等级(1-10):
-    <input type="hidden" name="evaluatorId" value=<%= userId %>>
-    <input type="hidden" name="beEvaluatedId" value=<%= beEvaluatedId %>>
+    <input type="hidden" name="evalId" value=<%= request.getParameter("evalId") %>>
     <input type="number" name="stars" min="1" max="10"><br/>
     <input type="submit" value="提交">
 </form>
 </body>
 </html>
+

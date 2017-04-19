@@ -1,9 +1,9 @@
 package com.zkyyo.www.service;
 
 import com.zkyyo.www.dao.EvaluationDao;
-import com.zkyyo.www.po.EmployeePo;
 import com.zkyyo.www.po.EvaluationPo;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -45,6 +45,26 @@ public class EvaluationService {
         return false;
     }
 
+    public boolean isValidId(String evalId) {
+        Pattern p = null;
+        Matcher m = null;
+        String regex = "^\\d+$";
+
+        if (evalId != null) {
+            p = Pattern.compile(regex);
+            m = p.matcher(evalId);
+            if (m.matches()) {
+                    return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean isExisted(int evalId) {
+        EvaluationDao evaluationDao = EvaluationDao.getInstance();
+        return evaluationDao.selectEvaluation(evalId) != null;
+    }
+
     public boolean addEvaluation(String evaluatorId, String beEvaluatedId, String stars, String comment) {
         int eEvaluatorId = Integer.valueOf(evaluatorId);
         int eBeEvaluatedId = Integer.valueOf(beEvaluatedId);
@@ -69,5 +89,19 @@ public class EvaluationService {
     public List<EvaluationPo> findReceivedEvaluations(int userId) {
         EvaluationDao evaluationDao = EvaluationDao.getInstance();
         return evaluationDao.selectReceivedEvaluations(userId);
+    }
+
+    public boolean updateEvaluation(EvaluationPo updatedEval) {
+        EvaluationDao evaluationDao = EvaluationDao.getInstance();
+        EvaluationPo initialEval = evaluationDao.selectEvaluation(updatedEval.getEvaluationId());
+
+        List<Integer> updatedTypes = new ArrayList<>();
+        if (updatedEval.getStarLevel() != 0 && updatedEval.getStarLevel() != initialEval.getStarLevel()) {
+            updatedTypes.add(EvaluationDao.UPDATE_STARS);
+        }
+        if (updatedEval.getComment() != null && !updatedEval.getComment().equals(initialEval.getComment())) {
+            updatedTypes.add(EvaluationDao.UPDATE_COMMENT);
+        }
+        return !updatedTypes.isEmpty() && evaluationDao.updateEvaluation(updatedTypes, updatedEval);
     }
 }

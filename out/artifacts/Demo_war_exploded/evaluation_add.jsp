@@ -21,13 +21,16 @@
         }
         out.println("</ul>");
     }
-    String status = (String) request.getAttribute("status");
-    if (status != null) {
-        if (status.equals("ok")) {
-            out.println("<h1>评价成功</h1>");
-        }
+    String message = (String) request.getAttribute("message");
+    if (message != null) {
+%>
+<script type="text/javascript">
+    alert("<%= message %>");
+</script>
+<%
     }
 %>
+
 
 <h1>评价员工</h1>
 <form method="post" action="/evaluation_add.do">

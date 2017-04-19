@@ -63,13 +63,15 @@ public class EmployeeAddServlet extends HttpServlet {
 
         if (!errors.isEmpty()) {
             request.setAttribute("errors", errors);
+            request.setAttribute("message", "注册失败");
         } else {
             Integer newUserId = employeeService.addEmployee(name, mobile, email, password, departmentId, salary, date);
             if (newUserId == null) {
                 errors.add("数据库发生错误,无法添加新员工");
                 request.setAttribute("errors", errors);
+                request.setAttribute("message", "注册失败");
             } else {
-                request.setAttribute("newId", newUserId);
+                request.setAttribute("message", "注册成功, 新员工号为: " + newUserId);
             }
         }
 

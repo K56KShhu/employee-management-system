@@ -36,7 +36,8 @@
     </tr>
     <tr>
         <td>部门名</td>
-        <td><%= department.getDeptName() %></td>
+        <td><%= department.getDeptName() %>
+        </td>
     </tr>
     <tr>
         <td>部门号</td>
@@ -85,6 +86,10 @@
                     </td>
                     <td><%= e.getBeEvaluatedId() %>
                     </td>
+                    <td><a href="evaluation_update.jsp?evalId=<%= e.getEvaluationId() %>" target="_blank">修改</a></td>
+                    <td>
+                        <a href="${pageContext.request.contextPath}/evaluation_delete.do?evalId=<%= e.getEvaluationId() %>"
+                           target="_blank">删除</a></td>
                 </tr>
                 <%
                     }
@@ -115,6 +120,10 @@
                     </td>
                     <td><%= e.getEvaluatorId() %>
                     </td>
+                    <td><a href="evaluation_update.jsp?evalId=<%= e.getEvaluationId() %>" target="_blank">修改</a></td>
+                    <td>
+                        <a href="${pageContext.request.contextPath}/evaluation_delete.do?evalId=<%= e.getEvaluationId() %>"
+                           target="_blank">删除</a></td>
                 </tr>
                 <%
                     }

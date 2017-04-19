@@ -17,15 +17,17 @@ public class EmployeeDeleteServlet extends HttpServlet {
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         int userId = Integer.valueOf(request.getParameter("userId"));
+        String way = (String) request.getSession().getAttribute("way");
+        String info = (String) request.getSession().getAttribute("info");
 
         EmployeeService employeeService = EmployeeService.getInstance();
         boolean isDeleted = employeeService.deleteEmployee(userId);
         if (isDeleted) {
-            request.setAttribute("status", "ok");
+            request.setAttribute("message", "删除员工成功");
         } else {
-            request.setAttribute("status", "fail");
+            request.setAttribute("message", "删除员工失败");
         }
 
-        request.getRequestDispatcher("employees.jsp").forward(request, response);
+        request.getRequestDispatcher("operation_message.jsp").forward(request, response);
     }
 }

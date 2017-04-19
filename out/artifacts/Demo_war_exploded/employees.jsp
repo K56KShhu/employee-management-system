@@ -13,15 +13,8 @@
         response.sendRedirect("index.jsp");
         return;
     }
-    String status = (String) request.getAttribute("status");
-    if (status != null) {
-        if (status.equals("fail")) {
-            out.println("<h1>删除员工失败</h1>");
-        } else if (status.equals("ok")) {
-            out.println("<h1>删除员工成功</h1>");
-        }
-    }
 %>
+
 <a href="${pageContext.request.contextPath}/logout.do">注销</a>
 <a href="${pageContext.request.contextPath}/functions.jsp">返回</a><br/>
 <h1>查询员工</h1>
@@ -53,13 +46,13 @@
     <%
         for (EmployeePo e : result) {
     %>
-
     <tr>
         <td><%= e.getUserId() %>
         </td>
         <td><%= e.getUserName() %>
         </td>
-        <td><a href="/department_detail.do?&deptId=<%= e.getDeptId() %>"><%= e.getDeptId() %></a></td>
+        <td><a href="/department_detail.do?&deptId=<%= e.getDeptId() %>"><%= e.getDeptId() %>
+        </a></td>
         <td><%= e.getSalary() %>
         </td>
         <td><%= e.getEmployDate() %>
@@ -68,10 +61,10 @@
         </td>
         <td><%= e.getEmail() %>
         </td>
-        <td><a href="/employee_detail.do?&userId=<%= e.getUserId() %>">详细</a></td>
-        <td><a href="/evaluation_add.jsp?&beEvaluatedId=<%= e.getUserId() %>">评价</a></td>
-        <td><a href="/employee_update.jsp?&userId=<%= e.getUserId() %>">修改</a></td>
-        <td><a href="/employee_delete.do?&userId=<%= e.getUserId() %>">删除</a></td>
+        <td><a href="/employee_detail.do?&userId=<%= e.getUserId() %>" target="_blank">详细</a></td>
+        <td><a href="/evaluation_add.jsp?&beEvaluatedId=<%= e.getUserId() %>" target="_blank">评价</a></td>
+        <td><a href="/employee_update.jsp?&userId=<%= e.getUserId() %>" target="_blank">修改</a></td>
+        <td><a href="/employee_delete.do?&userId=<%= e.getUserId() %>" target="_blank">删除</a></td>
     </tr>
     <%
             }

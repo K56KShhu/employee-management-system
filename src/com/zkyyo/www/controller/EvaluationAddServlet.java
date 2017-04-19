@@ -40,13 +40,15 @@ public class EvaluationAddServlet extends HttpServlet {
 
         if (!errors.isEmpty()) {
             request.setAttribute("errors", errors);
+            request.setAttribute("message", "评价失败");
         } else {
             boolean isAdded = evaluationService.addEvaluation(evaluatorId, beEvaluatedId, stars, comment);
             if (isAdded) {
-                request.setAttribute("status", "ok");
+                request.setAttribute("message", "评价成功");
             } else {
                 errors.add("数据库发生错误,无法添加评价");
                 request.setAttribute("errors", errors);
+                request.setAttribute("message", "评价失败");
             }
         }
 

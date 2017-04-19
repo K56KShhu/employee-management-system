@@ -229,7 +229,7 @@ public class EmployeeService {
             updatedTypes.add(EmployeeDao.UPDATE_EMPLOYEE_DATE);
         }
 
-        return employeeDao.updateEmployee(updatedTypes, updatedEp);
+        return !updatedTypes.isEmpty() && employeeDao.updateEmployee(updatedTypes, updatedEp);
 
         /*
         //姓名

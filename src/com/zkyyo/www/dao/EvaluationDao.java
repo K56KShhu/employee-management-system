@@ -11,6 +11,8 @@ import java.util.Map;
 import java.util.TreeMap;
 
 public class EvaluationDao {
+    public static final int UPDATE_STARS = 1;
+    public static final int UPDATE_COMMENT = 2;
     private static volatile EvaluationDao INSTANCE = null;
 
     private EvaluationDao() {
@@ -106,6 +108,34 @@ public class EvaluationDao {
         return evals;
     }
 
+    public EvaluationPo selectEvaluation(int evalId) {
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
+        EvaluationPo eval = null;
+
+        try {
+            conn = DbConn.getConn();
+            String sql = "SELECT * FROM evaluation WHERE test_evaluation_id=?";
+            pstmt = conn.prepareStatement(sql);
+            pstmt.setInt(1, evalId);
+            rs = pstmt.executeQuery();
+
+            if (rs.next()) {
+                int evaluatorId = rs.getInt("evaluator_id");
+                int beEvaluatedId = rs.getInt("be_evaluated_id");
+                int starLevel = rs.getInt("star_level");
+                String comment = rs.getString("comment");
+                eval = new EvaluationPo(evalId, evaluatorId, beEvaluatedId, starLevel, comment);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            DbClose.close(conn, pstmt, rs);
+        }
+        return eval;
+    }
+
     public List<EvaluationPo> selectEvaluations() {
         Connection conn = null;
         Statement stmt = null;
@@ -134,29 +164,42 @@ public class EvaluationDao {
         return evals;
     }
 
-    public boolean updateEvaluation(EvaluationPo newEvaluation) {
+    public boolean updateEvaluation(List<Integer> updatedTypes, EvaluationPo eval) {
         Connection conn = null;
         PreparedStatement pstmt = null;
         boolean isUpdated = false;
 
         try {
             conn = DbConn.getConn();
-            String sql = "UPDATE evaluation SET star_level=?, comment=? WHERE test_evaluation_id=?";
-            pstmt = conn.prepareStatement(sql);
-            pstmt.setInt(1, newEvaluation.getStarLevel());
-            pstmt.setString(2, newEvaluation.getComment());
-            pstmt.setInt(3, newEvaluation.getEvaluationId());
-            int effects = pstmt.executeUpdate();
-
-            if (effects > 0) {
-                isUpdated = true;
+            conn.setAutoCommit(false);
+            String sql;
+            for (int updateType : updatedTypes) {
+                switch (updateType) {
+                    case 1:
+                        sql = "UPDATE evaluation SET star_level=? WHERE test_evaluation_id=?";
+                        pstmt = conn.prepareStatement(sql);
+                        pstmt.setInt(1, eval.getStarLevel());
+                        pstmt.setInt(2, eval.getEvaluationId());
+                        pstmt.executeUpdate();
+                        break;
+                    case 2:
+                        sql = "UPDATE evaluation SET comment=? WHERE test_evaluation_id=?";
+                        pstmt = conn.prepareStatement(sql);
+                        pstmt.setString(1, eval.getComment());
+                        pstmt.setInt(2, eval.getEvaluationId());
+                        pstmt.executeUpdate();
+                        break;
+                    default:
+                        break;
+                }
             }
+            conn.commit();
+            isUpdated = true;
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
             DbClose.close(conn, pstmt);
         }
-
         return isUpdated;
     }
 

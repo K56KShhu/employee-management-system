@@ -22,11 +22,11 @@ public class DepartmentDeleteServlet extends HttpServlet {
         DepartmentService employeeService = DepartmentService.getInstance();
         boolean isDeleted = employeeService.deleteDepartment(deptId);
         if (isDeleted) {
-            request.setAttribute("status", "ok");
+            request.setAttribute("message", "部门解散成功");
         } else {
-            request.setAttribute("status", "fail");
+            request.setAttribute("message", "部门解散失败");
         }
 
-        request.getRequestDispatcher("departments.jsp").forward(request, response);
+        request.getRequestDispatcher("operation_message.jsp").forward(request, response);
     }
 }

@@ -20,7 +20,7 @@ public class EvaluationPo {
         this.comment = comment;
     }
 
-    public EvaluationPo(int evaluationId, int beEvaluatedId, int evaluatorId, int starLevel, String comment) {
+    public EvaluationPo(int evaluationId,int evaluatorId, int beEvaluatedId, int starLevel, String comment) {
         this.evaluationId = evaluationId;
         this.beEvaluatedId = beEvaluatedId;
         this.evaluatorId = evaluatorId;

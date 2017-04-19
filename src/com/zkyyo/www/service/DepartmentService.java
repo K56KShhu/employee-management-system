@@ -131,15 +131,13 @@ public class DepartmentService {
             updatedTypes.add(DepartmentDao.UPDATE_DESC);
         }
 
-        return departmentDao.updateDept(updatedTypes, updatedDept);
+        return !updatedTypes.isEmpty() && departmentDao.updateDept(updatedTypes, updatedDept);
     }
 
 
     public static void main(String[] args) {
         DepartmentService departmentService = DepartmentService.getInstance();
-        do {
-            System.out.println(departmentService.isValidId(new Scanner(System.in).nextLine()));
-        } while (true);
+        System.out.println(departmentService.findDepartment(-1));
     }
 }
 

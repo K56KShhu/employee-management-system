@@ -13,14 +13,6 @@
         response.sendRedirect("index.jsp");
         return;
     }
-    String status = (String) request.getAttribute("status");
-    if (status != null) {
-        if (status.equals("fail")) {
-            out.println("<h1>解散部门失败</h1>");
-        } else if (status.equals("ok")) {
-            out.println("<h1>解散部门成功</h1>");
-        }
-    }
 %>
 <a href="${pageContext.request.contextPath}/logout.do">注销</a>
 <a href="${pageContext.request.contextPath}/functions.jsp">返回</a><br/>
@@ -61,9 +53,9 @@
         </td>
         <td><%= d.getDeptDesc() %>
         </td>
-        <td><a href="/department_detail.do?&deptId=<%= d.getDeptId() %>">详细</a></td>
-        <td><a href="/department_update.jsp?&deptId=<%= d.getDeptId() %>">修改</a></td>
-        <td><a href="/department_delete.do?&deptId=<%= d.getDeptId() %>">删除</a></td>
+        <td><a href="/department_detail.do?&deptId=<%= d.getDeptId() %>" target="_blank">详细</a></td>
+        <td><a href="/department_update.jsp?&deptId=<%= d.getDeptId() %>" target="_blank">修改</a></td>
+        <td><a href="/department_delete.do?&deptId=<%= d.getDeptId() %>" target="_blank">删除</a></td>
     </tr>
     <%
             }
