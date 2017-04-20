@@ -4,7 +4,11 @@ import com.zkyyo.www.db.DbClose;
 import com.zkyyo.www.db.DbConn;
 import com.zkyyo.www.po.EvaluationPo;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.*;
 
 public class EvaluationDao {
@@ -49,6 +53,29 @@ public class EvaluationDao {
         return isAdded;
     }
 
+    public boolean deleteEvaluation(int evaluationId) {
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+        boolean isDeleted = false;
+
+        try {
+            conn = DbConn.getConn();
+            String sql = "DELETE FROM evaluation WHERE id=?";
+            pstmt = conn.prepareStatement(sql);
+            pstmt.setInt(1, evaluationId);
+            int effects = pstmt.executeUpdate();
+            if (effects > 0) {
+                isDeleted = true;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            DbClose.close(conn, pstmt);
+        }
+
+        return isDeleted;
+    }
+
     public List<EvaluationPo> selectSendedEvaluations(int userId) {
         Connection conn = null;
         PreparedStatement pstmt = null;
@@ -63,7 +90,7 @@ public class EvaluationDao {
             rs = pstmt.executeQuery();
 
             while (rs.next()) {
-                int evaluationId = rs.getInt("test_evaluation_id");
+                int evaluationId = rs.getInt("id");
                 int beEvaluatedId = rs.getInt("be_evaluated_id");
                 int starLevel = rs.getInt("star_level");
                 String comment = rs.getString("comment");
@@ -91,7 +118,7 @@ public class EvaluationDao {
             rs = pstmt.executeQuery();
 
             while (rs.next()) {
-                int evaluationId = rs.getInt("test_evaluation_id");
+                int evaluationId = rs.getInt("id");
                 int evaluatorId = rs.getInt("evaluator_id");
                 int starLevel = rs.getInt("star_level");
                 String comment = rs.getString("comment");
@@ -113,7 +140,7 @@ public class EvaluationDao {
 
         try {
             conn = DbConn.getConn();
-            String sql = "SELECT * FROM evaluation WHERE test_evaluation_id=?";
+            String sql = "SELECT * FROM evaluation WHERE id=?";
             pstmt = conn.prepareStatement(sql);
             pstmt.setInt(1, evalId);
             rs = pstmt.executeQuery();
@@ -145,8 +172,8 @@ public class EvaluationDao {
             stmt = conn.createStatement();
             rs = stmt.executeQuery(sql);
             while (rs.next()) {
-                //将数据库中的主键作为评价的唯一标识id
-                int evaluationId = rs.getInt("test_evaluation_id");
+                //将数据库中的主键作为评价的唯一标识
+                int evaluationId = rs.getInt("id");
                 int beEvaluatedId = rs.getInt("be_evaluated_id");
                 int evaluatorId = rs.getInt("evaluator_id");
                 int starLevel = rs.getInt("star_level");
@@ -161,6 +188,7 @@ public class EvaluationDao {
         return evals;
     }
 
+    /*
     public Map<Integer, EvaluationPo> selectEvaluationsByKeyWords(Set<String> keys) {
         Connection conn = null;
         PreparedStatement pstmt = null;
@@ -176,13 +204,46 @@ public class EvaluationDao {
                 pstmt.setString(1, "%" + key + "%");
                 rs = pstmt.executeQuery();
                 while (rs.next()) {
-                    int evaluationId = rs.getInt("test_evaluation_id");
+                    int evaluationId = rs.getInt("id");
                     int beEvaluatedId = rs.getInt("be_evaluated_id");
                     int evaluatorId = rs.getInt("evaluator_id");
                     int starLevel = rs.getInt("star_level");
                     String comment = rs.getString("comment");
                     EvaluationPo eval = new EvaluationPo(evaluationId, evaluatorId, beEvaluatedId, starLevel, comment);
                     evals.put(evaluationId, eval);
+                }
+            }
+            conn.commit();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            DbClose.close(conn, pstmt, rs);
+        }
+        return evals;
+    }
+    */
+
+    public Set<EvaluationPo> selectEvaluationsByKeyWords(Set<String> keys) {
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
+        Set<EvaluationPo> evals = new HashSet<>();
+
+        try {
+            conn = DbConn.getConn();
+            conn.setAutoCommit(false);
+            for (String key : keys) {
+                String sql = "SELECT * FROM evaluation WHERE comment LIKE ?";
+                pstmt = conn.prepareStatement(sql);
+                pstmt.setString(1, "%" + key + "%");
+                rs = pstmt.executeQuery();
+                while (rs.next()) {
+                    int evaluationId = rs.getInt("id");
+                    int beEvaluatedId = rs.getInt("be_evaluated_id");
+                    int evaluatorId = rs.getInt("evaluator_id");
+                    int starLevel = rs.getInt("star_level");
+                    String comment = rs.getString("comment");
+                    evals.add(new EvaluationPo(evaluationId, evaluatorId, beEvaluatedId, starLevel, comment));
                 }
             }
             conn.commit();
@@ -206,14 +267,14 @@ public class EvaluationDao {
             for (int updateType : updatedTypes) {
                 switch (updateType) {
                     case 1:
-                        sql = "UPDATE evaluation SET star_level=? WHERE test_evaluation_id=?";
+                        sql = "UPDATE evaluation SET star_level=? WHERE id=?";
                         pstmt = conn.prepareStatement(sql);
                         pstmt.setInt(1, eval.getStarLevel());
                         pstmt.setInt(2, eval.getEvaluationId());
                         pstmt.executeUpdate();
                         break;
                     case 2:
-                        sql = "UPDATE evaluation SET comment=? WHERE test_evaluation_id=?";
+                        sql = "UPDATE evaluation SET comment=? WHERE id=?";
                         pstmt = conn.prepareStatement(sql);
                         pstmt.setString(1, eval.getComment());
                         pstmt.setInt(2, eval.getEvaluationId());
@@ -231,28 +292,5 @@ public class EvaluationDao {
             DbClose.close(conn, pstmt);
         }
         return isUpdated;
-    }
-
-    public boolean deleteEvaluation(int evaluationId) {
-        Connection conn = null;
-        PreparedStatement pstmt = null;
-        boolean isDeleted = false;
-
-        try {
-            conn = DbConn.getConn();
-            String sql = "DELETE FROM evaluation WHERE test_evaluation_id=?";
-            pstmt = conn.prepareStatement(sql);
-            pstmt.setInt(1, evaluationId);
-            int effects = pstmt.executeUpdate();
-            if (effects > 0) {
-                isDeleted = true;
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            DbClose.close(conn, pstmt);
-        }
-
-        return isDeleted;
     }
 }

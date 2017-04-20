@@ -1,12 +1,16 @@
 package com.zkyyo.www.dao;
 
-import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
-
 import com.zkyyo.www.db.DbClose;
 import com.zkyyo.www.db.DbConn;
 import com.zkyyo.www.po.EmployeePo;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 
 public class EmployeeDao {
     public static final int UPDATE_DEPARTMENT_ID = 1;
@@ -51,6 +55,35 @@ public class EmployeeDao {
             e.printStackTrace();
         } finally {
             DbClose.close(conn, pstmt, rs);
+        }
+        return null;
+
+    }
+
+    public Integer createEmployeeId() {
+        Connection conn = null;
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        int largestNum = (int) Math.pow(10, 9);
+
+        try {
+            conn = DbConn.getConn();
+            String sql = "SELECT user_id FROM employee WHERE user_id=?";
+            stmt = conn.prepareStatement(sql);
+            for (int i = 0; i < largestNum; i++) {
+                int newUserId = (int) (largestNum * Math.random());
+                if (newUserId != 0) {
+                    stmt.setInt(1, newUserId);
+                    rs = stmt.executeQuery();
+                    if (!rs.next()) {
+                        return newUserId;
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            DbClose.close(conn, stmt, rs);
         }
         return null;
     }
@@ -100,34 +133,6 @@ public class EmployeeDao {
         return isUpdated;
     }
 
-    public Integer createEmployeeId() {
-        Connection conn = null;
-        PreparedStatement stmt = null;
-        ResultSet rs = null;
-        int largestNum = (int) Math.pow(10, 9);
-
-        try {
-            conn = DbConn.getConn();
-            String sql = "SELECT user_id FROM employee WHERE user_id=?";
-            stmt = conn.prepareStatement(sql);
-            for (int i = 0; i < largestNum; i++) {
-                int newUserId = (int) (largestNum * Math.random());
-                if (newUserId != 0) {
-                    stmt.setInt(1, newUserId);
-                    rs = stmt.executeQuery();
-                    if (!rs.next()) {
-                        return newUserId;
-                    }
-                }
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            DbClose.close(conn, stmt, rs);
-        }
-        return null;
-    }
-
     public boolean deleteEmployee(int deletedUserId) {
         Connection conn = null;
         PreparedStatement pstmt = null;
@@ -169,7 +174,7 @@ public class EmployeeDao {
             pstmt.setInt(1, searchedUserId);
             rs = pstmt.executeQuery();
 
-            while (rs.next()) {
+            if (rs.next()) {
                 int eUserId = rs.getInt("user_id");
                 String ePassword = rs.getString("user_pwd");
                 String eName = rs.getString("user_name");
@@ -325,101 +330,6 @@ public class EmployeeDao {
         return eps;
     }
 
-    public boolean updateEmployee(int updatedType, EmployeePo newEp) {
-        Connection conn = null;
-        PreparedStatement pstmt = null;
-        boolean isUpdate = false;
-
-        try {
-            conn = DbConn.getConn();
-            String sql = null;
-            switch (updatedType) {
-                //部门号
-                case UPDATE_DEPARTMENT_ID:
-                    conn.setAutoCommit(false);
-                    //原部门人数减1
-                    sql = "UPDATE department SET dept_population = dept_population - 1" +
-                            " WHERE dept_id = (SELECT dept_id FROM employee WHERE user_id=?)";
-                    pstmt = conn.prepareStatement(sql);
-                    pstmt.setInt(1, newEp.getUserId());
-                    pstmt.executeUpdate();
-
-                    //修改部门号
-                    sql = "UPDATE employee SET dept_id=? WHERE user_id=?";
-                    pstmt = conn.prepareStatement(sql);
-                    pstmt.setInt(1, newEp.getDeptId());
-                    pstmt.setInt(2, newEp.getUserId());
-                    pstmt.executeUpdate();
-
-                    //新部门人数加1
-                    sql = "UPDATE department SET dept_population = dept_population + 1" +
-                            " WHERE dept_id = (SELECT dept_id FROM employee WHERE user_id=?)";
-                    pstmt = conn.prepareStatement(sql);
-                    pstmt.setInt(1, newEp.getUserId());
-                    pstmt.executeUpdate();
-
-                    conn.commit();
-                    break;
-                //手机号
-                case UPDATE_MOBILE:
-                    sql = "UPDATE employee SET mobile=? WHERE user_id=?";
-                    pstmt = conn.prepareStatement(sql);
-                    pstmt.setString(1, newEp.getMobile());
-                    pstmt.setInt(2, newEp.getUserId());
-                    pstmt.executeUpdate();
-                    break;
-                //薪水
-                case UPDATE_SALARY:
-                    sql = "UPDATE employee SET salary=? WHERE user_id=?";
-                    pstmt = conn.prepareStatement(sql);
-                    pstmt.setDouble(1, newEp.getSalary());
-                    pstmt.setInt(2, newEp.getUserId());
-                    pstmt.executeUpdate();
-                    break;
-                //邮箱
-                case UPDATE_EMAIL:
-                    sql = "UPDATE employee SET email=? WHERE user_id=?";
-                    pstmt = conn.prepareStatement(sql);
-                    pstmt.setString(1, newEp.getEmail());
-                    pstmt.setInt(2, newEp.getUserId());
-                    pstmt.executeUpdate();
-                    break;
-                //就职日期
-                case UPDATE_EMPLOYEE_DATE:
-                    sql = "UPDATE employee SET employee_date=? WHERE user_id=?";
-                    pstmt = conn.prepareStatement(sql);
-                    pstmt.setDate(1, newEp.getEmployDate());
-                    pstmt.setInt(2, newEp.getUserId());
-                    pstmt.executeUpdate();
-                    break;
-                //密码
-                case UPDATE_PASSWORD:
-                    sql = "UPDATE employee SET user_pwd=? WHERE user_id=?";
-                    pstmt = conn.prepareStatement(sql);
-                    pstmt.setString(1, newEp.getPassword());
-                    pstmt.setInt(2, newEp.getUserId());
-                    pstmt.executeUpdate();
-                    break;
-                //姓名
-                case UPDATE_NAME:
-                    sql = "UPDATE employee SET user_name=? WHERE user_id=?";
-                    pstmt = conn.prepareStatement(sql);
-                    pstmt.setString(1, newEp.getUserName());
-                    pstmt.setInt(2, newEp.getUserId());
-                    pstmt.executeUpdate();
-                    break;
-                default:
-                    break;
-            }
-            isUpdate = true;
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            DbClose.close(conn, pstmt);
-        }
-        return isUpdate;
-    }
-
     public boolean updateEmployee(List<Integer> updatedTypes, EmployeePo newEp) {
         Connection conn = null;
         PreparedStatement pstmt = null;
@@ -515,5 +425,4 @@ public class EmployeeDao {
         }
         return isUpdate;
     }
-
 }

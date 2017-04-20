@@ -1,11 +1,16 @@
 package com.zkyyo.www.service;
 
 import com.zkyyo.www.dao.EvaluationDao;
-import com.zkyyo.www.po.EmployeePo;
 import com.zkyyo.www.po.EvaluationPo;
 import com.zkyyo.www.util.CleanUtil;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -29,9 +34,24 @@ public class EvaluationService {
         return INSTANCE;
     }
 
+    public boolean isValidId(String evalId) {
+        Pattern p;
+        Matcher m;
+        String regex = "^\\d+$";
+
+        if (evalId != null) {
+            p = Pattern.compile(regex);
+            m = p.matcher(evalId);
+            if (m.matches()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public boolean isValidStars(String stars) {
-        Pattern p = null;
-        Matcher m = null;
+        Pattern p;
+        Matcher m;
         String regex = "^\\d+$";
 
         if (stars != null) {
@@ -42,21 +62,6 @@ public class EvaluationService {
                 if (eStars >= MIN_STARS && eStars <= MAX_STARS) {
                     return true;
                 }
-            }
-        }
-        return false;
-    }
-
-    public boolean isValidId(String evalId) {
-        Pattern p = null;
-        Matcher m = null;
-        String regex = "^\\d+$";
-
-        if (evalId != null) {
-            p = Pattern.compile(regex);
-            m = p.matcher(evalId);
-            if (m.matches()) {
-                return true;
             }
         }
         return false;
@@ -119,12 +124,10 @@ public class EvaluationService {
         Collections.addAll(keySet, keys.trim().split(regex));
 
         EvaluationDao evaluationDao = EvaluationDao.getInstance();
-        Collection<EvaluationPo> col = evaluationDao.selectEvaluationsByKeyWords(keySet).values();
-        List<EvaluationPo> list = new ArrayList<>();
-        for (EvaluationPo e : col) {
-            list.add(e);
-        }
-        return list;
+        Set<EvaluationPo> resultSet = evaluationDao.selectEvaluationsByKeyWords(keySet);
+        List<EvaluationPo> resultList = new ArrayList<>();
+        resultList.addAll(resultSet);
+        return resultList;
     }
 
     public EvaluationPo findEvaluation(int evalId) {

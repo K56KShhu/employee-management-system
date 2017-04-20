@@ -3,7 +3,12 @@ package com.zkyyo.www.service;
 import com.zkyyo.www.dao.EmployeeDao;
 import com.zkyyo.www.po.EmployeePo;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.GregorianCalendar;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -41,8 +46,8 @@ public class EmployeeService {
     }
 
     public boolean isValidId(String id) {
-        Pattern p = null;
-        Matcher m = null;
+        Pattern p;
+        Matcher m;
         String regex = "^\\d{1,10}$";
 
         if (id != null) {
@@ -62,8 +67,8 @@ public class EmployeeService {
     }
 
     public boolean isValidName(String name) {
-        Pattern p = null;
-        Matcher m = null;
+        Pattern p;
+        Matcher m;
 //        String regex = "^[\\u4e00-\\u9fa5]{1,20}$|^[A-Za-z\\s]{1,20}$";
         String regex = "^[\\u4e00-\\u9fa5]{1,20}$|^[A-Za-z\\s]{1,20}$";
 
@@ -89,8 +94,8 @@ public class EmployeeService {
     }
 
     public boolean isValidDate(String date) {
-        Pattern p = null;
-        Matcher m = null;
+        Pattern p;
+        Matcher m;
         String regex = "^\\d{4}-\\d{1,2}-\\d{1,2}";
 
         if (date != null) {
@@ -114,8 +119,8 @@ public class EmployeeService {
     }
 
     public boolean isValidEmail(String email) {
-        Pattern p = null;
-        Matcher m = null;
+        Pattern p;
+        Matcher m;
         String regex = "^[\\w.+-]+@[\\w.+-]+\\.[\\w.+-]+$";
 
         if (email != null) {
@@ -129,8 +134,8 @@ public class EmployeeService {
     }
 
     public boolean isValidSalary(String salary) {
-        Pattern p = null;
-        Matcher m = null;
+        Pattern p;
+        Matcher m;
         String regex = "^\\d{1,10}\\.?[05]?0?$";
 
         if (salary != null) {
@@ -146,8 +151,8 @@ public class EmployeeService {
     }
 
     public boolean isValidMobile(String mobile) {
-        Pattern p = null;
-        Matcher m = null;
+        Pattern p;
+        Matcher m;
         String regex = "^0{0,2}((\\+86)|(86))?1[0-9]{10}$";
 
         if (mobile != null) {

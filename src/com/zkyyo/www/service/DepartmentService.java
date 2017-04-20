@@ -28,23 +28,9 @@ public class DepartmentService {
         return INSTANCE;
     }
 
-    public boolean isAvailableId(int id) {
-        DepartmentDao departmentDao = DepartmentDao.getInstance();
-        return departmentDao.isIdExisted(id);
-    }
-
-    public boolean isAvailableName(String name) {
-        if (name.length() > 0) {
-            DepartmentDao departmentDao = DepartmentDao.getInstance();
-            return departmentDao.isNameExisted(name);
-        } else {
-            return false;
-        }
-    }
-
     public boolean isValidId(String deptId) {
-        Pattern p = null;
-        Matcher m = null;
+        Pattern p;
+        Matcher m;
         String regex = "^[\\d]{1,10}$";
 
         if (deptId != null) {
@@ -58,8 +44,8 @@ public class DepartmentService {
     }
 
     public boolean isValidDate(String date) {
-        Pattern p = null;
-        Matcher m = null;
+        Pattern p;
+        Matcher m;
         String regex = "^\\d{4}-\\d{1,2}-\\d{1,2}";
 
         if (date != null) {
@@ -80,6 +66,20 @@ public class DepartmentService {
             }
         }
         return false;
+    }
+
+    public boolean isAvailableId(int id) {
+        DepartmentDao departmentDao = DepartmentDao.getInstance();
+        return departmentDao.isIdExisted(id);
+    }
+
+    public boolean isAvailableName(String name) {
+        if (name.length() > 0) {
+            DepartmentDao departmentDao = DepartmentDao.getInstance();
+            return departmentDao.isNameExisted(name);
+        } else {
+            return false;
+        }
     }
 
     public DepartmentPo addDepartment(String name, String deptId, String buildDate, String desc) {
