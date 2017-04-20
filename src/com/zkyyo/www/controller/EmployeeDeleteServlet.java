@@ -22,13 +22,12 @@ public class EmployeeDeleteServlet extends HttpServlet {
         int userId = Integer.valueOf(request.getParameter("userId"));
 
         EmployeeService employeeService = EmployeeService.getInstance();
-        EmployeePo deletedEp = employeeService.findEmployee(userId);
-        boolean isDeleted = employeeService.deleteEmployee(userId);
-        if (isDeleted) {
+        EmployeePo deletedEp = employeeService.deleteEmployee(userId);
+        if (deletedEp == null) {
+            request.setAttribute("message", "删除员工失败");
+        } else {
             request.setAttribute("message", "删除员工成功");
             LogUtil.delete(loginId, deletedEp);
-        } else {
-            request.setAttribute("message", "删除员工失败");
         }
 
         request.getRequestDispatcher("operation_message.jsp").forward(request, response);

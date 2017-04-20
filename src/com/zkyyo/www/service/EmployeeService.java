@@ -160,7 +160,7 @@ public class EmployeeService {
     }
 
     public EmployeePo addEmployee(String name, String mobile, String email, String password,
-                               String departmentId, String salary, String date) {
+                                  String departmentId, String salary, String date) {
         EmployeeDao employeeDao = EmployeeDao.getInstance();
         int employeeId = employeeDao.createEmployeeId();
         int deptId = Integer.valueOf(departmentId);
@@ -172,6 +172,21 @@ public class EmployeeService {
             return newEp;
         } else {
             return null;
+        }
+    }
+
+    public EmployeePo deleteEmployee(int userId) {
+        EmployeeDao employeeDao = EmployeeDao.getInstance();
+        EmployeePo deletedEp = employeeDao.selectEmployeeByUserId(userId);
+        if (deletedEp == null) {
+            return null;
+        } else {
+            boolean isDeleted = employeeDao.deleteEmployee(userId);
+            if (isDeleted) {
+                return deletedEp;
+            } else {
+                return null;
+            }
         }
     }
 
@@ -224,7 +239,7 @@ public class EmployeeService {
     }
 
 
-    public boolean updateEmployee(EmployeePo updatedEp) {
+    public EmployeePo updateEmployee(EmployeePo updatedEp) {
         EmployeeDao employeeDao = EmployeeDao.getInstance();
         EmployeePo initialEp = employeeDao.selectEmployeeByUserId(updatedEp.getUserId());
         List<Integer> updatedTypes = new ArrayList<>();
@@ -257,19 +272,14 @@ public class EmployeeService {
         if (updatedEp.getEmployDate() != null && !updatedEp.getEmployDate().equals(initialEp.getEmployDate())) {
             updatedTypes.add(EmployeeDao.UPDATE_EMPLOYEE_DATE);
         }
-
-        return !updatedTypes.isEmpty() && employeeDao.updateEmployee(updatedTypes, updatedEp);
-    }
-
-    public boolean deleteEmployee(int userId) {
-        EmployeeDao employeeDao = EmployeeDao.getInstance();
-        boolean isDeleted = employeeDao.deleteEmployee(userId);
-        if (isDeleted) {
-            return true;
+        boolean isUpdated = employeeDao.updateEmployee(updatedTypes, updatedEp);
+        if (isUpdated) {
+            return employeeDao.selectEmployeeByUserId(updatedEp.getUserId());
         } else {
-            return false;
+            return null;
         }
     }
+
 
     class UserIdCompare implements Comparator<EmployeePo> {
         public int compare(EmployeePo one, EmployeePo two) {

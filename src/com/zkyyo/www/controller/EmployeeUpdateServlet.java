@@ -30,51 +30,51 @@ public class EmployeeUpdateServlet extends HttpServlet {
 
         List<String> errors = new ArrayList<>();
         EmployeeService employeeService = EmployeeService.getInstance();
-        EmployeePo updatedEp = new EmployeePo();
-        updatedEp.setUserId(Integer.valueOf(userId));
+        EmployeePo ep = new EmployeePo();
+        ep.setUserId(Integer.valueOf(userId));
         if (name.length() > 0) {
             if (!employeeService.isValidName(name)) {
                 errors.add("姓名输入有误");
             } else {
-                updatedEp.setUserName(name);
+                ep.setUserName(name);
             }
         }
         if (mobile.length() > 0) {
             if (!employeeService.isValidMobile(mobile)) {
                 errors.add("手机号输入有误");
             } else {
-                updatedEp.setMobile(mobile);
+                ep.setMobile(mobile);
             }
         }
         if (email.length() > 0) {
             if (!employeeService.isValidEmail(email)) {
                 errors.add("邮箱输入有误");
             } else {
-                updatedEp.setEmail(email);
+                ep.setEmail(email);
             }
         }
         if (password.length() > 0) {
             if (!employeeService.isValidPassword(password, confirmedPaswword)) {
                 errors.add("第二次密码输入有误");
             } else {
-                updatedEp.setPassword(password);
+                ep.setPassword(password);
             }
         }
         if (departmendId.length() > 0) {
-            updatedEp.setDeptId(Integer.valueOf(departmendId));
+            ep.setDeptId(Integer.valueOf(departmendId));
         }
         if (salary.length() > 0) {
             if (!employeeService.isValidSalary(salary)) {
                 errors.add("薪水输入有误");
             } else {
-                updatedEp.setSalary(Double.valueOf(salary));
+                ep.setSalary(Double.valueOf(salary));
             }
         }
         if (date.length() > 0) {
             if (!employeeService.isValidDate(date)) {
                 errors.add("就职日期输入有误");
             } else {
-                updatedEp.setEmployDate(java.sql.Date.valueOf(date));
+                ep.setEmployDate(java.sql.Date.valueOf(date));
             }
         }
 
@@ -82,13 +82,13 @@ public class EmployeeUpdateServlet extends HttpServlet {
             request.setAttribute("errors", errors);
         } else {
             EmployeePo initialEp = employeeService.findEmployee(Integer.valueOf(userId));
-            boolean isUpdated = employeeService.updateEmployee(updatedEp);
-            if (isUpdated) {
-                request.setAttribute("status", "ok");
-                LogUtil.update(loginId, initialEp, updatedEp);
-            } else {
+            EmployeePo updatedEp = employeeService.updateEmployee(ep);
+            if (updatedEp == null) {
                 errors.add("数据库更新错误");
                 request.setAttribute("errors", errors);
+            } else {
+                request.setAttribute("status", "ok");
+                LogUtil.update(loginId, initialEp, updatedEp);
             }
         }
 
