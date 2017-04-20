@@ -265,6 +265,11 @@ public class EmployeeService {
         }
     }
 
+    /**
+     * 删除员工
+     * @param userId 待删除的员工号
+     * @return 删除成功返回被删除的员工对象, 找不到员工或删除失败返回null
+     */
     public EmployeePo deleteEmployee(int userId) {
         EmployeeDao employeeDao = EmployeeDao.getInstance();
         EmployeePo deletedEp = employeeDao.selectEmployeeByUserId(userId);
@@ -280,31 +285,62 @@ public class EmployeeService {
         }
     }
 
+    /**
+     * 模糊查询员工, 通过员工号查找
+     * @param userId 员工号
+     * @return 符合的员工列表
+     */
     public List<EmployeePo> fuzzyFindEmployeeByUserId(int userId) {
         EmployeeDao employeeDao = EmployeeDao.getInstance();
         return employeeDao.selectPossibleEmployeesByUserId(userId);
     }
 
+    /**
+     * 模糊查询员工, 通过员工名查找
+     * @param userName 员工名
+     * @return 符合的员工列表
+     */
     public List<EmployeePo> fuzzyFindEmployeeByUserName(String userName) {
         EmployeeDao employeeDao = EmployeeDao.getInstance();
         return employeeDao.selectPossibleEmployeesByUserName(userName);
     }
 
+    /**
+     * 查找同一部门的员工
+     * @param deptId 部门号
+     * @return 相同部门的员工列表
+     */
     public List<EmployeePo> findEmployeeByDeptId(int deptId) {
         EmployeeDao employeeDao = EmployeeDao.getInstance();
         return employeeDao.selectEmployeesByDeptId(deptId);
     }
 
+    /**
+     * 精确查询员工, 通过员工号查找
+     * @param userId 员工号
+     * @return 找到返回该员工对象, 否则返回null
+     */
     public EmployeePo findEmployee(int userId) {
         EmployeeDao employeeDao = EmployeeDao.getInstance();
         return employeeDao.selectEmployeeByUserId(userId);
     }
 
+    /**
+     * 查询所有员工
+     * @return 包含所有员工的列表
+     */
     public List<EmployeePo> findEmployees() {
         EmployeeDao employeeDao = EmployeeDao.getInstance();
         return employeeDao.selectEmployees();
     }
 
+    /**
+     * 对员工列表进行排序
+     * @param list 待排序的员工列表
+     * @param orderType 排序依据, 参考该类的静态成员变量
+     * @param isReverse 降序为true, 升序为false
+     * @return 排序完成工员工列表
+     */
     public List<EmployeePo> sort(List<EmployeePo> list, int orderType, boolean isReverse) {
         switch (orderType) {
             case ORDER_BY_USER_ID:
@@ -328,7 +364,11 @@ public class EmployeeService {
         return list;
     }
 
-
+    /**
+     * 更新员工信息
+     * @param updatedEp 包含最新员工信息的员工对象
+     * @return 更新成功返回最新员工对象, 否则返回null
+     */
     public EmployeePo updateEmployee(EmployeePo updatedEp) {
         EmployeeDao employeeDao = EmployeeDao.getInstance();
         EmployeePo initialEp = employeeDao.selectEmployeeByUserId(updatedEp.getUserId());
@@ -370,19 +410,27 @@ public class EmployeeService {
         }
     }
 
-
+    /**
+     * 提供排序依据: 员工号
+     */
     class UserIdCompare implements Comparator<EmployeePo> {
         public int compare(EmployeePo one, EmployeePo two) {
             return one.getUserId() - two.getUserId();
         }
     }
 
+    /**
+     * 提供排序依据: 就职日期
+     */
     class DateCompare implements Comparator<EmployeePo> {
         public int compare(EmployeePo one, EmployeePo two) {
             return one.getEmployDate().compareTo(two.getEmployDate());
         }
     }
 
+    /**
+     * 提供排序依据: 薪水
+     */
     class SalaryCompare implements Comparator<EmployeePo> {
         public int compare(EmployeePo one, EmployeePo two) {
             Double d1 = one.getSalary();
@@ -391,18 +439,12 @@ public class EmployeeService {
         }
     }
 
+    /**
+     * 提供排序依据: 部门号
+     */
     class DeptIdCompare implements Comparator<EmployeePo> {
         public int compare(EmployeePo one, EmployeePo two) {
             return one.getDeptId() - two.getDeptId();
-        }
-    }
-
-    public static void main(String[] args) {
-        EmployeeService employeeService = EmployeeService.getInstance();
-        List<EmployeePo> list = employeeService.findEmployees();
-        List<EmployeePo> result = employeeService.sort(list, ORDER_BY_SALARY, true);
-        for (EmployeePo e : result) {
-            System.out.println(e);
         }
     }
 }
