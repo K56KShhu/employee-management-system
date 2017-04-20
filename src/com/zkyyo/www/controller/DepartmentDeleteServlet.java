@@ -22,13 +22,12 @@ public class DepartmentDeleteServlet extends HttpServlet {
         int deptId = Integer.valueOf(request.getParameter("deptId"));
 
         DepartmentService employeeService = DepartmentService.getInstance();
-        DepartmentPo deletedDept = employeeService.findDepartment(deptId);
-        boolean isDeleted = employeeService.deleteDepartment(deptId);
-        if (isDeleted) {
+        DepartmentPo deletedDept = employeeService.deleteDepartment(deptId);
+        if (deletedDept == null) {
+            request.setAttribute("message", "部门解散失败");
+        } else {
             request.setAttribute("message", "部门解散成功");
             LogUtil.delete(loginId, deletedDept);
-        } else {
-            request.setAttribute("message", "部门解散失败");
         }
 
         request.getRequestDispatcher("operation_message.jsp").forward(request, response);

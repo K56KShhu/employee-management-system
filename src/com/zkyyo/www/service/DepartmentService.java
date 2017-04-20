@@ -94,9 +94,19 @@ public class DepartmentService {
         }
     }
 
-    public boolean deleteDepartment(int deptId) {
+    public DepartmentPo deleteDepartment(int deptId) {
         DepartmentDao departmentDao = DepartmentDao.getInstance();
-        return departmentDao.deleteDept(deptId);
+        DepartmentPo deletedDept = departmentDao.selectDepartmentByDeptId(deptId);
+        if (deletedDept == null) {
+            return null;
+        } else {
+            boolean isDeleted = departmentDao.deleteDept(deptId);
+            if (isDeleted) {
+                return deletedDept;
+            } else {
+                return null;
+            }
+        }
     }
 
     public List<DepartmentPo> fuzzyFindDepartmentByDeptId(int deptId) {
@@ -139,7 +149,7 @@ public class DepartmentService {
         return list;
     }
 
-    public boolean updateDepartment(DepartmentPo updatedDept) {
+    public DepartmentPo updateDepartment(DepartmentPo updatedDept) {
         DepartmentDao departmentDao = DepartmentDao.getInstance();
         DepartmentPo initialDept = departmentDao.selectDepartmentByDeptId(updatedDept.getDeptId());
         List<Integer> updatedTypes = new ArrayList<>();
@@ -153,8 +163,12 @@ public class DepartmentService {
         if (updatedDept.getDeptDesc() != null && !updatedDept.getDeptDesc().equals(initialDept.getDeptDesc())) {
             updatedTypes.add(DepartmentDao.UPDATE_DESC);
         }
-
-        return !updatedTypes.isEmpty() && departmentDao.updateDept(updatedTypes, updatedDept);
+        boolean isUpdated = departmentDao.updateDept(updatedTypes, updatedDept);
+        if (isUpdated) {
+            return departmentDao.selectDepartmentByDeptId(updatedDept.getDeptId());
+        } else {
+            return null;
+        }
     }
 
 

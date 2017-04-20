@@ -24,23 +24,23 @@ public class EvaluationUpdateServlet extends HttpServlet {
 
         List<String> errors = new ArrayList<>();
         EvaluationService evaluationService = EvaluationService.getInstance();
-        EvaluationPo updatedEval = new EvaluationPo();
+        EvaluationPo eval = new EvaluationPo();
         if (!evaluationService.isValidId(evalId)) {
             errors.add("评价索引格式无效");
         } else {
             if (!evaluationService.isExisted(Integer.valueOf(evalId))) {
                 errors.add("评价不存在");
             } else {
-                updatedEval.setEvaluationId(Integer.valueOf(evalId));
+                eval.setEvaluationId(Integer.valueOf(evalId));
                 if (stars.length() > 0) {
                     if (!evaluationService.isValidStars(stars)) {
                         errors.add("评价等级输入有误");
                     } else {
-                        updatedEval.setStarLevel(Integer.valueOf(stars));
+                        eval.setStarLevel(Integer.valueOf(stars));
                     }
                 }
                 if (comment.length() > 0) {
-                    updatedEval.setComment(comment);
+                    eval.setComment(comment);
                 }
             }
         }
@@ -50,14 +50,14 @@ public class EvaluationUpdateServlet extends HttpServlet {
             request.setAttribute("message", "修改评价失败");
         } else {
             EvaluationPo initialEval = evaluationService.findEvaluation(Integer.valueOf(evalId));
-            EvaluationPo eval = evaluationService.updateEvaluation(updatedEval);
-            if (eval == null) {
+            EvaluationPo updatedEval = evaluationService.updateEvaluation(eval);
+            if (updatedEval == null) {
                 errors.add("数据库发生错误,无法修改评价");
                 request.setAttribute("errors", errors);
                 request.setAttribute("message", "修改评价失败");
             } else {
                 request.setAttribute("message", "修改评价成功");
-                LogUtil.update(loginId, initialEval, eval);
+                LogUtil.update(loginId, initialEval, updatedEval);
             }
         }
 

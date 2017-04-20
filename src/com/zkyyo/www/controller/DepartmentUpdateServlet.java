@@ -25,15 +25,15 @@ public class DepartmentUpdateServlet extends HttpServlet {
 
         List<String> errors = new ArrayList<>();
         DepartmentService departmentService = DepartmentService.getInstance();
-        DepartmentPo updateDept = new DepartmentPo();
-        updateDept.setDeptId(Integer.valueOf(departmentId));
+        DepartmentPo dept = new DepartmentPo();
+        dept.setDeptId(Integer.valueOf(departmentId));
 
         //部门名
         if (name.length() > 0) {
             if (!departmentService.isValidName(name)) {
                 errors.add("部门名输入有误或已被注册");
             } else {
-                updateDept.setDeptName(name);
+                dept.setDeptName(name);
             }
         }
         //创建日期
@@ -41,25 +41,25 @@ public class DepartmentUpdateServlet extends HttpServlet {
             if (!departmentService.isValidDate(buildDate)) {
                 errors.add("创建日期输入有误");
             } else {
-                updateDept.setBuildDate(java.sql.Date.valueOf(buildDate));
+                dept.setBuildDate(java.sql.Date.valueOf(buildDate));
             }
         }
         //描述
         if (desc.length() > 0) {
-            updateDept.setDeptDesc(desc);
+            dept.setDeptDesc(desc);
         }
 
         if (!errors.isEmpty()) {
             request.setAttribute("errors", errors);
         } else {
             DepartmentPo initialDept = departmentService.findDepartment(Integer.valueOf(departmentId));
-            boolean isUpdated = departmentService.updateDepartment(updateDept);
-            if (isUpdated) {
-                request.setAttribute("status", "ok");
-                LogUtil.update(loginId, initialDept, updateDept);
-            } else {
+            DepartmentPo updatedDept = departmentService.updateDepartment(dept);
+            if (updatedDept == null) {
                 errors.add("数据库更新错误");
                 request.setAttribute("errors", errors);
+            } else {
+                request.setAttribute("status", "ok");
+                LogUtil.update(loginId, initialDept, updatedDept);
             }
         }
 
