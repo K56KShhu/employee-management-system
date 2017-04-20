@@ -9,7 +9,7 @@ import java.util.*;
 
 public class Test {
     public static void main(String[] args) {
-        String s = null;
-        System.out.println(Integer.valueOf(s));
+        Long l = 2121212L;
+        System.out.println(l);
     }
 }

@@ -41,11 +41,15 @@ public class DepartmentAddServlet extends HttpServlet {
 
         List<String> errors = new ArrayList<>();
         DepartmentService departmentService = DepartmentService.getInstance();
-        if (!departmentService.isValidName(name)) {
-            errors.add("部门名输入有误或已经被注册");
+        if (!departmentService.isAvailableName(name)) {
+            errors.add("部门名输入为空或已经被注册");
         }
         if (!departmentService.isValidId(departmentId)) {
-            errors.add("部门号输入有误或已经被注册");
+            errors.add("部门号输入有误");
+        } else {
+            if (!departmentService.isAvailableId(Integer.valueOf(departmentId))) {
+                errors.add("部门号已被注册");
+            }
         }
         if (!departmentService.isValidDate(buildDate)) {
             errors.add("部门建立日期输入有误");

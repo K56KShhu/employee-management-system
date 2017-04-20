@@ -15,7 +15,6 @@
 </div>
 <h2>Internal Server Error</h2>
 <hr/>
-
 <p>服务器发生了一点小问题, 先到别处逛逛吧.</p>
 </body>
 </html>

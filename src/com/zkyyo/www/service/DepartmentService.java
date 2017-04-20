@@ -2,6 +2,7 @@ package com.zkyyo.www.service;
 
 import com.zkyyo.www.dao.DepartmentDao;
 import com.zkyyo.www.po.DepartmentPo;
+import com.zkyyo.www.util.CleanUtil;
 
 import java.util.*;
 import java.util.regex.Matcher;
@@ -27,6 +28,20 @@ public class DepartmentService {
         return INSTANCE;
     }
 
+    public boolean isAvailableId(int id) {
+        DepartmentDao departmentDao = DepartmentDao.getInstance();
+        return departmentDao.isIdExisted(id);
+    }
+
+    public boolean isAvailableName(String name) {
+        if (name.length() > 0) {
+            DepartmentDao departmentDao = DepartmentDao.getInstance();
+            return departmentDao.isNameExisted(name);
+        } else {
+            return false;
+        }
+    }
+
     public boolean isValidId(String deptId) {
         Pattern p = null;
         Matcher m = null;
@@ -36,22 +51,10 @@ public class DepartmentService {
             p = Pattern.compile(regex);
             m = p.matcher(deptId);
             if (m.matches()) {
-                DepartmentDao departmentDao = DepartmentDao.getInstance();
-                if (departmentDao.isAvailableId(Integer.valueOf(deptId))) {
-                    return true;
-                }
+                return true;
             }
         }
         return false;
-    }
-
-    public boolean isValidName(String name) {
-        if (name.length() > 0) {
-            DepartmentDao departmentDao = DepartmentDao.getInstance();
-            return departmentDao.isNameExisted(name);
-        } else {
-            return false;
-        }
     }
 
     public boolean isValidDate(String date) {
@@ -82,9 +85,9 @@ public class DepartmentService {
     public DepartmentPo addDepartment(String name, String deptId, String buildDate, String desc) {
         int id = Integer.valueOf(deptId);
         java.sql.Date date = java.sql.Date.valueOf(buildDate);
-        String newStr = desc.replaceAll("(\r\n|\r|\n|\n\r)", "<br>");
+        desc = CleanUtil.cleanText(desc);
 
-        DepartmentPo newDept = new DepartmentPo(id, name, newStr, date);
+        DepartmentPo newDept = new DepartmentPo(id, name, desc, date);
         DepartmentDao departmentDao = DepartmentDao.getInstance();
         boolean isAdded = departmentDao.addDepartment(newDept);
         if (isAdded) {
@@ -154,13 +157,14 @@ public class DepartmentService {
         DepartmentPo initialDept = departmentDao.selectDepartmentByDeptId(updatedDept.getDeptId());
         List<Integer> updatedTypes = new ArrayList<>();
 
-        if (updatedDept.getDeptName() != null && !updatedDept.getDeptName().equals(initialDept.getDeptName())) {
+        if (updatedDept.getName() != null && !updatedDept.getName().equals(initialDept.getName())) {
             updatedTypes.add(DepartmentDao.UPDATE_NAME);
         }
         if (updatedDept.getBuildDate() != null && !updatedDept.getBuildDate().equals(initialDept.getBuildDate())) {
             updatedTypes.add(DepartmentDao.UPDATE_BUILD_DATE);
         }
-        if (updatedDept.getDeptDesc() != null && !updatedDept.getDeptDesc().equals(initialDept.getDeptDesc())) {
+        if (updatedDept.getDescription() != null && !updatedDept.getDescription().equals(initialDept.getDescription())) {
+            updatedDept.setDescription(CleanUtil.cleanText(updatedDept.getDescription()));
             updatedTypes.add(DepartmentDao.UPDATE_DESC);
         }
         boolean isUpdated = departmentDao.updateDept(updatedTypes, updatedDept);
@@ -180,7 +184,7 @@ public class DepartmentService {
 
     class PopulationCompare implements Comparator<DepartmentPo> {
         public int compare(DepartmentPo one, DepartmentPo two) {
-            return one.getDeptPopulation() - two.getDeptPopulation();
+            return one.getPopulation() - two.getPopulation();
         }
     }
 

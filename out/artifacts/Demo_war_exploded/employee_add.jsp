@@ -57,19 +57,19 @@
         </tr>
         <tr>
             <td align="right">密码:</td>
-            <td><input type="password" name="password" size="30" maxlength="30"></td>
+            <td><input type="password" name="password" size="30" maxlength="50"></td>
         </tr>
         <tr>
             <td align="right">密码确认:</td>
-            <td><input type="password" name="confirmedPsw" size="30" maxlength="30"></td>
+            <td><input type="password" name="confirmedPsw" size="30" maxlength="50"></td>
         </tr>
         <tr>
             <td align="right">部门号:</td>
-            <td><input type="text" name="deptId" size="30" maxlength="20"></td>
+            <td><input type="text" name="deptId" size="30" maxlength="10"></td>
         </tr>
         <tr>
             <td align="right">薪水:</td>
-            <td><input type="text" name="salary" size="30" maxlength="20"></td>
+            <td><input type="text" name="salary" size="30" maxlength="10"></td>
         </tr>
         <tr>
             <td align="right">就职日期:</td>

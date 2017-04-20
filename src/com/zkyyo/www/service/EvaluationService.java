@@ -3,6 +3,7 @@ package com.zkyyo.www.service;
 import com.zkyyo.www.dao.EvaluationDao;
 import com.zkyyo.www.po.EmployeePo;
 import com.zkyyo.www.po.EvaluationPo;
+import com.zkyyo.www.util.CleanUtil;
 
 import java.util.*;
 import java.util.regex.Matcher;
@@ -70,7 +71,7 @@ public class EvaluationService {
         int eEvaluatorId = Integer.valueOf(evaluatorId);
         int eBeEvaluatedId = Integer.valueOf(beEvaluatedId);
         int eStars = Integer.valueOf(stars);
-        String eComment = comment.replaceAll("(\r\n|\r|\n|\n\r)", "<br>");
+        String eComment = CleanUtil.cleanText(comment);
 
         EvaluationPo eval = new EvaluationPo(eEvaluatorId, eBeEvaluatedId, eStars, eComment);
         EvaluationDao evaluationDao = EvaluationDao.getInstance();
@@ -151,6 +152,7 @@ public class EvaluationService {
 
         List<Integer> updatedTypes = new ArrayList<>();
         if (updatedEval.getStarLevel() != 0 && updatedEval.getStarLevel() != initialEval.getStarLevel()) {
+            updatedEval.setComment(CleanUtil.cleanText(updatedEval.getComment()));
             updatedTypes.add(EvaluationDao.UPDATE_STARS);
         }
         if (updatedEval.getComment() != null && !updatedEval.getComment().equals(initialEval.getComment())) {

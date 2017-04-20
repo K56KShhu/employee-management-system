@@ -41,12 +41,12 @@
     </tr>
     <tr>
         <th>部门名</th>
-        <td><%= department.getDeptName() %>
+        <td><%= department.getName() %>
         </td>
     </tr>
     <tr>
         <th>人数</th>
-        <td><%= department.getDeptPopulation() %>
+        <td><%= department.getPopulation() %>
         </td>
     </tr>
     <tr>
@@ -56,7 +56,7 @@
     </tr>
     <tr>
         <th>描述</th>
-        <td><%= department.getDeptDesc() %>
+        <td><%= department.getDescription() %>
         </td>
     </tr>
     <tr>

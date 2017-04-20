@@ -62,13 +62,13 @@
     <tr>
         <td><%= d.getDeptId() %>
         </td>
-        <td><%= d.getDeptName() %>
+        <td><%= d.getName() %>
         </td>
-        <td><%= d.getDeptPopulation() %>
+        <td><%= d.getPopulation() %>
         </td>
         <td><%= d.getBuildDate() %>
         </td>
-        <td><%= d.getDeptDesc() %>
+        <td><%= d.getDescription() %>
         </td>
         <td><a href="/department_detail.do?&deptId=<%= d.getDeptId() %>" target="_blank">详细</a></td>
         <td><a href="/department_update.jsp?&deptId=<%= d.getDeptId() %>" target="_blank">修改</a></td>

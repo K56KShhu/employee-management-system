@@ -7,6 +7,8 @@ import com.zkyyo.www.po.DepartmentPo;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class DepartmentDao {
     public static final int UPDATE_NAME = 1;
@@ -28,7 +30,7 @@ public class DepartmentDao {
         return INSTANCE;
     }
 
-    public boolean isAvailableId(int id) {
+    public boolean isIdExisted(int id) {
         Connection conn = null;
         PreparedStatement pstmt = null;
         ResultSet rs = null;
@@ -79,9 +81,9 @@ public class DepartmentDao {
                     "dept_population, description, built_date) VALUES (?, ?, ?, ?, ?)";
             pstmt = conn.prepareStatement(sql);
             pstmt.setInt(1, newDept.getDeptId());
-            pstmt.setString(2, newDept.getDeptName());
-            pstmt.setInt(3, newDept.getDeptPopulation());
-            pstmt.setString(4, newDept.getDeptDesc());
+            pstmt.setString(2, newDept.getName());
+            pstmt.setInt(3, newDept.getPopulation());
+            pstmt.setString(4, newDept.getDescription());
             pstmt.setDate(5, newDept.getBuildDate());
 
             int effects = pstmt.executeUpdate();
@@ -377,7 +379,7 @@ public class DepartmentDao {
                 case 1:
                     sql = "UPDATE department SET dept_name=? WHERE dept_id=?";
                     pstmt = conn.prepareStatement(sql);
-                    pstmt.setString(1, newDept.getDeptName());
+                    pstmt.setString(1, newDept.getName());
                     pstmt.setInt(2, updateDeptId);
                     effects = pstmt.executeUpdate();
                     break;
@@ -385,7 +387,7 @@ public class DepartmentDao {
                 case 2:
                     sql = "UPDATE department SET description=? WHERE dept_id=?";
                     pstmt = conn.prepareStatement(sql);
-                    pstmt.setString(1, newDept.getDeptDesc());
+                    pstmt.setString(1, newDept.getDescription());
                     pstmt.setInt(2, updateDeptId);
                     effects = pstmt.executeUpdate();
                     break;
@@ -425,7 +427,7 @@ public class DepartmentDao {
                     case UPDATE_NAME:
                         sql = "UPDATE department SET dept_name=? WHERE dept_id=?";
                         pstmt = conn.prepareStatement(sql);
-                        pstmt.setString(1, updatedDept.getDeptName());
+                        pstmt.setString(1, updatedDept.getName());
                         pstmt.setInt(2, updatedDept.getDeptId());
                         pstmt.executeUpdate();
                         break;
@@ -433,7 +435,7 @@ public class DepartmentDao {
                     case UPDATE_DESC:
                         sql = "UPDATE department SET description=? WHERE dept_id=?";
                         pstmt = conn.prepareStatement(sql);
-                        pstmt.setString(1, updatedDept.getDeptDesc());
+                        pstmt.setString(1, updatedDept.getDescription());
                         pstmt.setInt(2, updatedDept.getDeptId());
                         pstmt.executeUpdate();
                         break;

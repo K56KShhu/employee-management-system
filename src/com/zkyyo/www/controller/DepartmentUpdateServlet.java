@@ -46,10 +46,10 @@ public class DepartmentUpdateServlet extends HttpServlet {
 
         //部门名
         if (name.length() > 0) {
-            if (!departmentService.isValidName(name)) {
-                errors.add("部门名输入有误或已被注册");
+            if (!departmentService.isAvailableName(name)) {
+                errors.add("部门名输入为空或已被注册");
             } else {
-                dept.setDeptName(name);
+                dept.setName(name);
             }
         }
         //创建日期
@@ -62,7 +62,7 @@ public class DepartmentUpdateServlet extends HttpServlet {
         }
         //描述
         if (desc.length() > 0) {
-            dept.setDeptDesc(desc);
+            dept.setDescription(desc);
         }
 
         String page = ERROR_VIEW;

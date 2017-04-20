@@ -113,7 +113,7 @@ public class LogUtil {
 
         try {
             BufferedWriter bw = new BufferedWriter(new FileWriter(PATH, true));
-            bw.write("* " + timeStamp + " - 建立部门" + newDept.getDeptName() + "(" + newDept.getDeptId() + ")"
+            bw.write("* " + timeStamp + " - 建立部门" + newDept.getName() + "(" + newDept.getDeptId() + ")"
                     + " <" + operator.getUserName() + "(" + operator.getUserId() + ")>");
             bw.newLine();
             bw.close();
@@ -129,7 +129,7 @@ public class LogUtil {
 
         try {
             BufferedWriter bw = new BufferedWriter(new FileWriter(PATH, true));
-            bw.write("* " + timeStamp + " - 解散部门" + deletedDept.getDeptName() + "(" + deletedDept.getDeptId() + ")"
+            bw.write("* " + timeStamp + " - 解散部门" + deletedDept.getName() + "(" + deletedDept.getDeptId() + ")"
                     + " <" + operator.getUserName() + "(" + operator.getUserId() + ")>");
             bw.newLine();
             bw.close();
@@ -145,19 +145,19 @@ public class LogUtil {
 
         try {
             BufferedWriter bw = new BufferedWriter(new FileWriter(PATH, true));
-            bw.write("* " + timeStamp + " - 修改部门" + initialDept.getDeptName() + "("
+            bw.write("* " + timeStamp + " - 修改部门" + initialDept.getName() + "("
                     + initialDept.getDeptId() + ") <" + operator.getUserName() + "(" + operator.getUserId() + ")>");
             bw.newLine();
-            if (updatedDept.getDeptName() != null && !updatedDept.getDeptName().equals(initialDept.getDeptName())) {
-                bw.write(PRE_SPACE + "原部门名: " + initialDept.getDeptName());
+            if (updatedDept.getName() != null && !updatedDept.getName().equals(initialDept.getName())) {
+                bw.write(PRE_SPACE + "原部门名: " + initialDept.getName());
                 bw.newLine();
-                bw.write(PRE_SPACE + "现部门名: " + updatedDept.getDeptName());
+                bw.write(PRE_SPACE + "现部门名: " + updatedDept.getName());
                 bw.newLine();
             }
-            if (updatedDept.getDeptDesc() != null && !updatedDept.getDeptDesc().equals(initialDept.getDeptDesc())) {
-                bw.write(PRE_SPACE + "原部门描述: " + initialDept.getDeptDesc());
+            if (updatedDept.getDescription() != null && !updatedDept.getDescription().equals(initialDept.getDescription())) {
+                bw.write(PRE_SPACE + "原部门描述: " + initialDept.getDescription());
                 bw.newLine();
-                bw.write(PRE_SPACE + "现部门描述: " + updatedDept.getDeptDesc());
+                bw.write(PRE_SPACE + "现部门描述: " + updatedDept.getDescription());
                 bw.newLine();
             }
             if (updatedDept.getBuildDate() != null && !updatedDept.getBuildDate().equals(initialDept.getBuildDate())) {

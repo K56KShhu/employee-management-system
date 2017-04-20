@@ -55,7 +55,7 @@ public class EmployeeService {
         return false;
     }
 
-    public boolean isUserExisted(int id) {
+    public boolean isIdExisted(int id) {
         EmployeeDao employeeDao = EmployeeDao.getInstance();
         EmployeePo foundEp = employeeDao.selectEmployeeByUserId(id);
         return foundEp != null;
@@ -64,7 +64,8 @@ public class EmployeeService {
     public boolean isValidName(String name) {
         Pattern p = null;
         Matcher m = null;
-        String regex = "^[\\u4e00-\\u9fa5]+$|^[A-Za-z]+$";
+//        String regex = "^[\\u4e00-\\u9fa5]{1,20}$|^[A-Za-z\\s]{1,20}$";
+        String regex = "^[\\u4e00-\\u9fa5]{1,20}$|^[A-Za-z\\s]{1,20}$";
 
         if (name != null) {
             p = Pattern.compile(regex);
@@ -78,7 +79,7 @@ public class EmployeeService {
 
     public boolean isValidPassword(String password, String confirmedPassword) {
         if (password != null && confirmedPassword != null) {
-            if (password.length() > 0) {
+            if (password.length() > 0 && password.length() <= 50) {
                 if (password.equals(confirmedPassword)) {
                     return true;
                 }
@@ -130,7 +131,7 @@ public class EmployeeService {
     public boolean isValidSalary(String salary) {
         Pattern p = null;
         Matcher m = null;
-        String regex = "^\\d{1,13}\\.?[05]?0?$";
+        String regex = "^\\d{1,10}\\.?[05]?0?$";
 
         if (salary != null) {
             p = Pattern.compile(regex);

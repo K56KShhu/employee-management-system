@@ -5,27 +5,27 @@ import java.util.Objects;
 
 public class DepartmentPo {
     private int deptId;
-    private String deptName;
-    private int deptPopulation = 0;
-    private String deptDesc;
+    private String name;
+    private int population = 0;
+    private String description;
     private Date buildDate;
 
     public DepartmentPo() {
 
     }
 
-    public DepartmentPo(int deptId, String deptName, String deptDesc, Date buildDate) {
+    public DepartmentPo(int deptId, String name, String description, Date buildDate) {
         this.deptId = deptId;
-        this.deptName = deptName;
-        this.deptDesc = deptDesc;
+        this.name = name;
+        this.description = description;
         this.buildDate = buildDate;
     }
 
-    public DepartmentPo(int deptId, String deptName, int deptPopulation, String deptDesc, Date buildDate) {
+    public DepartmentPo(int deptId, String name, int population, String description, Date buildDate) {
         this.deptId = deptId;
-        this.deptName = deptName;
-        this.deptPopulation = deptPopulation;
-        this.deptDesc = deptDesc;
+        this.name = name;
+        this.population = population;
+        this.description = description;
         this.buildDate = buildDate;
     }
 
@@ -37,28 +37,28 @@ public class DepartmentPo {
         this.deptId = deptId;
     }
 
-    public String getDeptName() {
-        return deptName;
+    public String getName() {
+        return name;
     }
 
-    public void setDeptName(String deptName) {
-        this.deptName = deptName;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public int getDeptPopulation() {
-        return deptPopulation;
+    public int getPopulation() {
+        return population;
     }
 
-    public void setDeptPopulation(int deptPopulation) {
-        this.deptPopulation = deptPopulation;
+    public void setPopulation(int population) {
+        this.population = population;
     }
 
-    public String getDeptDesc() {
-        return deptDesc;
+    public String getDescription() {
+        return description;
     }
 
-    public void setDeptDesc(String deptDesc) {
-        this.deptDesc = deptDesc;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public Date getBuildDate() {
@@ -73,9 +73,9 @@ public class DepartmentPo {
     public String toString() {
         return "DepartmentPo{" +
                 "deptId=" + deptId +
-                ", deptName='" + deptName + '\'' +
-                ", deptPopulation=" + deptPopulation +
-                ", deptDesc='" + deptDesc + '\'' +
+                ", name='" + name + '\'' +
+                ", population=" + population +
+                ", description='" + description + '\'' +
                 ", buildDate=" + buildDate +
                 '}';
     }
@@ -95,13 +95,13 @@ public class DepartmentPo {
         }
         DepartmentPo other = (DepartmentPo) obj;
         return deptId == other.getDeptId()
-                && deptName.equals(other.getDeptName())
-                && deptPopulation == other.getDeptPopulation()
-                && deptDesc.equals(other.getDeptDesc())
+                && name.equals(other.getName())
+                && population == other.getPopulation()
+                && description.equals(other.getDescription())
                 && buildDate.equals(other.getBuildDate());
     }
     
     public int hashCode() {
-        return Objects.hash(deptId, deptName, deptPopulation, deptDesc, buildDate);
+        return Objects.hash(deptId, name, population, description, buildDate);
     }
 }

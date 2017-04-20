@@ -49,7 +49,7 @@
     <tr>
         <th>部门名</th>
         <td><a href="/department_detail.do?&deptId=<%= employee.getDeptId() %>"
-               target="_blank"><%= department.getDeptName() %>
+               target="_blank"><%= department.getName() %>
         </a></td>
     </tr>
     <tr>

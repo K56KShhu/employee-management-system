@@ -38,20 +38,24 @@ public class DepartmentFindServlet extends HttpServlet {
         String reverse = request.getParameter("reverse");
         List<DepartmentPo> result = null;
         DepartmentService departmentService = DepartmentService.getInstance();
-        info = info.trim();
 
-        if (way.length() > 0 && info.length() > 0) {
-            if (way.equals("by_dept_id")) {
-                result = departmentService.fuzzyFindDepartmentByDeptId(Integer.valueOf(info));
+        if (way != null && way.length() > 0) {
+            if (info != null) {
+                info = info.trim();
+                if (info.length() > 0) {
+                    if (way.equals("by_dept_id") && departmentService.isValidId(info)) {
+                        result = departmentService.fuzzyFindDepartmentByDeptId(Integer.valueOf(info));
+                    }
+                    if (way.equals("by_dept_name")) {
+                        result = departmentService.fuzzyFindDepartmentByDeptName(info);
+                    }
+                    if (way.equals("all")) {
+                        result = departmentService.findDepartments();
+                    }
+                } else {
+                    result = departmentService.findDepartments();
+                }
             }
-            if (way.equals("by_dept_name")) {
-                result = departmentService.fuzzyFindDepartmentByDeptName(info);
-            }
-            if (way.equals("all")) {
-                result = departmentService.findDepartments();
-            }
-        } else {
-            result = departmentService.findDepartments();
         }
 
         if (result != null) {

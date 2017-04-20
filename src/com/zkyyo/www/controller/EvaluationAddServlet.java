@@ -48,7 +48,7 @@ public class EvaluationAddServlet extends HttpServlet {
             response.sendRedirect("functions.jsp");
         }
         if (employeeService.isValidId(beEvaluatedId)) {
-            if (!employeeService.isUserExisted(Integer.valueOf(beEvaluatedId))) {
+            if (!employeeService.isIdExisted(Integer.valueOf(beEvaluatedId))) {
                 errors.add("被评价员工不存在");
             }
         }

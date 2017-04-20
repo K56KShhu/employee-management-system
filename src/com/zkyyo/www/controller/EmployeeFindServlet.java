@@ -1,6 +1,8 @@
 package com.zkyyo.www.controller;
 
+import com.zkyyo.www.dao.DepartmentDao;
 import com.zkyyo.www.po.EmployeePo;
+import com.zkyyo.www.service.DepartmentService;
 import com.zkyyo.www.service.EmployeeService;
 
 import javax.servlet.ServletException;
@@ -38,23 +40,45 @@ public class EmployeeFindServlet extends HttpServlet {
         String reverse = request.getParameter("reverse");
         List<EmployeePo> result = null;
         EmployeeService employeeService = EmployeeService.getInstance();
-        info = info.trim();
+        DepartmentService departmentService = DepartmentService.getInstance();
 
-        if (way.length() > 0 && info.length() > 0) {
-            if (way.equals("by_user_id")) {
-                result = employeeService.fuzzyFindEmployeeByUserId(Integer.valueOf(info));
+//        if (way.length() > 0 && info.length() > 0) {
+//            if (way.equals("by_user_id") && employeeService.isValidId(info)) {
+//                result = employeeService.fuzzyFindEmployeeByUserId(Integer.valueOf(info));
+//            }
+//            if (way.equals("by_user_name") && employeeService.isValidName(info)) {
+//                result = employeeService.fuzzyFindEmployeeByUserName(info);
+//            }
+//            if (way.equals("by_dept_id") && departmentService.isValidId(info)) {
+//                result = employeeService.findEmployeeByDeptId(Integer.valueOf(info));
+//            }
+//            if (way.equals("all")) {
+//                result = employeeService.findEmployees();
+//            }
+//        } else {
+//            result = employeeService.findEmployees();
+//        }
+
+        if (way != null && way.length() > 0) {
+            if (info != null) {
+                info = info.trim();
+                if (info.length() > 0) {
+                    if (way.equals("by_user_id") && employeeService.isValidId(info)) {
+                        result = employeeService.fuzzyFindEmployeeByUserId(Integer.valueOf(info));
+                    }
+                    if (way.equals("by_user_name") && employeeService.isValidName(info)) {
+                        result = employeeService.fuzzyFindEmployeeByUserName(info);
+                    }
+                    if (way.equals("by_dept_id") && departmentService.isValidId(info)) {
+                        result = employeeService.findEmployeeByDeptId(Integer.valueOf(info));
+                    }
+                    if (way.equals("all")) {
+                        result = employeeService.findEmployees();
+                    }
+                } else {
+                    result = employeeService.findEmployees();
+                }
             }
-            if (way.equals("by_user_name")) {
-                result = employeeService.fuzzyFindEmployeeByUserName(info);
-            }
-            if (way.equals("by_dept_id")) {
-                result = employeeService.findEmployeeByDeptId(Integer.valueOf(info));
-            }
-            if (way.equals("all")) {
-                result = employeeService.findEmployees();
-            }
-        } else {
-            result = employeeService.findEmployees();
         }
 
         if (result != null) {
@@ -94,9 +118,8 @@ public class EmployeeFindServlet extends HttpServlet {
                         break;
                 }
             }
-
-            request.setAttribute("result", result);
-            request.getRequestDispatcher(EMPLOYEE_VIEW).forward(request, response);
         }
+        request.setAttribute("result", result);
+        request.getRequestDispatcher(EMPLOYEE_VIEW).forward(request, response);
     }
 }

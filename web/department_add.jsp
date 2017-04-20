@@ -41,7 +41,7 @@
     <table border="1" align="center">
         <tr>
             <th align="right">部门号:</th>
-            <td><input type="text" name="departmentId" size="30" maxlength="20"></td>
+            <td><input type="text" name="departmentId" size="30" maxlength="10"></td>
         </tr>
         <tr>
             <th align="right">部门名:</th>
@@ -54,7 +54,7 @@
                        value="<%= new java.sql.Date(System.currentTimeMillis()) %>"></td>
         </tr>
         <tr>
-            <th align="right">描述:</th>
+            <th align="right">描述(300字以内):</th>
             <td><textarea name="description" rows="10" cols="30" maxlength="300"></textarea></td>
         </tr>
     </table>
