@@ -15,6 +15,11 @@
     <a href="${pageContext.request.contextPath}/logout.do">注销&nbsp;</a>
 </div>
 <%
+    Integer userId = (Integer) request.getSession().getAttribute("login");
+    if (userId == null) {
+        response.sendRedirect("index.jsp");
+        return;
+    }
     String message = (String) request.getAttribute("message");
     if (message != null) {
 %>

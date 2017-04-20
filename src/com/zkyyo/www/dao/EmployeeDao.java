@@ -96,7 +96,8 @@ public class EmployeeDao {
         try {
             conn = DbConn.getConn();
             conn.setAutoCommit(false);
-            String sql = "INSERT INTO employee (user_id, user_pwd, user_name, dept_id, mobile, salary, email, employee_date)" +
+            String sql = "INSERT INTO employee (user_id, user_pwd, user_name, dept_id," +
+                    " mobile, salary, email, employee_date)" +
                     "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
             pstmt = conn.prepareStatement(sql);
             pstmt.setInt(1, newEp.getUserId());

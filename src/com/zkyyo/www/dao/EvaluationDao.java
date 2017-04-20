@@ -37,7 +37,8 @@ public class EvaluationDao {
 
         try {
             conn = DbConn.getConn();
-            String sql = "INSERT INTO evaluation (evaluator_id, be_evaluated_id, star_level, comment) VALUES (?, ?, ?, ?)";
+            String sql = "INSERT INTO evaluation (evaluator_id, be_evaluated_id, star_level, comment)" +
+                    " VALUES (?, ?, ?, ?)";
             pstmt = conn.prepareStatement(sql);
             pstmt.setInt(1, newEval.getEvaluatorId());
             pstmt.setInt(2, newEval.getBeEvaluatedId());

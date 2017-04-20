@@ -12,17 +12,40 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * 该类存放关于员工的用于逻辑处理的代码
+ * 其中包含员工的相关信息的校验,增删查改方法
+ */
 public class EmployeeService {
+    /**
+     * 作为排序方法的参数, 以用户ID作为排序依据
+     */
     public static final int ORDER_BY_USER_ID = 1;
+    /**
+     * 作为排序方法的参数, 以用户所在部门ID作为排序依据
+     */
     public static final int ORDER_BY_DEPT_ID = 2;
+    /**
+     * 作为排序方法的参数, 以用户的薪水作为排序依据
+     */
     public static final int ORDER_BY_SALARY = 3;
+    /**
+     * 作为排序方法的参数, 用户的就职日期作为排序依据
+     */
     public static final int ORDER_BY_DATE = 4;
 
+    /**
+     * 用于创建懒汉模式下的一个单例, 默认为null
+     */
     private static volatile EmployeeService INSTANCE = null;
 
     private EmployeeService() {
     }
 
+    /**
+     * 创建一个该类的实例
+     * @return 返回这个类的一个实例
+     */
     public static EmployeeService getInstance() {
         if (INSTANCE == null) {
             synchronized (EmployeeService.class) {
@@ -34,6 +57,12 @@ public class EmployeeService {
         return INSTANCE;
     }
 
+    /**
+     * 检查用户输入的密码是否正确
+     * @param employeeId 用户输入的员工号
+     * @param password 用户输入的未检验的密码
+     * @return 密码相同为true 密码不同为false
+     */
     public boolean checkLogin(int employeeId, String password) {
         EmployeeDao employeeDao = EmployeeDao.getInstance();
         String realPsw = employeeDao.loginCheck(employeeId);
@@ -45,6 +74,12 @@ public class EmployeeService {
         return false;
     }
 
+    /**
+     * 校验员工号是否符合格式
+     * 格式为一串1-10位的大于0的整数
+     * @param id 待校验的用户号
+     * @return 符合为true, 不符合为false
+     */
     public boolean isValidId(String id) {
         Pattern p;
         Matcher m;
@@ -60,12 +95,23 @@ public class EmployeeService {
         return false;
     }
 
+    /**
+     * 检测员工号是否存在
+     * @param id 待检测的员工号
+     * @return 存在为true, 不存在为false
+     */
     public boolean isIdExisted(int id) {
         EmployeeDao employeeDao = EmployeeDao.getInstance();
         EmployeePo foundEp = employeeDao.selectEmployeeByUserId(id);
         return foundEp != null;
     }
 
+    /**
+     * 校验员工名是否符合格式
+     * 格式为20个字以内的中文名或含空格下20个字母以内的英文名
+     * @param name 待校验的用户名
+     * @return 符合为true, 不符合为false
+     */
     public boolean isValidName(String name) {
         Pattern p;
         Matcher m;
@@ -82,6 +128,12 @@ public class EmployeeService {
         return false;
     }
 
+    /**
+     * 校验两个密码是否相同
+     * @param password 第一次输入的密码
+     * @param confirmedPassword 第二次输入的代码
+     * @return 相同为true, 不相同为false
+     */
     public boolean isValidPassword(String password, String confirmedPassword) {
         if (password != null && confirmedPassword != null) {
             if (password.length() > 0 && password.length() <= 50) {
@@ -93,6 +145,11 @@ public class EmployeeService {
         return false;
     }
 
+    /**
+     * 校验日期是否符合格式, 且是否合法
+     * @param date 待校验的日期
+     * @return 符合为true, 不符合为false
+     */
     public boolean isValidDate(String date) {
         Pattern p;
         Matcher m;
@@ -118,6 +175,11 @@ public class EmployeeService {
         return false;
     }
 
+    /**
+     * 校验邮箱是否符合格式
+     * @param email 待校验的邮箱
+     * @return 符合为true, 不符合为false
+     */
     public boolean isValidEmail(String email) {
         Pattern p;
         Matcher m;
@@ -133,6 +195,12 @@ public class EmployeeService {
         return false;
     }
 
+    /**
+     * 校验薪水是否符合格式
+     * 薪水整数部分最高10位, 小数部分精度为.50
+     * @param salary 待校验的薪水
+     * @return 符合为true, 不符合为false
+     */
     public boolean isValidSalary(String salary) {
         Pattern p;
         Matcher m;
@@ -150,6 +218,11 @@ public class EmployeeService {
         return false;
     }
 
+    /**
+     * 校验邮箱是否符合格式
+     * @param mobile 待校验的邮箱
+     * @return 符合为true, 不符合为false
+     */
     public boolean isValidMobile(String mobile) {
         Pattern p;
         Matcher m;
@@ -165,6 +238,17 @@ public class EmployeeService {
         return false;
     }
 
+    /**
+     * 添加员工, 并自动注册员工号
+     * @param name 员工名
+     * @param mobile 手机号
+     * @param email 邮箱
+     * @param password 密码
+     * @param departmentId 密码
+     * @param salary 薪水
+     * @param date 就职日期
+     * @return 添加成功为该员工对象, 添加失败为null
+     */
     public EmployeePo addEmployee(String name, String mobile, String email, String password,
                                   String departmentId, String salary, String date) {
         EmployeeDao employeeDao = EmployeeDao.getInstance();
