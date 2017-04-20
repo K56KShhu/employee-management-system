@@ -159,7 +159,7 @@ public class EmployeeService {
         return false;
     }
 
-    public Integer addEmployee(String name, String mobile, String email, String password,
+    public EmployeePo addEmployee(String name, String mobile, String email, String password,
                                String departmentId, String salary, String date) {
         EmployeeDao employeeDao = EmployeeDao.getInstance();
         int employeeId = employeeDao.createEmployeeId();
@@ -169,7 +169,7 @@ public class EmployeeService {
         EmployeePo newEp = new EmployeePo(employeeId, password, name, deptId, mobile, eSalary, email, eDate);
         boolean isAdded = employeeDao.addEmployee(newEp);
         if (isAdded) {
-            return employeeId;
+            return newEp;
         } else {
             return null;
         }

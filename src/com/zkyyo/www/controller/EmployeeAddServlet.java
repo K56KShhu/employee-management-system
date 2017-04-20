@@ -1,6 +1,8 @@
 package com.zkyyo.www.controller;
 
+import com.zkyyo.www.po.EmployeePo;
 import com.zkyyo.www.service.EmployeeService;
+import com.zkyyo.www.util.LogUtil;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebInitParam;
@@ -31,6 +33,7 @@ public class EmployeeAddServlet extends HttpServlet {
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.setCharacterEncoding("UTF-8");
+        Integer loginId = (Integer) request.getSession().getAttribute("login");
         String name = request.getParameter("name").trim();
         String mobile = request.getParameter("mobile").trim();
         String email = request.getParameter("email").trim();
@@ -65,13 +68,14 @@ public class EmployeeAddServlet extends HttpServlet {
             request.setAttribute("errors", errors);
             request.setAttribute("message", "注册失败");
         } else {
-            Integer newUserId = employeeService.addEmployee(name, mobile, email, password, departmentId, salary, date);
-            if (newUserId == null) {
+            EmployeePo newEp = employeeService.addEmployee(name, mobile, email, password, departmentId, salary, date);
+            if (newEp == null) {
                 errors.add("数据库发生错误,无法添加新员工");
                 request.setAttribute("errors", errors);
                 request.setAttribute("message", "注册失败");
             } else {
-                request.setAttribute("message", "注册成功, 新员工号为: " + newUserId);
+                request.setAttribute("message", "注册成功, 新员工号为: " + newEp.getUserId());
+                LogUtil.add(loginId, newEp);
             }
         }
 

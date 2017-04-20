@@ -3,7 +3,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
-    <title>查询员工</title>
+    <title>查询部门</title>
     <style type="text/css">
         body {
             margin: auto;

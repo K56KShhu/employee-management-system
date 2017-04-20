@@ -1,6 +1,7 @@
 package com.zkyyo.www.service;
 
 import com.zkyyo.www.dao.EvaluationDao;
+import com.zkyyo.www.po.EmployeePo;
 import com.zkyyo.www.po.EvaluationPo;
 
 import java.util.*;
@@ -65,7 +66,7 @@ public class EvaluationService {
         return evaluationDao.selectEvaluation(evalId) != null;
     }
 
-    public boolean addEvaluation(String evaluatorId, String beEvaluatedId, String stars, String comment) {
+    public EvaluationPo addEvaluation(String evaluatorId, String beEvaluatedId, String stars, String comment) {
         int eEvaluatorId = Integer.valueOf(evaluatorId);
         int eBeEvaluatedId = Integer.valueOf(beEvaluatedId);
         int eStars = Integer.valueOf(stars);
@@ -73,12 +74,27 @@ public class EvaluationService {
 
         EvaluationPo eval = new EvaluationPo(eEvaluatorId, eBeEvaluatedId, eStars, eComment);
         EvaluationDao evaluationDao = EvaluationDao.getInstance();
-        return evaluationDao.addEvaluation(eval);
+        boolean isAdded = evaluationDao.addEvaluation(eval);
+        if (isAdded) {
+            return eval;
+        } else {
+            return null;
+        }
     }
 
-    public boolean deleteEvaluation(int evalId) {
+    public EvaluationPo deleteEvaluation(int evalId) {
         EvaluationDao evaluationDao = EvaluationDao.getInstance();
-        return evaluationDao.deleteEvaluation(evalId);
+        EvaluationPo deletedEval = evaluationDao.selectEvaluation(evalId);
+        if (deletedEval == null) {
+            return null;
+        } else {
+            boolean isDeleted = evaluationDao.deleteEvaluation(evalId);
+            if (isDeleted) {
+                return deletedEval;
+            } else {
+                return null;
+            }
+        }
     }
 
     public List<EvaluationPo> findSendedEvaluations(int userId) {
@@ -110,6 +126,11 @@ public class EvaluationService {
         return list;
     }
 
+    public EvaluationPo findEvaluation(int evalId) {
+        EvaluationDao evaluationDao = EvaluationDao.getInstance();
+        return evaluationDao.selectEvaluation(evalId);
+    }
+
     public List<EvaluationPo> sort(List<EvaluationPo> list, int orderType, boolean isReverse) {
         switch (orderType) {
             case ORDER_BY_STARS:
@@ -124,7 +145,7 @@ public class EvaluationService {
         return list;
     }
 
-    public boolean updateEvaluation(EvaluationPo updatedEval) {
+    public EvaluationPo updateEvaluation(EvaluationPo updatedEval) {
         EvaluationDao evaluationDao = EvaluationDao.getInstance();
         EvaluationPo initialEval = evaluationDao.selectEvaluation(updatedEval.getEvaluationId());
 
@@ -135,7 +156,12 @@ public class EvaluationService {
         if (updatedEval.getComment() != null && !updatedEval.getComment().equals(initialEval.getComment())) {
             updatedTypes.add(EvaluationDao.UPDATE_COMMENT);
         }
-        return !updatedTypes.isEmpty() && evaluationDao.updateEvaluation(updatedTypes, updatedEval);
+        boolean isUpdated = evaluationDao.updateEvaluation(updatedTypes, updatedEval);
+        if (isUpdated) {
+            return evaluationDao.selectEvaluation(updatedEval.getEvaluationId());
+        } else {
+            return null;
+        }
     }
 
     class StarsCompare implements Comparator<EvaluationPo> {

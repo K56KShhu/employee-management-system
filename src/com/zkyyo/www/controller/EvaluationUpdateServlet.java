@@ -2,6 +2,7 @@ package com.zkyyo.www.controller;
 
 import com.zkyyo.www.po.EvaluationPo;
 import com.zkyyo.www.service.EvaluationService;
+import com.zkyyo.www.util.LogUtil;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -16,29 +17,30 @@ import java.util.List;
 public class EvaluationUpdateServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.setCharacterEncoding("UTF-8");
+        Integer loginId = (Integer) request.getSession().getAttribute("login");
         String evalId = request.getParameter("evalId").trim();
         String stars = request.getParameter("stars").trim();
         String comment = request.getParameter("comment").trim();
 
         List<String> errors = new ArrayList<>();
         EvaluationService evaluationService = EvaluationService.getInstance();
-        EvaluationPo eval = new EvaluationPo();
+        EvaluationPo updatedEval = new EvaluationPo();
         if (!evaluationService.isValidId(evalId)) {
             errors.add("评价索引格式无效");
         } else {
             if (!evaluationService.isExisted(Integer.valueOf(evalId))) {
                 errors.add("评价不存在");
             } else {
-                eval.setEvaluationId(Integer.valueOf(evalId));
+                updatedEval.setEvaluationId(Integer.valueOf(evalId));
                 if (stars.length() > 0) {
                     if (!evaluationService.isValidStars(stars)) {
                         errors.add("评价等级输入有误");
                     } else {
-                        eval.setStarLevel(Integer.valueOf(stars));
+                        updatedEval.setStarLevel(Integer.valueOf(stars));
                     }
                 }
                 if (comment.length() > 0) {
-                    eval.setComment(comment);
+                    updatedEval.setComment(comment);
                 }
             }
         }
@@ -47,13 +49,15 @@ public class EvaluationUpdateServlet extends HttpServlet {
             request.setAttribute("errors", errors);
             request.setAttribute("message", "修改评价失败");
         } else {
-            boolean isUpdated = evaluationService.updateEvaluation(eval);
-            if (isUpdated) {
-                request.setAttribute("message", "修改评价成功");
-            } else {
+            EvaluationPo initialEval = evaluationService.findEvaluation(Integer.valueOf(evalId));
+            EvaluationPo eval = evaluationService.updateEvaluation(updatedEval);
+            if (eval == null) {
                 errors.add("数据库发生错误,无法修改评价");
                 request.setAttribute("errors", errors);
                 request.setAttribute("message", "修改评价失败");
+            } else {
+                request.setAttribute("message", "修改评价成功");
+                LogUtil.update(loginId, initialEval, eval);
             }
         }
 

@@ -79,7 +79,7 @@ public class DepartmentService {
         return false;
     }
 
-    public Integer addDepartment(String name, String deptId, String buildDate, String desc) {
+    public DepartmentPo addDepartment(String name, String deptId, String buildDate, String desc) {
         int id = Integer.valueOf(deptId);
         java.sql.Date date = java.sql.Date.valueOf(buildDate);
         String newStr = desc.replaceAll("(\r\n|\r|\n|\n\r)", "<br>");
@@ -88,7 +88,7 @@ public class DepartmentService {
         DepartmentDao departmentDao = DepartmentDao.getInstance();
         boolean isAdded = departmentDao.addDepartment(newDept);
         if (isAdded) {
-            return id;
+            return newDept;
         } else {
             return null;
         }

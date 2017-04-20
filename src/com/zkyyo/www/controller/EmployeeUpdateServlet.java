@@ -2,6 +2,7 @@ package com.zkyyo.www.controller;
 
 import com.zkyyo.www.po.EmployeePo;
 import com.zkyyo.www.service.EmployeeService;
+import com.zkyyo.www.util.LogUtil;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -16,6 +17,7 @@ import java.util.List;
 public class EmployeeUpdateServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.setCharacterEncoding("UTF-8");
+        Integer loginId = (Integer) request.getSession().getAttribute("login");
         String userId = request.getParameter("userId");
         String name = request.getParameter("name").trim();
         String mobile = request.getParameter("mobile").trim();
@@ -79,9 +81,11 @@ public class EmployeeUpdateServlet extends HttpServlet {
         if (!errors.isEmpty()) {
             request.setAttribute("errors", errors);
         } else {
+            EmployeePo initialEp = employeeService.findEmployee(Integer.valueOf(userId));
             boolean isUpdated = employeeService.updateEmployee(updatedEp);
             if (isUpdated) {
                 request.setAttribute("status", "ok");
+                LogUtil.update(loginId, initialEp, updatedEp);
             } else {
                 errors.add("数据库更新错误");
                 request.setAttribute("errors", errors);

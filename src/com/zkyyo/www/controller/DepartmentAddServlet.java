@@ -1,7 +1,9 @@
 package com.zkyyo.www.controller;
 
+import com.zkyyo.www.po.DepartmentPo;
 import com.zkyyo.www.service.DepartmentService;
 import com.zkyyo.www.service.EmployeeService;
+import com.zkyyo.www.util.LogUtil;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebInitParam;
@@ -32,6 +34,7 @@ public class DepartmentAddServlet extends HttpServlet {
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.setCharacterEncoding("UTF-8");
+        Integer loginId = (Integer) request.getSession().getAttribute("login");
         String name = request.getParameter("name").trim();
         String departmentId = request.getParameter("departmentId").trim();
         String buildDate = request.getParameter("buildDate").trim();
@@ -52,12 +55,13 @@ public class DepartmentAddServlet extends HttpServlet {
         if (!errors.isEmpty()) {
             request.setAttribute("errors", errors);
         } else {
-            Integer newDeptId = departmentService.addDepartment(name, departmentId, buildDate, desc);
-            if (newDeptId == null) {
+            DepartmentPo newDept = departmentService.addDepartment(name, departmentId, buildDate, desc);
+            if (newDept == null) {
                 errors.add("数据库发生错误,无法创建部门");
                 request.setAttribute("errors", errors);
             } else {
                 request.setAttribute("status", "ok");
+                LogUtil.add(loginId, newDept);
             }
         }
 

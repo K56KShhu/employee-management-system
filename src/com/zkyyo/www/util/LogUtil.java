@@ -12,17 +12,19 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 public class LogUtil {
-    public static final String PATH = "/home/xu/java_new_place/log.txt";
+    private static final String PATH = "/home/xu/java_new_place/log.txt";
     private static final String PRE_SPACE = "                        ";
 
     //员工操作
-    public static void add(EmployeePo handler, EmployeePo newEmployee) {
+    public static void add(int operatorId, EmployeePo newEp) {
+        EmployeeDao employeeDao = EmployeeDao.getInstance();
+        EmployeePo operator = employeeDao.selectEmployeeByUserId(operatorId);
         String timeStamp = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(Calendar.getInstance().getTime());
 
         try {
             BufferedWriter bw = new BufferedWriter(new FileWriter(PATH, true));
-            bw.write("* " + timeStamp + " - 新增员工" + newEmployee.geteName() + "(" + newEmployee.geteUserId() + ")"
-                    + " <" + handler.geteName() + "(" + handler.geteUserId() + ")>");
+            bw.write("* " + timeStamp + " - 新增员工" + newEp.getUserName() + "(" + newEp.getUserId() + ")"
+                    + " <" + operator.getUserName() + "(" + operator.getUserId() + ")>");
             bw.newLine();
             bw.close();
         } catch (IOException e) {
@@ -30,13 +32,15 @@ public class LogUtil {
         }
     }
 
-    public static void delete(EmployeePo handler, EmployeePo deletedEmployee) {
+    public static void delete(int operatorId, EmployeePo deletedEp) {
+        EmployeeDao employeeDao = EmployeeDao.getInstance();
+        EmployeePo operator = employeeDao.selectEmployeeByUserId(operatorId);
         String timeStamp = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(Calendar.getInstance().getTime());
 
         try {
             BufferedWriter bw = new BufferedWriter(new FileWriter(PATH, true));
-            bw.write("* " + timeStamp + " - 删除员工" + deletedEmployee.geteName() + "(" + deletedEmployee.geteUserId() + ")"
-                    + " <" + handler.geteName() + "(" + handler.geteUserId() + ")>");
+            bw.write("* " + timeStamp + " - 删除员工" + deletedEp.getUserName() + "(" + deletedEp.getUserId() + ")"
+                    + " <" + operator.getUserName() + "(" + operator.getUserId() + ")>");
             bw.newLine();
             bw.close();
         } catch (IOException e) {
@@ -44,44 +48,57 @@ public class LogUtil {
         }
     }
 
-    public static void update(EmployeePo handler, EmployeePo initialEp, EmployeePo updatedEp) {
+    public static void update(int operatorId, EmployeePo initialEp, EmployeePo updatedEp) {
+        EmployeeDao employeeDao = EmployeeDao.getInstance();
+        EmployeePo operator = employeeDao.selectEmployeeByUserId(operatorId);
         String timeStamp = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(Calendar.getInstance().getTime());
 
         try {
             BufferedWriter bw = new BufferedWriter(new FileWriter(PATH, true));
-            bw.write("* " + timeStamp + " - 修改员工" + initialEp.geteName() + "(" + initialEp.geteUserId() + ")"
-                    + " <" + handler.geteName() + "(" + handler.geteUserId() + ")>");
+            bw.write("* " + timeStamp + " - 修改员工" + initialEp.getUserName() + "(" + initialEp.getUserId() + ")"
+                    + " <" + operator.getUserName() + "(" + operator.getUserId() + ")>");
             bw.newLine();
-            if (initialEp.geteDeptId() != updatedEp.geteDeptId()) {
-                bw.write(PRE_SPACE + "原部门号: " + initialEp.geteDeptId());
+            if (updatedEp.getUserName() != null && !updatedEp.getUserName().equals(initialEp.getUserName())) {
+                bw.write(PRE_SPACE + "原姓名: " + initialEp.getUserName());
                 bw.newLine();
-                bw.write(PRE_SPACE + "现部门号: " + updatedEp.geteDeptId());
-                bw.newLine();
-            }
-            if (!initialEp.geteMobile().equals(updatedEp.geteMobile())) {
-                bw.write(PRE_SPACE + "原手机号: " + initialEp.geteMobile());
-                bw.newLine();
-                bw.write(PRE_SPACE + "现手机号: " + updatedEp.geteMobile());
+                bw.write(PRE_SPACE + "现姓名: " + updatedEp.getUserName());
                 bw.newLine();
             }
-            if (initialEp.geteSalary() != updatedEp.geteSalary()) {
-                bw.write(PRE_SPACE + "原薪水: " + initialEp.geteSalary());
+            if (updatedEp.getDeptId() != 0 && updatedEp.getDeptId() != initialEp.getDeptId()) {
+                bw.write(PRE_SPACE + "原部门号: " + initialEp.getDeptId());
                 bw.newLine();
-                bw.write(PRE_SPACE + "现薪水: " + updatedEp.geteSalary());
-                bw.newLine();
-            }
-            if (!initialEp.geteEmail().equals(updatedEp.geteEmail())) {
-                bw.write(PRE_SPACE + "原邮箱: " + initialEp.geteEmail());
-                bw.newLine();
-                bw.write(PRE_SPACE + "现邮箱: " + updatedEp.geteEmail());
+                bw.write(PRE_SPACE + "现部门号: " + updatedEp.getDeptId());
                 bw.newLine();
             }
-            if (!initialEp.geteEmployDate().equals(updatedEp.geteEmployDate())) {
-                bw.write(PRE_SPACE + "原就职日期: " + initialEp.geteEmployDate());
+            if (updatedEp.getMobile() != null && !updatedEp.getMobile().equals(initialEp.getMobile())) {
+                bw.write(PRE_SPACE + "原手机号: " + initialEp.getMobile());
                 bw.newLine();
-                bw.write(PRE_SPACE + "现就职日期: " + updatedEp.geteEmployDate());
+                bw.write(PRE_SPACE + "现手机号: " + updatedEp.getMobile());
                 bw.newLine();
             }
+            if (updatedEp.getSalary() != 0.0 && updatedEp.getSalary() != initialEp.getSalary()) {
+                bw.write(PRE_SPACE + "原薪水: " + initialEp.getSalary());
+                bw.newLine();
+                bw.write(PRE_SPACE + "现薪水: " + updatedEp.getSalary());
+                bw.newLine();
+            }
+            if (updatedEp.getEmail() != null && !updatedEp.getEmail().equals(initialEp.getEmail())) {
+                bw.write(PRE_SPACE + "原邮箱: " + initialEp.getEmail());
+                bw.newLine();
+                bw.write(PRE_SPACE + "现邮箱: " + updatedEp.getEmail());
+                bw.newLine();
+            }
+            if (updatedEp.getEmployDate() != null && !updatedEp.getEmployDate().equals(initialEp.getEmployDate())) {
+                bw.write(PRE_SPACE + "原就职日期: " + initialEp.getEmployDate());
+                bw.newLine();
+                bw.write(PRE_SPACE + "现就职日期: " + updatedEp.getEmployDate());
+                bw.newLine();
+            }
+            if (updatedEp.getPassword() != null && !updatedEp.getPassword().equals(initialEp.getPassword())) {
+                bw.write(PRE_SPACE + "修改密码");
+                bw.newLine();
+            }
+
             bw.close();
         } catch (IOException e) {
             e.printStackTrace();
@@ -89,13 +106,15 @@ public class LogUtil {
     }
 
     //部门
-    public static void add(EmployeePo handler, DepartmentPo newDepartment) {
+    public static void add(int operatorId, DepartmentPo newDept) {
+        EmployeeDao employeeDao = EmployeeDao.getInstance();
+        EmployeePo operator = employeeDao.selectEmployeeByUserId(operatorId);
         String timeStamp = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(Calendar.getInstance().getTime());
 
         try {
             BufferedWriter bw = new BufferedWriter(new FileWriter(PATH, true));
-            bw.write("* " + timeStamp + " - 建立部门" + newDepartment.getDeptName() + "(" + newDepartment.getDeptId() + ")"
-                    + " <" + handler.geteName() + "(" + handler.geteUserId() + ")>");
+            bw.write("* " + timeStamp + " - 建立部门" + newDept.getDeptName() + "(" + newDept.getDeptId() + ")"
+                    + " <" + operator.getUserName() + "(" + operator.getUserId() + ")>");
             bw.newLine();
             bw.close();
         } catch (IOException e) {
@@ -103,13 +122,15 @@ public class LogUtil {
         }
     }
 
-    public static void delete(EmployeePo handler, DepartmentPo deleteDepartment) {
+    public static void delete(int operatorId, DepartmentPo deletedDept) {
+        EmployeeDao employeeDao = EmployeeDao.getInstance();
+        EmployeePo operator = employeeDao.selectEmployeeByUserId(operatorId);
         String timeStamp = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(Calendar.getInstance().getTime());
 
         try {
             BufferedWriter bw = new BufferedWriter(new FileWriter(PATH, true));
-            bw.write("* " + timeStamp + " - 解散部门" + deleteDepartment.getDeptName() + "(" + deleteDepartment.getDeptId() + ")"
-                    + " <" + handler.geteName() + "(" + handler.geteUserId() + ")>");
+            bw.write("* " + timeStamp + " - 解散部门" + deletedDept.getDeptName() + "(" + deletedDept.getDeptId() + ")"
+                    + " <" + operator.getUserName() + "(" + operator.getUserId() + ")>");
             bw.newLine();
             bw.close();
         } catch (IOException e) {
@@ -117,30 +138,32 @@ public class LogUtil {
         }
     }
 
-    public static void update(EmployeePo handler, DepartmentPo initialDept, DepartmentPo updatedDept) {
+    public static void update(int operatorId, DepartmentPo initialDept, DepartmentPo updatedDept) {
+        EmployeeDao employeeDao = EmployeeDao.getInstance();
+        EmployeePo operator = employeeDao.selectEmployeeByUserId(operatorId);
         String timeStamp = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(Calendar.getInstance().getTime());
 
         try {
             BufferedWriter bw = new BufferedWriter(new FileWriter(PATH, true));
-            bw.write("* " + timeStamp + " - 修改部门" + updatedDept.getDeptName() + "("
-                    + updatedDept.getDeptId() + ") <" + handler.geteName() + "(" + handler.geteUserId() + ")>");
+            bw.write("* " + timeStamp + " - 修改部门" + initialDept.getDeptName() + "("
+                    + initialDept.getDeptId() + ") <" + operator.getUserName() + "(" + operator.getUserId() + ")>");
             bw.newLine();
-            if (!initialDept.getDeptName().equals(updatedDept.getDeptName())) {
+            if (updatedDept.getDeptName() != null && !updatedDept.getDeptName().equals(initialDept.getDeptName())) {
                 bw.write(PRE_SPACE + "原部门名: " + initialDept.getDeptName());
                 bw.newLine();
                 bw.write(PRE_SPACE + "现部门名: " + updatedDept.getDeptName());
                 bw.newLine();
             }
-            if (!initialDept.getDeptDesc().equals(updatedDept.getDeptDesc())) {
+            if (updatedDept.getDeptDesc() != null && !updatedDept.getDeptDesc().equals(initialDept.getDeptDesc())) {
                 bw.write(PRE_SPACE + "原部门描述: " + initialDept.getDeptDesc());
                 bw.newLine();
                 bw.write(PRE_SPACE + "现部门描述: " + updatedDept.getDeptDesc());
                 bw.newLine();
             }
-            if (!initialDept.getBuiltDate().equals(updatedDept.getBuiltDate())) {
-                bw.write(PRE_SPACE + "原部门建立时间: " + initialDept.getBuiltDate());
+            if (updatedDept.getBuildDate() != null && !updatedDept.getBuildDate().equals(initialDept.getBuildDate())) {
+                bw.write(PRE_SPACE + "原部门建立时间: " + initialDept.getBuildDate());
                 bw.newLine();
-                bw.write(PRE_SPACE + "现部门建立时间: " + updatedDept.getBuiltDate());
+                bw.write(PRE_SPACE + "现部门建立时间: " + updatedDept.getBuildDate());
                 bw.newLine();
             }
             bw.close();
@@ -150,15 +173,17 @@ public class LogUtil {
     }
 
     //评价
-    public static void add(EmployeePo handler, EvaluationPo newEvaluation) {
+    public static void add(int operatorId, EvaluationPo newEval) {
+        EmployeeDao employeeDao = EmployeeDao.getInstance();
+        EmployeePo operator = employeeDao.selectEmployeeByUserId(operatorId);
         String timeStamp = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(Calendar.getInstance().getTime());
 
         try {
             BufferedWriter bw = new BufferedWriter(new FileWriter(PATH, true));
             EmployeeDao empd = EmployeeDao.getInstance();
-            EmployeePo ep = empd.selectEmployeeByUserId(newEvaluation.getBeEvaluatedId());
-            bw.write("* " + timeStamp + " - 评价" + ep.geteName() + "(" + ep.geteUserId() + ")"
-                    + " <" + handler.geteName() + "(" + handler.geteUserId() + ")>");
+            EmployeePo ep = empd.selectEmployeeByUserId(newEval.getBeEvaluatedId());
+            bw.write("* " + timeStamp + " - 评价" + ep.getUserName() + "(" + ep.getUserId() + ")"
+                    + " <" + operator.getUserName() + "(" + operator.getUserId() + ")>");
             bw.newLine();
             bw.close();
         } catch (IOException e) {
@@ -166,18 +191,20 @@ public class LogUtil {
         }
     }
 
-    public static void delete(EmployeePo handler, EvaluationPo deletedEvaluation) {
+    public static void delete(int operatorId, EvaluationPo deletedEval) {
+        EmployeeDao employeeDao = EmployeeDao.getInstance();
+        EmployeePo operator = employeeDao.selectEmployeeByUserId(operatorId);
         String timeStamp = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(Calendar.getInstance().getTime());
 
         try {
             BufferedWriter bw = new BufferedWriter(new FileWriter(PATH, true));
             EmployeeDao empd = EmployeeDao.getInstance();
-            EmployeePo employee = empd.selectEmployeeByUserId(deletedEvaluation.getBeEvaluatedId());
-            EmployeePo evaluator = empd.selectEmployeeByUserId(deletedEvaluation.getEvaluatorId());
-            bw.write("* " + timeStamp + " - 删除评价(" + deletedEvaluation.getEvaluationId() + ") "
-                    + employee.geteName() + "(" + employee.geteUserId() + ")"
-                    + "<-" + evaluator.geteName() + "(" + evaluator.geteUserId() + ")"
-                    + " <" + handler.geteName() + "(" + handler.geteUserId() + ")>");
+            EmployeePo employee = empd.selectEmployeeByUserId(deletedEval.getBeEvaluatedId());
+            EmployeePo evaluator = empd.selectEmployeeByUserId(deletedEval.getEvaluatorId());
+            bw.write("* " + timeStamp + " - 删除评价(" + deletedEval.getEvaluationId() + ") "
+                    + employee.getUserName() + "(" + employee.getUserId() + ")"
+                    + "<<<" + evaluator.getUserName() + "(" + evaluator.getUserId() + ")"
+                    + " <" + operator.getUserName() + "(" + operator.getUserId() + ")>");
             bw.newLine();
             bw.close();
         } catch (IOException e) {
@@ -185,29 +212,30 @@ public class LogUtil {
         }
     }
 
-    public static void update(EmployeePo handler, EvaluationPo initialEval, EvaluationPo updateEval) {
+    public static void update(int operatorId, EvaluationPo initialEval, EvaluationPo updatedEval) {
+        EmployeeDao employeeDao = EmployeeDao.getInstance();
+        EmployeePo operator = employeeDao.selectEmployeeByUserId(operatorId);
+        EmployeePo employee = employeeDao.selectEmployeeByUserId(initialEval.getBeEvaluatedId());
+        EmployeePo evaluator = employeeDao.selectEmployeeByUserId(initialEval.getEvaluatorId());
         String timeStamp = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(Calendar.getInstance().getTime());
-        EmployeeDao empd = EmployeeDao.getInstance();
-        EmployeePo employee = empd.selectEmployeeByUserId(initialEval.getBeEvaluatedId());
-        EmployeePo evaluator = empd.selectEmployeeByUserId(initialEval.getEvaluatorId());
 
         try {
             BufferedWriter bw = new BufferedWriter(new FileWriter(PATH, true));
             bw.write("* " + timeStamp + " - 修改评价(" + initialEval.getEvaluationId() + ") "
-                    + employee.geteName() + "(" + employee.geteUserId() + ")"
-                    + "<-" + evaluator.geteName() + "(" + evaluator.geteUserId() + ")"
-                    + " <" + handler.geteName() + "(" + handler.geteUserId() + ")>");
+                    + employee.getUserName() + "(" + employee.getUserId() + ")"
+                    + "<<<" + evaluator.getUserName() + "(" + evaluator.getUserId() + ")"
+                    + " <" + operator.getUserName() + "(" + operator.getUserId() + ")>");
             bw.newLine();
-            if (initialEval.getStarLevel() != updateEval.getStarLevel()) {
+            if (updatedEval.getStarLevel() != 0 && updatedEval.getStarLevel() != initialEval.getStarLevel()) {
                 bw.write(PRE_SPACE + "原评价等级: " + initialEval.getStarLevel());
                 bw.newLine();
-                bw.write(PRE_SPACE + "现评价等级: " + updateEval.getStarLevel());
+                bw.write(PRE_SPACE + "现评价等级: " + updatedEval.getStarLevel());
                 bw.newLine();
             }
-            if (!initialEval.getComment().equals(updateEval.getComment())) {
+            if (updatedEval.getComment() != null && !updatedEval.getComment().equals(initialEval.getComment())) {
                 bw.write(PRE_SPACE + "原评价: " + initialEval.getComment());
                 bw.newLine();
-                bw.write(PRE_SPACE + "现评价: " + updateEval.getComment());
+                bw.write(PRE_SPACE + "现评价: " + updatedEval.getComment());
                 bw.newLine();
             }
             bw.close();
@@ -215,5 +243,4 @@ public class LogUtil {
             e.printStackTrace();
         }
     }
-
 }

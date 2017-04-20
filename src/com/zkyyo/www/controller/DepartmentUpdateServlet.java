@@ -2,6 +2,7 @@ package com.zkyyo.www.controller;
 
 import com.zkyyo.www.po.DepartmentPo;
 import com.zkyyo.www.service.DepartmentService;
+import com.zkyyo.www.util.LogUtil;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -16,6 +17,7 @@ import java.util.List;
 public class DepartmentUpdateServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.setCharacterEncoding("UTF-8");
+        Integer loginId = (Integer) request.getSession().getAttribute("login");
         String name = request.getParameter("name").trim();
         String departmentId = request.getParameter("deptId").trim();
         String buildDate = request.getParameter("buildDate").trim();
@@ -37,7 +39,7 @@ public class DepartmentUpdateServlet extends HttpServlet {
         //创建日期
         if (buildDate.length() > 0) {
             if (!departmentService.isValidDate(buildDate)) {
-                errors.add(buildDate);
+                errors.add("创建日期输入有误");
             } else {
                 updateDept.setBuildDate(java.sql.Date.valueOf(buildDate));
             }
@@ -50,9 +52,11 @@ public class DepartmentUpdateServlet extends HttpServlet {
         if (!errors.isEmpty()) {
             request.setAttribute("errors", errors);
         } else {
+            DepartmentPo initialDept = departmentService.findDepartment(Integer.valueOf(departmentId));
             boolean isUpdated = departmentService.updateDepartment(updateDept);
             if (isUpdated) {
                 request.setAttribute("status", "ok");
+                LogUtil.update(loginId, initialDept, updateDept);
             } else {
                 errors.add("数据库更新错误");
                 request.setAttribute("errors", errors);

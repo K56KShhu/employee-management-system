@@ -1,6 +1,8 @@
 package com.zkyyo.www.controller;
 
+import com.zkyyo.www.po.EmployeePo;
 import com.zkyyo.www.service.EmployeeService;
+import com.zkyyo.www.util.LogUtil;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -16,14 +18,15 @@ public class EmployeeDeleteServlet extends HttpServlet {
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        Integer loginId = (Integer) request.getSession().getAttribute("login");
         int userId = Integer.valueOf(request.getParameter("userId"));
-        String way = (String) request.getSession().getAttribute("way");
-        String info = (String) request.getSession().getAttribute("info");
 
         EmployeeService employeeService = EmployeeService.getInstance();
+        EmployeePo deletedEp = employeeService.findEmployee(userId);
         boolean isDeleted = employeeService.deleteEmployee(userId);
         if (isDeleted) {
             request.setAttribute("message", "删除员工成功");
+            LogUtil.delete(loginId, deletedEp);
         } else {
             request.setAttribute("message", "删除员工失败");
         }

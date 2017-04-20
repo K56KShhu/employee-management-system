@@ -1,7 +1,8 @@
 package com.zkyyo.www.controller;
 
-import com.zkyyo.www.dao.EvaluationDao;
+import com.zkyyo.www.po.EvaluationPo;
 import com.zkyyo.www.service.EvaluationService;
+import com.zkyyo.www.util.LogUtil;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -18,16 +19,18 @@ public class EvaluationDeleteServlet extends HttpServlet {
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String evalId = request.getParameter("evalId");
+        Integer loginId = (Integer) request.getSession().getAttribute("login");
 
         EvaluationService evaluationService = EvaluationService.getInstance();
         if (evalId != null) {
             if (evaluationService.isValidId(evalId)) {
                 if (evaluationService.isExisted(Integer.valueOf(evalId))) {
-                    boolean isDeleted = evaluationService.deleteEvaluation(Integer.valueOf(evalId));
-                    if (isDeleted) {
-                        request.setAttribute("message", "评价删除成功");
-                    } else {
+                    EvaluationPo deletedEval = evaluationService.deleteEvaluation(Integer.valueOf(evalId));
+                    if (deletedEval == null) {
                         request.setAttribute("message", "评价删除失败");
+                    } else {
+                        request.setAttribute("message", "评价删除成功");
+                        LogUtil.delete(loginId, deletedEval);
                     }
                 }
             }

@@ -3,6 +3,7 @@ package com.zkyyo.www.controller;
 import com.zkyyo.www.po.EvaluationPo;
 import com.zkyyo.www.service.EmployeeService;
 import com.zkyyo.www.service.EvaluationService;
+import com.zkyyo.www.util.LogUtil;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -17,6 +18,7 @@ import java.util.List;
 public class EvaluationAddServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.setCharacterEncoding("UTF-8");
+        Integer loginId = (Integer) request.getSession().getAttribute("login");
         int userId = (Integer) request.getSession().getAttribute("login");
         String evaluatorId = request.getParameter("evaluatorId").trim();
         String beEvaluatedId = request.getParameter("beEvaluatedId").trim();
@@ -42,13 +44,14 @@ public class EvaluationAddServlet extends HttpServlet {
             request.setAttribute("errors", errors);
             request.setAttribute("message", "评价失败");
         } else {
-            boolean isAdded = evaluationService.addEvaluation(evaluatorId, beEvaluatedId, stars, comment);
-            if (isAdded) {
-                request.setAttribute("message", "评价成功");
-            } else {
+            EvaluationPo newEval = evaluationService.addEvaluation(evaluatorId, beEvaluatedId, stars, comment);
+            if (newEval == null) {
                 errors.add("数据库发生错误,无法添加评价");
                 request.setAttribute("errors", errors);
                 request.setAttribute("message", "评价失败");
+            } else {
+                request.setAttribute("message", "评价成功");
+                LogUtil.add(loginId, newEval);
             }
         }
 
