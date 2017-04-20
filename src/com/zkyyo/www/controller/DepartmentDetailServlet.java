@@ -6,6 +6,7 @@ import com.zkyyo.www.service.DepartmentService;
 import com.zkyyo.www.service.EmployeeService;
 
 import javax.servlet.ServletException;
+import javax.servlet.annotation.WebInitParam;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -13,8 +14,20 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 
-@WebServlet("/department_detail.do")
+@WebServlet(
+        name = "DepartmentDetailServlet",
+        urlPatterns = {"/department_detail.do"},
+        initParams = {
+                @WebInitParam(name = "EMPLOYEE_VIEW", value = "department_detail.jsp")
+        }
+)
 public class DepartmentDetailServlet extends HttpServlet {
+    private String EMPLOYEE_VIEW;
+
+    public void init() throws ServletException {
+        EMPLOYEE_VIEW = getServletConfig().getInitParameter("EMPLOYEE_VIEW");
+    }
+
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         doGet(request, response);
     }
@@ -29,6 +42,7 @@ public class DepartmentDetailServlet extends HttpServlet {
 
         request.setAttribute("department", dept);
         request.setAttribute("employees", employees);
-        request.getRequestDispatcher("department_detail.jsp").forward(request, response);
+        String page = EMPLOYEE_VIEW;
+        request.getRequestDispatcher(page).forward(request, response);
     }
 }

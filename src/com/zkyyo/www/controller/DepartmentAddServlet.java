@@ -2,7 +2,6 @@ package com.zkyyo.www.controller;
 
 import com.zkyyo.www.po.DepartmentPo;
 import com.zkyyo.www.service.DepartmentService;
-import com.zkyyo.www.service.EmployeeService;
 import com.zkyyo.www.util.LogUtil;
 
 import javax.servlet.ServletException;
@@ -52,6 +51,7 @@ public class DepartmentAddServlet extends HttpServlet {
             errors.add("部门建立日期输入有误");
         }
 
+        String page = ERROR_VIEW;
         if (!errors.isEmpty()) {
             request.setAttribute("errors", errors);
         } else {
@@ -62,10 +62,11 @@ public class DepartmentAddServlet extends HttpServlet {
             } else {
                 request.setAttribute("status", "ok");
                 LogUtil.add(loginId, newDept);
+                page = SUCCESS_VIEW;
             }
         }
 
-        request.getRequestDispatcher("department_add.jsp").forward(request, response);
+        request.getRequestDispatcher(page).forward(request, response);
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

@@ -1,9 +1,7 @@
 package com.zkyyo.www.controller;
 
 import com.zkyyo.www.po.DepartmentPo;
-import com.zkyyo.www.po.EmployeePo;
 import com.zkyyo.www.service.DepartmentService;
-import com.zkyyo.www.service.EmployeeService;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebInitParam;
@@ -40,7 +38,6 @@ public class DepartmentFindServlet extends HttpServlet {
         String reverse = request.getParameter("reverse");
         List<DepartmentPo> result = null;
         DepartmentService departmentService = DepartmentService.getInstance();
-//        EmployeeService employeeService = (EmployeeService) getServletContext().getAttribute("employeeService");
         info = info.trim();
 
         if (way.length() > 0 && info.length() > 0) {

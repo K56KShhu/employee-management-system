@@ -38,8 +38,8 @@ public class EmployeeAddServlet extends HttpServlet {
         String mobile = request.getParameter("mobile").trim();
         String email = request.getParameter("email").trim();
         String password = request.getParameter("password");
-        String confirmedPassword = request.getParameter("confirmedPassword");
-        String departmentId = request.getParameter("departmentId").trim();
+        String confirmedPsw = request.getParameter("confirmedPsw");
+        String deptId = request.getParameter("deptId").trim();
         String salary = request.getParameter("salary").trim();
         String date = request.getParameter("date").trim();
 
@@ -54,7 +54,7 @@ public class EmployeeAddServlet extends HttpServlet {
         if (!employeeService.isValidEmail(email)) {
             errors.add("邮箱输入有误");
         }
-        if (!employeeService.isValidPassword(password, confirmedPassword)) {
+        if (!employeeService.isValidPassword(password, confirmedPsw)) {
             errors.add("第二次验证密码输入有误");
         }
         if (!employeeService.isValidSalary(salary)) {
@@ -64,11 +64,12 @@ public class EmployeeAddServlet extends HttpServlet {
             errors.add("就职日期输入有误");
         }
 
+        String page = ERROR_VIEW;
         if (!errors.isEmpty()) {
             request.setAttribute("errors", errors);
             request.setAttribute("message", "注册失败");
         } else {
-            EmployeePo newEp = employeeService.addEmployee(name, mobile, email, password, departmentId, salary, date);
+            EmployeePo newEp = employeeService.addEmployee(name, mobile, email, password, deptId, salary, date);
             if (newEp == null) {
                 errors.add("数据库发生错误,无法添加新员工");
                 request.setAttribute("errors", errors);
@@ -76,10 +77,11 @@ public class EmployeeAddServlet extends HttpServlet {
             } else {
                 request.setAttribute("message", "注册成功, 新员工号为: " + newEp.getUserId());
                 LogUtil.add(loginId, newEp);
+                page = SUCCESS_VIEW;
             }
         }
 
-        request.getRequestDispatcher("employee_add.jsp").forward(request, response);
+        request.getRequestDispatcher(page).forward(request, response);
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

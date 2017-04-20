@@ -5,6 +5,7 @@ import com.zkyyo.www.service.EmployeeService;
 import com.zkyyo.www.util.LogUtil;
 
 import javax.servlet.ServletException;
+import javax.servlet.annotation.WebInitParam;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -13,8 +14,23 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-@WebServlet("/employee_update.do")
+@WebServlet(
+        name = "EmployeeUpdateServlet",
+        urlPatterns = {"/employee_update.do"},
+        initParams = {
+                @WebInitParam(name = "SUCCESS_VIEW", value = "employee_update.jsp"),
+                @WebInitParam(name = "ERROR_VIEW", value = "employee_update.jsp")
+        }
+)
 public class EmployeeUpdateServlet extends HttpServlet {
+    private String SUCCESS_VIEW;
+    private String ERROR_VIEW;
+
+    public void init() throws ServletException {
+        SUCCESS_VIEW = getServletConfig().getInitParameter("SUCCESS_VIEW");
+        ERROR_VIEW = getServletConfig().getInitParameter("ERROR_VIEW");
+    }
+
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.setCharacterEncoding("UTF-8");
         Integer loginId = (Integer) request.getSession().getAttribute("login");
@@ -23,8 +39,8 @@ public class EmployeeUpdateServlet extends HttpServlet {
         String mobile = request.getParameter("mobile").trim();
         String email = request.getParameter("email").trim();
         String password = request.getParameter("password");
-        String confirmedPaswword = request.getParameter("confirmedPassword");
-        String departmendId = request.getParameter("departmentId").trim();
+        String confirmedPsw = request.getParameter("confirmedPsw");
+        String deptId = request.getParameter("deptId").trim();
         String salary = request.getParameter("salary").trim();
         String date = request.getParameter("date").trim();
 
@@ -54,14 +70,14 @@ public class EmployeeUpdateServlet extends HttpServlet {
             }
         }
         if (password.length() > 0) {
-            if (!employeeService.isValidPassword(password, confirmedPaswword)) {
+            if (!employeeService.isValidPassword(password, confirmedPsw)) {
                 errors.add("第二次密码输入有误");
             } else {
                 ep.setPassword(password);
             }
         }
-        if (departmendId.length() > 0) {
-            ep.setDeptId(Integer.valueOf(departmendId));
+        if (deptId.length() > 0) {
+            ep.setDeptId(Integer.valueOf(deptId));
         }
         if (salary.length() > 0) {
             if (!employeeService.isValidSalary(salary)) {
@@ -78,6 +94,7 @@ public class EmployeeUpdateServlet extends HttpServlet {
             }
         }
 
+        String page = ERROR_VIEW;
         if (!errors.isEmpty()) {
             request.setAttribute("errors", errors);
         } else {
@@ -89,10 +106,11 @@ public class EmployeeUpdateServlet extends HttpServlet {
             } else {
                 request.setAttribute("status", "ok");
                 LogUtil.update(loginId, initialEp, updatedEp);
+                page = SUCCESS_VIEW;
             }
         }
 
-        request.getRequestDispatcher("employee_update.jsp").forward(request, response);
+        request.getRequestDispatcher(page).forward(request, response);
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

@@ -62,11 +62,11 @@
         </tr>
         <tr>
             <td align="right">密码确认:</td>
-            <td><input type="password" name="confirmedPassword" size="30" maxlength="30"></td>
+            <td><input type="password" name="confirmedPsw" size="30" maxlength="30"></td>
         </tr>
         <tr>
             <td align="right">部门号:</td>
-            <td><input type="text" name="departmentId" size="30" maxlength="20"></td>
+            <td><input type="text" name="deptId" size="30" maxlength="20"></td>
         </tr>
         <tr>
             <td align="right">薪水:</td>
