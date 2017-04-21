@@ -41,7 +41,7 @@
     <table border="1" align="center">
         <tr>
             <th align="right">部门号:</th>
-            <td><input type="text" name="departmentId" size="30" maxlength="10"></td>
+            <td><input type="text" name="departmentId" size="30" maxlength="9"></td>
         </tr>
         <tr>
             <th align="right">部门名:</th>

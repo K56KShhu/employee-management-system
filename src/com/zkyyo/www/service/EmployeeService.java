@@ -34,6 +34,10 @@ public class EmployeeService {
      */
     public static final int ORDER_BY_DATE = 4;
     /**
+     * 最大密码长度
+     */
+    private static final int PASSWORD_MAX_LENGTH = 50;
+    /**
      * 用于创建懒汉模式下的一个单例, 默认为null
      */
     private static volatile EmployeeService INSTANCE = null;
@@ -46,6 +50,7 @@ public class EmployeeService {
 
     /**
      * 创建一个该类的实例
+     *
      * @return 返回这个类的一个实例
      */
     public static EmployeeService getInstance() {
@@ -61,8 +66,9 @@ public class EmployeeService {
 
     /**
      * 检查用户输入的密码是否正确
+     *
      * @param employeeId 用户输入的员工号
-     * @param password 用户输入的未检验的密码
+     * @param password   用户输入的未检验的密码
      * @return 密码相同为true 密码不同为false
      */
     public boolean checkLogin(int employeeId, String password) {
@@ -79,6 +85,7 @@ public class EmployeeService {
     /**
      * 校验员工号是否符合格式
      * 格式为一串1-10位的大于0的数字G
+     *
      * @param id 待校验的用户号
      * @return 符合为true, 不符合为false
      */
@@ -99,6 +106,7 @@ public class EmployeeService {
 
     /**
      * 检测员工号是否存在
+     *
      * @param id 待检测的员工号
      * @return 存在为true, 不存在为false
      */
@@ -111,6 +119,7 @@ public class EmployeeService {
     /**
      * 校验员工名是否符合格式
      * 格式为20个字以内的中文名或含空格下20个字母以内的英文名
+     *
      * @param name 待校验的用户名
      * @return 符合为true, 不符合为false
      */
@@ -132,13 +141,15 @@ public class EmployeeService {
 
     /**
      * 校验两个密码是否相同
-     * @param password 第一次输入的密码
+     *
+     * @param password          第一次输入的密码
      * @param confirmedPassword 第二次输入的代码
      * @return 相同为true, 不相同为false
      */
     public boolean isValidPassword(String password, String confirmedPassword) {
         if (password != null && confirmedPassword != null) {
-            if (password.length() > 0 && password.length() <= 50) {
+            //密码长度>0 且<=50
+            if (password.length() > 0 && password.length() <= PASSWORD_MAX_LENGTH) {
                 if (password.equals(confirmedPassword)) {
                     return true;
                 }
@@ -149,6 +160,7 @@ public class EmployeeService {
 
     /**
      * 校验日期是否符合格式, 且是否合法
+     *
      * @param date 待校验的日期
      * @return 符合为true, 不符合为false
      */
@@ -182,6 +194,7 @@ public class EmployeeService {
 
     /**
      * 校验邮箱是否符合格式
+     *
      * @param email 待校验的邮箱
      * @return 符合为true, 不符合为false
      */
@@ -203,6 +216,7 @@ public class EmployeeService {
     /**
      * 校验薪水是否符合格式
      * 薪水整数部分最高10位, 小数部分精度为.50
+     *
      * @param salary 待校验的薪水
      * @return 符合为true, 不符合为false
      */
@@ -215,9 +229,7 @@ public class EmployeeService {
             p = Pattern.compile(regex);
             m = p.matcher(salary);
             if (m.matches()) {
-                if (Integer.valueOf(salary) > 0) {
-                    return true;
-                }
+                return true;
             }
         }
         return false;
@@ -225,6 +237,7 @@ public class EmployeeService {
 
     /**
      * 校验邮箱是否符合格式
+     *
      * @param mobile 待校验的邮箱
      * @return 符合为true, 不符合为false
      */
@@ -245,13 +258,14 @@ public class EmployeeService {
 
     /**
      * 添加员工, 并自动注册员工号
-     * @param name 员工名
-     * @param mobile 手机号
-     * @param email 邮箱
-     * @param password 密码
+     *
+     * @param name         员工名
+     * @param mobile       手机号
+     * @param email        邮箱
+     * @param password     密码
      * @param departmentId 密码
-     * @param salary 薪水
-     * @param date 就职日期
+     * @param salary       薪水
+     * @param date         就职日期
      * @return 添加成功为该员工对象, 添加失败为null
      */
     public EmployeePo addEmployee(String name, String mobile, String email, String password,
@@ -273,6 +287,7 @@ public class EmployeeService {
 
     /**
      * 删除员工
+     *
      * @param userId 待删除的员工号
      * @return 删除成功返回被删除的员工对象, 找不到员工或删除失败返回null
      */
@@ -294,6 +309,7 @@ public class EmployeeService {
 
     /**
      * 模糊查询员工, 通过员工号查找
+     *
      * @param userId 员工号
      * @return 符合的员工列表
      */
@@ -304,6 +320,7 @@ public class EmployeeService {
 
     /**
      * 模糊查询员工, 通过员工名查找
+     *
      * @param userName 员工名
      * @return 符合的员工列表
      */
@@ -314,6 +331,7 @@ public class EmployeeService {
 
     /**
      * 查找同一部门的员工
+     *
      * @param deptId 部门号
      * @return 相同部门的员工列表
      */
@@ -324,6 +342,7 @@ public class EmployeeService {
 
     /**
      * 精确查询员工, 通过员工号查找
+     *
      * @param userId 员工号
      * @return 找到返回该员工对象, 否则返回null
      */
@@ -334,6 +353,7 @@ public class EmployeeService {
 
     /**
      * 查询所有员工
+     *
      * @return 包含所有员工的列表
      */
     public List<EmployeePo> findEmployees() {
@@ -343,7 +363,8 @@ public class EmployeeService {
 
     /**
      * 对员工列表进行排序
-     * @param list 待排序的员工列表
+     *
+     * @param list      待排序的员工列表
      * @param orderType 排序依据, 参考该类的静态成员变量
      * @param isReverse 降序为true, 升序为false
      * @return 排序完成工员工列表
@@ -379,6 +400,7 @@ public class EmployeeService {
 
     /**
      * 更新员工信息
+     *
      * @param updatedEp 包含最新员工信息的员工对象
      * @return 更新成功返回最新员工对象, 否则返回null
      */

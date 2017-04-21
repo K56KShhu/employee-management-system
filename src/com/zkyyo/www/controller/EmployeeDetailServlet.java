@@ -38,27 +38,38 @@ public class EmployeeDetailServlet extends HttpServlet {
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String userId = request.getParameter("userId");
-
-        String page = ERROR_VIEW;
         EmployeeService employeeService = EmployeeService.getInstance();
         DepartmentService departmentService = DepartmentService.getInstance();
         EvaluationService evaluationService = EvaluationService.getInstance();
+        EmployeePo employee = null;
+        DepartmentPo department = null;
+        List<EvaluationPo> sendedEvals = null;
+        List<EvaluationPo> receivedEvals = null;
+        String page = ERROR_VIEW;
         if (userId != null) {
+            //检查用户号是否有效
             if (employeeService.isValidId(userId)) {
-                EmployeePo employee = employeeService.findEmployee(Integer.valueOf(userId));
-                DepartmentPo department = null;
-                if (employee != null) {
+                int id = Integer.valueOf(userId);
+                boolean isExisted = employeeService.isIdExisted(id);
+                //验证员工是否存在
+                if (isExisted) { //存在
+                    //获取员工信息
+                    employee = employeeService.findEmployee(id);
+                    //获取部门信息
                     department = departmentService.findDepartment(employee.getDeptId());
+                    //获取发送的评价
+                    sendedEvals = evaluationService.findSendedEvaluations(id);
+                    //获取接收的评价
+                    receivedEvals = evaluationService.findReceivedEvaluations(id);
+                    page = SUCCESS_VIEW;
                 }
-                List<EvaluationPo> sendedEvals = evaluationService.findSendedEvaluations(Integer.valueOf(userId));
-                List<EvaluationPo> receivedEvals = evaluationService.findReceivedEvaluations(Integer.valueOf(userId));
-                request.setAttribute("employee", employee);
-                request.setAttribute("department", department);
-                request.setAttribute("sendedEvals", sendedEvals);
-                request.setAttribute("receivedEvals", receivedEvals);
-                page = SUCCESS_VIEW;
             }
         }
+
+        request.setAttribute("employee", employee);
+        request.setAttribute("department", department);
+        request.setAttribute("sendedEvals", sendedEvals);
+        request.setAttribute("receivedEvals", receivedEvals);
         request.getRequestDispatcher(page).forward(request, response);
     }
 }

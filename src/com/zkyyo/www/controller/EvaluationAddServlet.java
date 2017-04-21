@@ -36,43 +36,52 @@ public class EvaluationAddServlet extends HttpServlet {
         request.setCharacterEncoding("UTF-8");
         Integer loginId = (Integer) request.getSession().getAttribute("login");
         int userId = (Integer) request.getSession().getAttribute("login");
-        String evaluatorId = request.getParameter("evaluatorId").trim();
-        String beEvaluatedId = request.getParameter("beEvaluatedId").trim();
-        String stars = request.getParameter("stars").trim();
-        String comment = request.getParameter("comment").trim();
+        String evaluatorId = request.getParameter("evaluatorId");
+        String beEvaluatedId = request.getParameter("beEvaluatedId");
+        String stars = request.getParameter("stars");
+        String comment = request.getParameter("comment");
 
-        List<String> errors = new ArrayList<>();
+        List<String> errors = new ArrayList<>(); //错误列表
+        //检查是否遗漏参数 !未解决!
+        if (evaluatorId == null || beEvaluatedId == null || stars == null || comment == null) {
+            errors.add("信息不完整");
+        }
+
         EmployeeService employeeService = EmployeeService.getInstance();
         EvaluationService evaluationService = EvaluationService.getInstance();
-        if (Integer.valueOf(evaluatorId) != userId) {
+        //校验评价人是否为当前登录的用户
+        if (evaluatorId != null && Integer.valueOf(evaluatorId) != userId) {
+            //评价人不是当前用户, 重定向为功能页面
             response.sendRedirect("functions.jsp");
         }
-        if (employeeService.isValidId(beEvaluatedId)) {
+        //校验被评价的员工号是否符合格式
+        if (beEvaluatedId != null && employeeService.isValidId(beEvaluatedId)) {
+            //校验被评价员工是否存在
             if (!employeeService.isIdExisted(Integer.valueOf(beEvaluatedId))) {
                 errors.add("被评价员工不存在");
             }
         }
-        if (!evaluationService.isValidStars(stars)) {
+        //校验评价等级
+        if (stars != null && !evaluationService.isValidStars(stars)) {
             errors.add("评价等级无效");
         }
 
         String page = ERROR_VIEW;
-        if (!errors.isEmpty()) {
+        if (!errors.isEmpty()) { //输入有误
             request.setAttribute("errors", errors);
             request.setAttribute("message", "评价失败");
-        } else {
+        } else { //输入正确
             EvaluationPo newEval = evaluationService.addEvaluation(evaluatorId, beEvaluatedId, stars, comment);
-            if (newEval == null) {
+            if (newEval == null) { //添加失败
                 errors.add("数据库发生错误,无法添加评价");
                 request.setAttribute("errors", errors);
                 request.setAttribute("message", "评价失败");
-            } else {
+            } else { //添加成功
                 request.setAttribute("message", "评价成功");
-                LogUtil.add(loginId, newEval);
+                LogUtil.add(loginId, newEval); //记录日志
                 page = SUCCESS_VIEW;
             }
         }
-
         request.getRequestDispatcher(page).forward(request, response);
     }
 

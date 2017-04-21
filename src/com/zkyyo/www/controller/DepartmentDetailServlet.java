@@ -36,9 +36,9 @@ public class DepartmentDetailServlet extends HttpServlet {
         Integer deptId = Integer.valueOf(request.getParameter("deptId"));
 
         DepartmentService departmentService = DepartmentService.getInstance();
-        DepartmentPo dept = departmentService.findDepartment(deptId);
+        DepartmentPo dept = departmentService.findDepartment(deptId); //获得部门信息
         EmployeeService employeeService = EmployeeService.getInstance();
-        List<EmployeePo> employees = employeeService.findEmployeeByDeptId(deptId);
+        List<EmployeePo> employees = employeeService.findEmployeeByDeptId(deptId); //获得该部门所有员工的信息
 
         request.setAttribute("department", dept);
         request.setAttribute("employees", employees);

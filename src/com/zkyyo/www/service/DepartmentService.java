@@ -53,14 +53,14 @@ public class DepartmentService {
 
     /**
      * 校验部门号是否符合格式
-     * 格式为1-10位的大于0的数字
+     * 格式为1-9位的大于0的数字
      * @param deptId 待校验的部门号
      * @return 符合为true, 不符合为false
      */
     public boolean isValidId(String deptId) {
         Pattern p;
         Matcher m;
-        String regex = "^[\\d]{1,10}$";
+        String regex = "^[\\d]{1,9}$";
 
         if (deptId != null) {
             p = Pattern.compile(regex);
@@ -121,7 +121,7 @@ public class DepartmentService {
      * @return 可用为true, 不可用为false
      */
     public boolean isAvailableName(String name) {
-        if (name.length() > 0) {
+        if (name != null && name.length() > 0) {
             DepartmentDao departmentDao = DepartmentDao.getInstance();
             return departmentDao.isNameExisted(name);
         } else {

@@ -40,12 +40,14 @@ public class EvaluationDeleteServlet extends HttpServlet {
         String page = ERROR_VIEW;
         EvaluationService evaluationService = EvaluationService.getInstance();
         if (evalId != null) {
+            //待删除评价号是否有效
             if (evaluationService.isValidId(evalId)) {
+                //待删除评价是否存在
                 if (evaluationService.isExisted(Integer.valueOf(evalId))) {
                     EvaluationPo deletedEval = evaluationService.deleteEvaluation(Integer.valueOf(evalId));
-                    if (deletedEval == null) {
+                    if (deletedEval == null) { //删除失败
                         request.setAttribute("message", "评价删除失败");
-                    } else {
+                    } else { //删除成功
                         request.setAttribute("message", "评价删除成功");
                         LogUtil.delete(loginId, deletedEval);
                         page = SUCCESS_VIEW;

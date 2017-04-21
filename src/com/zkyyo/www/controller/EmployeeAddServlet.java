@@ -34,53 +34,65 @@ public class EmployeeAddServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.setCharacterEncoding("UTF-8");
         Integer loginId = (Integer) request.getSession().getAttribute("login");
-        String name = request.getParameter("name").trim();
-        String mobile = request.getParameter("mobile").trim();
-        String email = request.getParameter("email").trim();
+        String name = request.getParameter("name");
+        String mobile = request.getParameter("mobile");
+        String email = request.getParameter("email");
         String password = request.getParameter("password");
         String confirmedPsw = request.getParameter("confirmedPsw");
-        String deptId = request.getParameter("deptId").trim();
-        String salary = request.getParameter("salary").trim();
-        String date = request.getParameter("date").trim();
+        String deptId = request.getParameter("deptId");
+        String salary = request.getParameter("salary");
+        String date = request.getParameter("date");
 
-        List<String> errors = new ArrayList<>();
+        List<String> errors = new ArrayList<>(); //获取错误信息
+        //检查是否遗漏参数 !未解决!
+        if (name == null || mobile == null || email == null || password == null
+                || confirmedPsw ==null || deptId == null || salary == null || date == null) {
+            errors.add("信息不完整");
+        }
+
         EmployeeService employeeService = EmployeeService.getInstance();
+        //校验姓名
         if (!employeeService.isValidName(name)) {
             errors.add("姓名输入有误");
         }
+        //校验手机号
         if (!employeeService.isValidMobile(mobile)) {
             errors.add("手机号输入有误");
         }
+        //校验邮箱
         if (!employeeService.isValidEmail(email)) {
             errors.add("邮箱输入有误");
         }
+        //校验二次密码
         if (!employeeService.isValidPassword(password, confirmedPsw)) {
             errors.add("第二次验证密码输入有误");
         }
+        //校验薪水
         if (!employeeService.isValidSalary(salary)) {
             errors.add("薪水输入有误");
         }
+        //校验日期
         if (!employeeService.isValidDate(date)) {
             errors.add("就职日期输入有误");
         }
 
         String page = ERROR_VIEW;
-        if (!errors.isEmpty()) {
+        //检查是否含有错误信息
+        if (!errors.isEmpty()) { //输入错误
             request.setAttribute("errors", errors);
             request.setAttribute("message", "注册失败");
-        } else {
+        } else { //输入成功
             EmployeePo newEp = employeeService.addEmployee(name, mobile, email, password, deptId, salary, date);
-            if (newEp == null) {
+            if (newEp == null) { //添加失败
                 errors.add("数据库发生错误,无法添加新员工");
                 request.setAttribute("errors", errors);
                 request.setAttribute("message", "注册失败");
-            } else {
+            } else { //添加成功
                 request.setAttribute("message", "注册成功, 新员工号为: " + newEp.getUserId());
-                LogUtil.add(loginId, newEp);
+                LogUtil.add(loginId, newEp); //记录日志
                 page = SUCCESS_VIEW;
             }
         }
-
         request.getRequestDispatcher(page).forward(request, response);
     }
 

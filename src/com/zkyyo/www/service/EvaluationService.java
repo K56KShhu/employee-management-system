@@ -65,7 +65,7 @@ public class EvaluationService {
     public boolean isValidId(String evalId) {
         Pattern p;
         Matcher m;
-        String regex = "^\\d{1,10}$";
+        String regex = "^\\d{1,8}$";
 
         if (evalId != null) {
             p = Pattern.compile(regex);

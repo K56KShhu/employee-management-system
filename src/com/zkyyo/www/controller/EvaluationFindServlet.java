@@ -32,23 +32,33 @@ public class EvaluationFindServlet extends HttpServlet {
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String way = request.getParameter("way");
-        String info = request.getParameter("info").trim();
+        String info = request.getParameter("info");
         String order = request.getParameter("order");
         String reverse = request.getParameter("reverse");
         List<EvaluationPo> result = null;
         EvaluationService evaluationService = EvaluationService.getInstance();
 
-        if (way.length() > 0 && info.length() > 0) {
-            if (way.equals("all")) {
-                result = evaluationService.findEvaluations();
+        //获得查询列表
+        if (way != null && way.length() > 0) {
+            if (info != null) {
+                info = info.trim();
+                if (info.length() > 0) { //用户有输入内容
+                    //根据评价关键词查询
+                    if (way.equals("by_key_words")) {
+                        result = evaluationService.findEvaluationsByKeyWords(info);
+                    }
+                    //查询所有
+                    if (way.equals("all")) {
+                        result = evaluationService.findEvaluations();
+                    }
+                } else { //用户无输入内容
+                    //查询所有
+                    result = evaluationService.findEvaluationsByKeyWords(info);
+                }
             }
-            if (way.equals("by_key_words")) {
-                result = evaluationService.findEvaluationsByKeyWords(info);
-            }
-        } else {
-            result = evaluationService.findEvaluations();
         }
 
+        //排序
         if (result != null) {
             //升序
             if (reverse.equals("false")) {
@@ -60,6 +70,7 @@ public class EvaluationFindServlet extends HttpServlet {
                         break;
                 }
             }
+            //倒序
             if (reverse.equals("true")) {
                 switch (order) {
                     case "stars":

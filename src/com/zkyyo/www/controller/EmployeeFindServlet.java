@@ -42,57 +42,53 @@ public class EmployeeFindServlet extends HttpServlet {
         EmployeeService employeeService = EmployeeService.getInstance();
         DepartmentService departmentService = DepartmentService.getInstance();
 
-//        if (way.length() > 0 && info.length() > 0) {
-//            if (way.equals("by_user_id") && employeeService.isValidId(info)) {
-//                result = employeeService.fuzzyFindEmployeeByUserId(Integer.valueOf(info));
-//            }
-//            if (way.equals("by_user_name") && employeeService.isValidName(info)) {
-//                result = employeeService.fuzzyFindEmployeeByUserName(info);
-//            }
-//            if (way.equals("by_dept_id") && departmentService.isValidId(info)) {
-//                result = employeeService.findEmployeeByDeptId(Integer.valueOf(info));
-//            }
-//            if (way.equals("all")) {
-//                result = employeeService.findEmployees();
-//            }
-//        } else {
-//            result = employeeService.findEmployees();
-//        }
-
+        //获取查询结果列表
         if (way != null && way.length() > 0) {
             if (info != null) {
                 info = info.trim();
-                if (info.length() > 0) {
+                //检查用户是否输入内容
+                if (info.length() > 0) { //有输入
+                    //通过员工号查询
                     if (way.equals("by_user_id") && employeeService.isValidId(info)) {
                         result = employeeService.fuzzyFindEmployeeByUserId(Integer.valueOf(info));
                     }
+                    //通过员工名查询
                     if (way.equals("by_user_name") && employeeService.isValidName(info)) {
                         result = employeeService.fuzzyFindEmployeeByUserName(info);
                     }
+                    //通过部门号查询
                     if (way.equals("by_dept_id") && departmentService.isValidId(info)) {
                         result = employeeService.findEmployeeByDeptId(Integer.valueOf(info));
                     }
+                    //查询所有
                     if (way.equals("all")) {
                         result = employeeService.findEmployees();
                     }
-                } else {
+                } else { //无输入
+                    //查询所有
                     result = employeeService.findEmployees();
                 }
             }
         }
 
+       //排序
         if (result != null) {
+            //升序
             if (reverse.equals("false")) {
                 switch (order) {
+                    //员工号
                     case "user_id":
                         result = employeeService.sort(result, EmployeeService.ORDER_BY_USER_ID, false);
                         break;
+                    //部门号
                     case "dept_id":
                         result = employeeService.sort(result, EmployeeService.ORDER_BY_DEPT_ID, false);
                         break;
+                    //薪水
                     case "salary":
                         result = employeeService.sort(result, EmployeeService.ORDER_BY_SALARY, false);
                         break;
+                    //就职日期
                     case "date":
                         result = employeeService.sort(result, EmployeeService.ORDER_BY_DATE, false);
                         break;
@@ -100,20 +96,25 @@ public class EmployeeFindServlet extends HttpServlet {
                         break;
                 }
             }
+            //倒序
             if (reverse.equals("true")) {
                 switch (order) {
+                    //员工号
                     case "user_id":
                         result = employeeService.sort(result, EmployeeService.ORDER_BY_USER_ID, true);
                         break;
+                    //部门号
                     case "dept_id":
                         result = employeeService.sort(result, EmployeeService.ORDER_BY_DEPT_ID, true);
                         break;
+                    //薪水
                     case "salary":
                         result = employeeService.sort(result, EmployeeService.ORDER_BY_SALARY, true);
                         break;
                     case "date":
                         result = employeeService.sort(result, EmployeeService.ORDER_BY_DATE, true);
                         break;
+                    //就职日期
                     default:
                         break;
                 }

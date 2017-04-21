@@ -14,6 +14,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * 该类用于处理部门创建
+ */
 @WebServlet(
         name = "DepartmentAddServlet",
         urlPatterns = {"/department_add.do"},
@@ -34,38 +37,42 @@ public class DepartmentAddServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.setCharacterEncoding("UTF-8");
         Integer loginId = (Integer) request.getSession().getAttribute("login");
-        String name = request.getParameter("name").trim();
-        String departmentId = request.getParameter("departmentId").trim();
-        String buildDate = request.getParameter("buildDate").trim();
-        String desc = request.getParameter("description").trim();
+        String name = request.getParameter("name");
+        String departmentId = request.getParameter("departmentId");
+        String buildDate = request.getParameter("buildDate");
+        String desc = request.getParameter("description");
 
-        List<String> errors = new ArrayList<>();
+        List<String> errors = new ArrayList<>(); //记录错误内容
         DepartmentService departmentService = DepartmentService.getInstance();
+        //检测部门名是否可用
         if (!departmentService.isAvailableName(name)) {
             errors.add("部门名输入为空或已经被注册");
         }
+        //校验部门号是否符合格式
         if (!departmentService.isValidId(departmentId)) {
             errors.add("部门号输入有误");
         } else {
+            //检测部门号是否可用
             if (!departmentService.isAvailableId(Integer.valueOf(departmentId))) {
                 errors.add("部门号已被注册");
             }
         }
+        //校验日期是否正确
         if (!departmentService.isValidDate(buildDate)) {
             errors.add("部门建立日期输入有误");
         }
 
         String page = ERROR_VIEW;
-        if (!errors.isEmpty()) {
+        if (!errors.isEmpty()) { //输入有误
             request.setAttribute("errors", errors);
         } else {
             DepartmentPo newDept = departmentService.addDepartment(name, departmentId, buildDate, desc);
-            if (newDept == null) {
+            if (newDept == null) { //添加失败
                 errors.add("数据库发生错误,无法创建部门");
                 request.setAttribute("errors", errors);
-            } else {
+            } else { //添加成功
                 request.setAttribute("status", "ok");
-                LogUtil.add(loginId, newDept);
+                LogUtil.add(loginId, newDept); //记录日志
                 page = SUCCESS_VIEW;
             }
         }

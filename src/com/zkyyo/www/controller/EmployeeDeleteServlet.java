@@ -40,9 +40,9 @@ public class EmployeeDeleteServlet extends HttpServlet {
         EmployeeService employeeService = EmployeeService.getInstance();
         EmployeePo deletedEp = employeeService.deleteEmployee(userId);
         String page = ERROR_VIEW;
-        if (deletedEp == null) {
+        if (deletedEp == null) { //删除失败
             request.setAttribute("message", "删除员工失败");
-        } else {
+        } else { //删除成功
             request.setAttribute("message", "删除员工成功");
             LogUtil.delete(loginId, deletedEp);
             page = SUCCESS_VIEW;

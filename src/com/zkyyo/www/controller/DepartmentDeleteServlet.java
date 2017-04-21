@@ -40,11 +40,11 @@ public class DepartmentDeleteServlet extends HttpServlet {
         DepartmentService employeeService = DepartmentService.getInstance();
         DepartmentPo deletedDept = employeeService.deleteDepartment(deptId);
         String page = ERROR_VIEW;
-        if (deletedDept == null) {
+        if (deletedDept == null) { //解散失败
             request.setAttribute("message", "部门解散失败");
-        } else {
+        } else { //解散成功
             request.setAttribute("message", "部门解散成功");
-            LogUtil.delete(loginId, deletedDept);
+            LogUtil.delete(loginId, deletedDept); //记录日志
             page = SUCCESS_VIEW;
         }
 

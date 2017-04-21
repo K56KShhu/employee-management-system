@@ -28,14 +28,19 @@ public class LoginServlet extends HttpServlet {
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        int employeeId = Integer.valueOf(request.getParameter("employeeId"));
-        String password = request.getParameter("password");
+        String employeeId = request.getParameter("employeeId"); //请求登录的员工号
+        String password = request.getParameter("password"); //用户输入的密码
         String page = ERROR_VIEW;
 
         EmployeeService employeeService = EmployeeService.getInstance();
-        if (employeeService.checkLogin(employeeId, password)) {
-            request.getSession().setAttribute("login", employeeId);
-            page = SUCCESS_VIEW;
+        //检测员工号是否有效
+        if (employeeService.isValidId(employeeId)) {
+            int id = Integer.valueOf(employeeId);
+            //密码验证
+            if (employeeService.checkLogin(id, password)) {
+                request.getSession().setAttribute("login", id);
+                page = SUCCESS_VIEW;
+            }
         }
         response.sendRedirect(page);
     }
