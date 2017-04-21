@@ -76,7 +76,7 @@ public class EmployeeService {
 
     /**
      * 校验员工号是否符合格式
-     * 格式为一串1-10位的大于0的整数
+     * 格式为一串1-10位的大于0的数字G
      * @param id 待校验的用户号
      * @return 符合为true, 不符合为false
      */
