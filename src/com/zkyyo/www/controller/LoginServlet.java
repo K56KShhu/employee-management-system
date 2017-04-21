@@ -12,10 +12,10 @@ import java.io.IOException;
 
 @WebServlet(
         name = "LoginServlet",
-        urlPatterns={"/login.do"},
+        urlPatterns = {"/login.do"},
         initParams = {
-                @WebInitParam(name = "SUCCESS_VIEW", value="functions.jsp"),
-                @WebInitParam(name = "ERROR_VIEW", value="index.jsp")
+                @WebInitParam(name = "SUCCESS_VIEW", value = "functions.jsp"),
+                @WebInitParam(name = "ERROR_VIEW", value = "index.jsp")
         }
 )
 public class LoginServlet extends HttpServlet {

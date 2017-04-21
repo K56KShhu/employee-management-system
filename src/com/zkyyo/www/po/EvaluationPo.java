@@ -12,7 +12,6 @@ public class EvaluationPo {
     private int starLevel; //评价等级
     private String comment; //评价内容
 
-
     /**
      * 默认构造方法
      * 用于更新评价信息, 只需提供需要修改的信息
@@ -24,10 +23,11 @@ public class EvaluationPo {
     /**
      * 构造方法
      * 用于添加评价
-     * @param evaluatorId 评价者的员工号
+     *
+     * @param evaluatorId   评价者的员工号
      * @param beEvaluatedId 被评价的员工号
-     * @param starLevel 评价等级
-     * @param comment 评价内容
+     * @param starLevel     评价等级
+     * @param comment       评价内容
      */
     public EvaluationPo(int evaluatorId, int beEvaluatedId, int starLevel, String comment) {
         this.beEvaluatedId = beEvaluatedId;
@@ -39,11 +39,12 @@ public class EvaluationPo {
     /**
      * 构造方法
      * 用于修改, 删除评价
-     * @param evaluationId 评价号
-     * @param evaluatorId 评价者的员工号
+     *
+     * @param evaluationId  评价号
+     * @param evaluatorId   评价者的员工号
      * @param beEvaluatedId 被评价的员工号
-     * @param starLevel 评价等级
-     * @param comment 评价内容
+     * @param starLevel     评价等级
+     * @param comment       评价内容
      */
     public EvaluationPo(int evaluationId, int evaluatorId, int beEvaluatedId, int starLevel, String comment) {
         this.evaluationId = evaluationId;
@@ -124,7 +125,7 @@ public class EvaluationPo {
                 && starLevel == other.getStarLevel()
                 && comment.equals(other.getComment());
     }
-    
+
     public int hashCode() {
         return Objects.hash(evaluationId, beEvaluatedId, evaluatorId, starLevel, comment);
     }

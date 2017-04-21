@@ -82,7 +82,13 @@
         <td><a href="/employee_detail.do?&userId=<%= e.getUserId() %>" target="_blank">详细</a></td>
         <td><a href="/evaluation_add.jsp?&beEvaluatedId=<%= e.getUserId() %>" target="_blank">评价</a></td>
         <td><a href="/employee_update.jsp?&userId=<%= e.getUserId() %>" target="_blank">修改</a></td>
+        <%
+            if (userId != e.getUserId()) {
+        %>
         <td><a href="/employee_delete.do?&userId=<%= e.getUserId() %>" target="_blank">删除</a></td>
+        <%
+            }
+        %>
     </tr>
     <%
             }

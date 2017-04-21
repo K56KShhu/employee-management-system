@@ -38,6 +38,7 @@ public class DepartmentService {
 
     /**
      * 创建一个该类的实例
+     *
      * @return 返回这个类的一个实例
      */
     public static DepartmentService getInstance() {
@@ -54,6 +55,7 @@ public class DepartmentService {
     /**
      * 校验部门号是否符合格式
      * 格式为1-9位的大于0的数字
+     *
      * @param deptId 待校验的部门号
      * @return 符合为true, 不符合为false
      */
@@ -74,6 +76,7 @@ public class DepartmentService {
 
     /**
      * 校验日期是否符合格式, 且是否合法
+     *
      * @param date 待校验的日期
      * @return 符合为true, 不符合为false
      */
@@ -96,7 +99,7 @@ public class DepartmentService {
                     Calendar mycal = new GregorianCalendar(year, month - 1, 1); //起始月份为0
                     int daysInMonth = mycal.getActualMaximum(Calendar.DAY_OF_MONTH);
                     //校验对应月份的天数
-                    if (day < daysInMonth) {
+                    if (day <= daysInMonth) {
                         return true;
                     }
                 }
@@ -107,6 +110,7 @@ public class DepartmentService {
 
     /**
      * 检测部门号是否可用
+     *
      * @param id 待检测的部门号
      * @return 可用为true, 不可用为false
      */
@@ -117,6 +121,7 @@ public class DepartmentService {
 
     /**
      * 检测部门名是否可用
+     *
      * @param name 待检测的部门名
      * @return 可用为true, 不可用为false
      */
@@ -131,10 +136,11 @@ public class DepartmentService {
 
     /**
      * 添加部门
-     * @param name 部门名
-     * @param deptId 部门号
+     *
+     * @param name      部门名
+     * @param deptId    部门号
      * @param buildDate 建立日期
-     * @param desc 部门描述
+     * @param desc      部门描述
      * @return 添加成功返回该部门对象, 否则返回null
      */
     public DepartmentPo addDepartment(String name, String deptId, String buildDate, String desc) {
@@ -154,6 +160,7 @@ public class DepartmentService {
 
     /**
      * 解散部门
+     *
      * @param deptId 待解散的部门号
      * @return 解散成功返回被解散的部门对象, 部门不存在或解散失败返回null
      */
@@ -174,6 +181,7 @@ public class DepartmentService {
 
     /**
      * 模糊查询部门, 根据部门号查找
+     *
      * @param deptId 部门号
      * @return 符合的部门列表
      */
@@ -184,6 +192,7 @@ public class DepartmentService {
 
     /**
      * 模糊查询部门, 根据部门名查找
+     *
      * @param name 部门号
      * @return 符合的部门列表
      */
@@ -194,6 +203,7 @@ public class DepartmentService {
 
     /**
      * 精确查询部门, 根据部门号查询
+     *
      * @param deptId 部门号
      * @return 找到返回该部门对象, 否则返回null
      */
@@ -204,6 +214,7 @@ public class DepartmentService {
 
     /**
      * 查找所有部门
+     *
      * @return 包含所有部门的列表
      */
     public List<DepartmentPo> findDepartments() {
@@ -213,7 +224,8 @@ public class DepartmentService {
 
     /**
      * 对部门列表进行排序
-     * @param list 待排序的部门列表
+     *
+     * @param list      待排序的部门列表
      * @param orderType 排序依据, 参考该类的静态成员变量
      * @param isReverse 降序为true, 升序为false
      * @return 排序后的部门列表
@@ -245,6 +257,7 @@ public class DepartmentService {
 
     /**
      * 更新部门信息
+     *
      * @param updatedDept 包含最新部门信息的部门对象
      * @return 更新成功返回最新部门对象, 否则返回null
      */

@@ -63,7 +63,7 @@ public class DepartmentUpdateServlet extends HttpServlet {
         if (buildDate != null && buildDate.length() > 0) {
             //检查日期是否有效
             if (!departmentService.isValidDate(buildDate)) {
-                errors.add("创建日期输入有误");
+                errors.add("创建日期(yyyy-MM-dd)输入有误");
             } else {
                 dept.setBuildDate(java.sql.Date.valueOf(buildDate));
             }

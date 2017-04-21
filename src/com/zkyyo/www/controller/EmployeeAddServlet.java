@@ -47,7 +47,7 @@ public class EmployeeAddServlet extends HttpServlet {
         List<String> errors = new ArrayList<>(); //获取错误信息
         //检查是否遗漏参数 !未解决!
         if (name == null || mobile == null || email == null || password == null
-                || confirmedPsw ==null || deptId == null || salary == null || date == null) {
+                || confirmedPsw == null || deptId == null || salary == null || date == null) {
             errors.add("信息不完整");
         }
 
@@ -75,7 +75,7 @@ public class EmployeeAddServlet extends HttpServlet {
         }
         //校验日期
         if (!employeeService.isValidDate(date)) {
-            errors.add("就职日期输入有误");
+            errors.add("就职日期(yyyy-MM-dd)输入有误");
         }
         if (deptId != null && departmentService.isAvailableId(Integer.valueOf(deptId))) {
             errors.add("部门不存在");

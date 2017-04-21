@@ -59,7 +59,7 @@ public class DepartmentAddServlet extends HttpServlet {
         }
         //校验日期是否正确
         if (!departmentService.isValidDate(buildDate)) {
-            errors.add("部门建立日期输入有误");
+            errors.add("部门建立日期(yyyy-MM-dd)输入有误");
         }
 
         String page = ERROR_VIEW;

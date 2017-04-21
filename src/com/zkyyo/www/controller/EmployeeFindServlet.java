@@ -1,6 +1,5 @@
 package com.zkyyo.www.controller;
 
-import com.zkyyo.www.dao.DepartmentDao;
 import com.zkyyo.www.po.EmployeePo;
 import com.zkyyo.www.service.DepartmentService;
 import com.zkyyo.www.service.EmployeeService;
@@ -28,7 +27,6 @@ public class EmployeeFindServlet extends HttpServlet {
         EMPLOYEE_VIEW = getServletConfig().getInitParameter("EMPLOYEE_VIEW");
     }
 
-
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         doGet(request, response);
     }
@@ -37,7 +35,7 @@ public class EmployeeFindServlet extends HttpServlet {
         String way = request.getParameter("way"); //查询方式
         String info = request.getParameter("info"); //查询内容
         String order = request.getParameter("order"); //排序依据
-        String reverse = request.getParameter("reverse"); //升序降序
+        String reverse = request.getParameter("reverse"); //
         List<EmployeePo> result = null;
         EmployeeService employeeService = EmployeeService.getInstance();
         DepartmentService departmentService = DepartmentService.getInstance();
@@ -71,7 +69,7 @@ public class EmployeeFindServlet extends HttpServlet {
             }
         }
 
-       //排序
+        //排序
         if (result != null) {
             //升序
             if (reverse.equals("false")) {

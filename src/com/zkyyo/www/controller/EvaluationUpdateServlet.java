@@ -1,6 +1,7 @@
 package com.zkyyo.www.controller;
 
 import com.zkyyo.www.po.EvaluationPo;
+import com.zkyyo.www.service.EmployeeService;
 import com.zkyyo.www.service.EvaluationService;
 import com.zkyyo.www.util.LogUtil;
 
@@ -56,19 +57,28 @@ public class EvaluationUpdateServlet extends HttpServlet {
                 if (!evaluationService.isExisted(id)) {
                     errors.add("评价不存在");
                 } else {
-                    eval.setEvaluationId(id); //设置评价号
-                    //是否进行进行等级评价
-                    if (stars != null && stars.length() > 0) {
-                        //检测评价等级是否有效
-                        if (!evaluationService.isValidStars(stars)) {
-                            errors.add("评价等级输入有误"); //不合法
-                        } else {
-                            eval.setStarLevel(id); //合法
+                    EmployeeService employeeService = EmployeeService.getInstance();
+                    EvaluationPo findedEval = evaluationService.findEvaluation(id);
+                    boolean evaluatorExisted = employeeService.isIdExisted(findedEval.getEvaluatorId());
+                    boolean beEvaluatedExisted = employeeService.isIdExisted(findedEval.getBeEvaluatedId());
+                    //检查评论者和被评论者是否存在
+                    if (!evaluatorExisted || !beEvaluatedExisted) {
+                        errors.add("评价者或被评论者不存在");
+                    } else {
+                        eval.setEvaluationId(id); //设置评价号
+                        //是否进行进行等级评价
+                        if (stars != null && stars.length() > 0) {
+                            //检测评价等级是否有效
+                            if (!evaluationService.isValidStars(stars)) {
+                                errors.add("评价等级输入有误"); //不合法
+                            } else {
+                                eval.setStarLevel(id); //合法
+                            }
                         }
-                    }
-                    //是否进行评论
-                    if (comment != null && comment.length() > 0) {
-                        eval.setComment(comment);
+                        //是否进行评论
+                        if (comment != null && comment.length() > 0) {
+                            eval.setComment(comment);
+                        }
                     }
                 }
             }

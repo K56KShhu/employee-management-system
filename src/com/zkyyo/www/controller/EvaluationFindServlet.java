@@ -74,7 +74,7 @@ public class EvaluationFindServlet extends HttpServlet {
             if (reverse.equals("true")) {
                 switch (order) {
                     case "stars":
-                        result = evaluationService.sort(result, EvaluationService.ORDER_BY_STARS, false);
+                        result = evaluationService.sort(result, EvaluationService.ORDER_BY_STARS, true);
                         break;
                     default:
                         break;

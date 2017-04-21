@@ -27,13 +27,14 @@ public class EmployeePo {
     /**
      * 构造方法
      * 用于添加, 删除, 查询员工信息
-     * @param userId 员工号
-     * @param password 密码
-     * @param userName 员工名
-     * @param deptId 员工所在部门号
-     * @param mobile 手机号
-     * @param salary 薪水
-     * @param email 邮箱
+     *
+     * @param userId     员工号
+     * @param password   密码
+     * @param userName   员工名
+     * @param deptId     员工所在部门号
+     * @param mobile     手机号
+     * @param salary     薪水
+     * @param email      邮箱
      * @param employDate 就职日期
      */
     public EmployeePo(int userId, String password, String userName, int deptId,
@@ -149,7 +150,7 @@ public class EmployeePo {
                 && email.equals(other.email)
                 && employDate.equals(other.getEmployDate());
     }
-    
+
     public int hashCode() {
         return Objects.hash(userId, password, userName, deptId, mobile, salary, email, employDate);
     }

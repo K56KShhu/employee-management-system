@@ -183,7 +183,7 @@ public class EmployeeService {
                     Calendar mycal = new GregorianCalendar(year, month - 1, 1); //起始月份为0
                     int daysInMonth = mycal.getActualMaximum(Calendar.DAY_OF_MONTH);
                     //校验对应月份的日数
-                    if (day < daysInMonth) {
+                    if (day <= daysInMonth) {
                         return true;
                     }
                 }

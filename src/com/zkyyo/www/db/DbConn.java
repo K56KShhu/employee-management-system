@@ -13,6 +13,7 @@ public class DbConn {
      */
     private static final String JDBC_DRIVER = "com.mysql.jdbc.Driver";
     /**
+     * != null &&
      * 数据库URL
      */
     private static final String DB_URL = "jdbc:mysql://localhost/test2?useSSL=true";
@@ -28,6 +29,7 @@ public class DbConn {
 
     /**
      * 获得一个数据库的连接
+     *
      * @return 一个数据库的连接
      */
     public static Connection getConn() {

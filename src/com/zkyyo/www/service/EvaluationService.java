@@ -43,6 +43,7 @@ public class EvaluationService {
 
     /**
      * 创建一个该类的实例
+     *
      * @return 返回这个类的一个实例
      */
     public static EvaluationService getInstance() {
@@ -59,6 +60,7 @@ public class EvaluationService {
     /**
      * 校验评价号是否符合格式
      * 格式为>=0的数字
+     *
      * @param evalId 待校验的评价号字符串
      * @return 符合为true, 不符合为false
      */
@@ -79,6 +81,7 @@ public class EvaluationService {
 
     /**
      * 校验评价等级是否符合格式
+     *
      * @param stars 待校验的评价等级字符串
      * @return 符合为true, 不符合为false
      */
@@ -103,6 +106,7 @@ public class EvaluationService {
 
     /**
      * 检测评价是否已经存在
+     *
      * @param evalId 待检测的评价号
      * @return 存在为true, 不存在false
      */
@@ -113,10 +117,11 @@ public class EvaluationService {
 
     /**
      * 添加评价
-     * @param evaluatorId 评价者的员工号字符串
+     *
+     * @param evaluatorId   评价者的员工号字符串
      * @param beEvaluatedId 被评价者的员工号字符串
-     * @param stars 评价等级字符串
-     * @param comment 评论
+     * @param stars         评价等级字符串
+     * @param comment       评论
      * @return 评论成功返回该评论对象, 否则返回null
      */
     public EvaluationPo addEvaluation(String evaluatorId, String beEvaluatedId, String stars, String comment) {
@@ -137,6 +142,7 @@ public class EvaluationService {
 
     /**
      * 删除评论
+     *
      * @param evalId 待删除评论的评论号
      * @return 删除成功返回被删除的评论对象, 评论不存在或删除失败返回null
      */
@@ -158,6 +164,7 @@ public class EvaluationService {
 
     /**
      * 查找发送的评价
+     *
      * @param userId 发送者的员工号
      * @return 评价列表
      */
@@ -168,6 +175,7 @@ public class EvaluationService {
 
     /**
      * 查找获得的评价
+     *
      * @param userId 获得者的员工号
      * @return 评价列表
      */
@@ -178,6 +186,7 @@ public class EvaluationService {
 
     /**
      * 查找所有评价
+     *
      * @return 评价列表
      */
     public List<EvaluationPo> findEvaluations() {
@@ -187,6 +196,7 @@ public class EvaluationService {
 
     /**
      * 模糊查询, 根据评论的关键字查找评价
+     *
      * @param keys 以空格分隔的关键字字符串
      * @return 符合要求的评价列表
      */
@@ -206,6 +216,7 @@ public class EvaluationService {
 
     /**
      * 精确查询, 根据评价号查找
+     *
      * @param evalId 待查找的评价号
      * @return 找到返回该评价对象, 否则返回null
      */
@@ -216,7 +227,8 @@ public class EvaluationService {
 
     /**
      * 对评价列表进行排序
-     * @param list 评价列表
+     *
+     * @param list      评价列表
      * @param orderType 排序依据, 参考该类的静态成员变量
      * @param isReverse 倒序为true, 升序为false
      * @return 排序后的评价列表
@@ -237,6 +249,7 @@ public class EvaluationService {
 
     /**
      * 更新评价信息
+     *
      * @param updatedEval 包含最新评价信息的评价对象
      * @return 更新成功返回新评价对象, 失败返回null
      */

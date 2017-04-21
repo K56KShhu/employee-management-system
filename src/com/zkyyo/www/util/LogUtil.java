@@ -27,8 +27,9 @@ public class LogUtil {
 
     /**
      * 记录用户增加员工的操作
+     *
      * @param operatorId 操作者员工号
-     * @param newEp 新员工对象
+     * @param newEp      新员工对象
      */
     public static void add(int operatorId, EmployeePo newEp) {
         EmployeeDao employeeDao = EmployeeDao.getInstance();
@@ -49,8 +50,9 @@ public class LogUtil {
 
     /**
      * 记录用户创建部门的操作
+     *
      * @param operatorId 操作者员工号
-     * @param newEval 新部门对象
+     * @param newEval    新部门对象
      */
     public static void add(int operatorId, EvaluationPo newEval) {
         EmployeeDao employeeDao = EmployeeDao.getInstance();
@@ -73,8 +75,9 @@ public class LogUtil {
 
     /**
      * 记录用户添加评论的操作
+     *
      * @param operatorId 操作者员工号
-     * @param newDept 新评价对象
+     * @param newDept    新评价对象
      */
     public static void add(int operatorId, DepartmentPo newDept) {
         EmployeeDao employeeDao = EmployeeDao.getInstance();
@@ -95,8 +98,9 @@ public class LogUtil {
 
     /**
      * 记录用户删除员工的操作
+     *
      * @param operatorId 操作者员工号
-     * @param deletedEp 被删除的员工对象
+     * @param deletedEp  被删除的员工对象
      */
     public static void delete(int operatorId, EmployeePo deletedEp) {
         EmployeeDao employeeDao = EmployeeDao.getInstance();
@@ -117,7 +121,8 @@ public class LogUtil {
 
     /**
      * 记录员工解散部门的操作
-     * @param operatorId 操作者员工号
+     *
+     * @param operatorId  操作者员工号
      * @param deletedDept 被解散的部门对象
      */
     public static void delete(int operatorId, DepartmentPo deletedDept) {
@@ -139,7 +144,8 @@ public class LogUtil {
 
     /**
      * 记录员工删除评论的操作
-     * @param operatorId 操作者员工号
+     *
+     * @param operatorId  操作者员工号
      * @param deletedEval 被删除的评论对象
      */
     public static void delete(int operatorId, EvaluationPo deletedEval) {
@@ -167,9 +173,10 @@ public class LogUtil {
 
     /**
      * 记录用户更新员工的操作, 并记录新旧数据的区别
+     *
      * @param operatorId 操作者员工号
-     * @param initialEp 更新前的员工对象
-     * @param updatedEp 更新后的员工对象
+     * @param initialEp  更新前的员工对象
+     * @param updatedEp  更新后的员工对象
      */
     public static void update(int operatorId, EmployeePo initialEp, EmployeePo updatedEp) {
         EmployeeDao employeeDao = EmployeeDao.getInstance();
@@ -238,7 +245,8 @@ public class LogUtil {
 
     /**
      * 记录用户更新部门的操作, 并记录新旧数据的区别
-     * @param operatorId 操作者员工号
+     *
+     * @param operatorId  操作者员工号
      * @param initialDept 更新前的部门对象
      * @param updatedDept 更新后的部门对象
      */
@@ -284,7 +292,8 @@ public class LogUtil {
 
     /**
      * 记录用户更新评论的操作, 并记录新旧数据的区别
-     * @param operatorId 操作者员工号
+     *
+     * @param operatorId  操作者员工号
      * @param initialEval 更新前的评论
      * @param updatedEval 更新后的评论
      */

@@ -13,6 +13,7 @@ public class DbClose {
 
     /**
      * 关闭数据库连接
+     *
      * @param conn 待关闭的连接对象
      * @param stmt 待关闭的Statement对象
      */
@@ -35,9 +36,10 @@ public class DbClose {
 
     /**
      * 关闭数据库连接
+     *
      * @param conn 待关闭的连接对象
      * @param stmt 待关闭的Statement对象
-     * @param rs 待关闭的结果集对象
+     * @param rs   待关闭的结果集对象
      */
     public static void close(Connection conn, Statement stmt, ResultSet rs) {
         try {
@@ -65,7 +67,8 @@ public class DbClose {
 
     /**
      * 关闭数据库连接
-     * @param conn 待关闭的连接对象
+     *
+     * @param conn  待关闭的连接对象
      * @param pstmt 待关闭的PreparedStatement对象
      */
     public static void close(Connection conn, PreparedStatement pstmt) {
@@ -87,9 +90,10 @@ public class DbClose {
 
     /**
      * 关闭数据库连接
-     * @param conn 待关闭的连接对象
+     *
+     * @param conn  待关闭的连接对象
      * @param pstmt 待关闭的PreparedStatement对象
-     * @param rs 待关闭的结果集对象
+     * @param rs    待关闭的结果集对象
      */
     public static void close(Connection conn, PreparedStatement pstmt, ResultSet rs) {
         try {

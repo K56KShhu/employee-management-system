@@ -24,10 +24,11 @@ public class DepartmentPo {
     /**
      * 构造方法
      * 用于创建部门, 不允许指定人数
-     * @param deptId 部门号
-     * @param name 部门名
+     *
+     * @param deptId      部门号
+     * @param name        部门名
      * @param description 部门描述
-     * @param buildDate 建立日期
+     * @param buildDate   建立日期
      */
     public DepartmentPo(int deptId, String name, String description, Date buildDate) {
         this.deptId = deptId;
@@ -39,11 +40,12 @@ public class DepartmentPo {
     /**
      * 构造方法
      * 用于查询部门, 包含人数
-     * @param deptId 部门号
-     * @param name 部门名
-     * @param population 部门人数
+     *
+     * @param deptId      部门号
+     * @param name        部门名
+     * @param population  部门人数
      * @param description 部门描述
-     * @param buildDate 建立日期
+     * @param buildDate   建立日期
      */
     public DepartmentPo(int deptId, String name, int population, String description, Date buildDate) {
         this.deptId = deptId;
@@ -124,7 +126,7 @@ public class DepartmentPo {
                 && description.equals(other.getDescription())
                 && buildDate.equals(other.getBuildDate());
     }
-    
+
     public int hashCode() {
         return Objects.hash(deptId, name, population, description, buildDate);
     }

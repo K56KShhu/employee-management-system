@@ -28,8 +28,8 @@
 
 <form method="get" action="${pageContext.request.contextPath}/evaluation_find.do">
     <select name="way">
-        <option value="all">查询所有</option>
         <option value="by_key_words">通过评论关键字(空格分隔)</option>
+        <option value="all">查询所有</option>
     </select>
     <input type="text" name="info" size="50" maxlength="80">
     <input type="submit" value="搜索一下"><br/>

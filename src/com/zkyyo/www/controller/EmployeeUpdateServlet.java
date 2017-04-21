@@ -45,17 +45,18 @@ public class EmployeeUpdateServlet extends HttpServlet {
         String date = request.getParameter("date"); //就职日期
 
         List<String> errors = new ArrayList<>(); //获取错误信息
+        EmployeePo ep = new EmployeePo();
         //检查是否遗漏参数 !未解决!
         if (userId == null || name == null || mobile == null || email == null || password == null
-                || confirmedPsw ==null || deptId == null || salary == null || date == null) {
+                || confirmedPsw == null || deptId == null || salary == null || date == null) {
             errors.add("信息不完整");
+        } else {
+            ep.setUserId(Integer.valueOf(userId));
         }
 
         EmployeeService employeeService = EmployeeService.getInstance();
-        EmployeePo ep = new EmployeePo();
-        ep.setUserId(Integer.valueOf(userId));
         //是否修改用户名
-        if (name.length() > 0) {
+        if (name != null && name.length() > 0) {
             //校验用户名
             if (!employeeService.isValidName(name)) {
                 errors.add("姓名输入有误");
@@ -64,7 +65,7 @@ public class EmployeeUpdateServlet extends HttpServlet {
             }
         }
         //是否修改手机号
-        if (mobile.length() > 0) {
+        if (mobile != null && mobile.length() > 0) {
             //校验手机号
             if (!employeeService.isValidMobile(mobile)) {
                 errors.add("手机号输入有误");
@@ -73,7 +74,7 @@ public class EmployeeUpdateServlet extends HttpServlet {
             }
         }
         //是否修改邮箱
-        if (email.length() > 0) {
+        if (email != null && email.length() > 0) {
             //校验邮箱
             if (!employeeService.isValidEmail(email)) {
                 errors.add("邮箱输入有误");
@@ -82,7 +83,7 @@ public class EmployeeUpdateServlet extends HttpServlet {
             }
         }
         //是否修改密码
-        if (password.length() > 0) {
+        if (password != null && password.length() > 0) {
             //校验二次密码
             if (!employeeService.isValidPassword(password, confirmedPsw)) {
                 errors.add("第二次密码输入有误");
@@ -91,12 +92,12 @@ public class EmployeeUpdateServlet extends HttpServlet {
             }
         }
         //是否修改员工号
-        if (deptId.length() > 0) {
+        if (deptId != null && deptId.length() > 0) {
             //校验员工号
             ep.setDeptId(Integer.valueOf(deptId));
         }
         //是否修改薪水
-        if (salary.length() > 0) {
+        if (salary != null && salary.length() > 0) {
             //校验薪水
             if (!employeeService.isValidSalary(salary)) {
                 errors.add("薪水输入有误");
@@ -105,10 +106,10 @@ public class EmployeeUpdateServlet extends HttpServlet {
             }
         }
         //是否修改就职日期
-        if (date.length() > 0) {
+        if (date != null && date.length() > 0) {
             //校验日期
             if (!employeeService.isValidDate(date)) {
-                errors.add("就职日期输入有误");
+                errors.add("就职日期(yyyy-MM-dd)输入有误");
             } else {
                 ep.setEmployDate(java.sql.Date.valueOf(date));
             }
@@ -118,18 +119,19 @@ public class EmployeeUpdateServlet extends HttpServlet {
         if (!errors.isEmpty()) { //输入有误
             request.setAttribute("errors", errors);
         } else { //输入正确
-            EmployeePo initialEp = employeeService.findEmployee(Integer.valueOf(userId));
-            EmployeePo updatedEp = employeeService.updateEmployee(ep);
-            if (updatedEp == null) { //添加失败
-                errors.add("数据库更新错误");
-                request.setAttribute("errors", errors);
-            } else { //添加成功
-                request.setAttribute("status", "ok");
-                LogUtil.update(loginId, initialEp, updatedEp); //记录日志
-                page = SUCCESS_VIEW;
+            if (userId != null) {
+                EmployeePo initialEp = employeeService.findEmployee(Integer.valueOf(userId));
+                EmployeePo updatedEp = employeeService.updateEmployee(ep);
+                if (updatedEp == null) { //添加失败
+                    errors.add("数据库更新错误");
+                    request.setAttribute("errors", errors);
+                } else { //添加成功
+                    request.setAttribute("status", "ok");
+                    LogUtil.update(loginId, initialEp, updatedEp); //记录日志
+                    page = SUCCESS_VIEW;
+                }
             }
         }
-
         request.getRequestDispatcher(page).forward(request, response);
     }
 
