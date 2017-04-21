@@ -2,17 +2,33 @@ package com.zkyyo.www.po;
 
 import java.util.Objects;
 
+/**
+ * 评价的实体类
+ */
 public class EvaluationPo {
-    private int evaluationId;
-    private int beEvaluatedId;
-    private int evaluatorId;
-    private int starLevel;
-    private String comment;
+    private int evaluationId; //评价号 为数据库中主键
+    private int beEvaluatedId; //被评价的员工号
+    private int evaluatorId; //评价者的员工号
+    private int starLevel; //评价等级
+    private String comment; //评价内容
 
+
+    /**
+     * 默认构造方法
+     * 用于更新评价信息, 只需提供需要修改的信息
+     */
     public EvaluationPo() {
 
     }
 
+    /**
+     * 构造方法
+     * 用于添加评价
+     * @param evaluatorId 评价者的员工号
+     * @param beEvaluatedId 被评价的员工号
+     * @param starLevel 评价等级
+     * @param comment 评价内容
+     */
     public EvaluationPo(int evaluatorId, int beEvaluatedId, int starLevel, String comment) {
         this.beEvaluatedId = beEvaluatedId;
         this.evaluatorId = evaluatorId;
@@ -20,6 +36,15 @@ public class EvaluationPo {
         this.comment = comment;
     }
 
+    /**
+     * 构造方法
+     * 用于修改, 删除评价
+     * @param evaluationId 评价号
+     * @param evaluatorId 评价者的员工号
+     * @param beEvaluatedId 被评价的员工号
+     * @param starLevel 评价等级
+     * @param comment 评价内容
+     */
     public EvaluationPo(int evaluationId, int evaluatorId, int beEvaluatedId, int starLevel, String comment) {
         this.evaluationId = evaluationId;
         this.beEvaluatedId = beEvaluatedId;

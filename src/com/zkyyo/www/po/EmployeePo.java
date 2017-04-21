@@ -3,19 +3,42 @@ package com.zkyyo.www.po;
 import java.sql.Date;
 import java.util.Objects;
 
+/**
+ * 部门的实体类
+ */
 public class EmployeePo {
-    private int userId;
-    private String password;
-    private String userName;
-    private int deptId;
-    private String mobile;
-    private double salary;
-    private String email;
-    private Date employDate;
+    private int userId; //员工号 1-10位大于0的数字
+    private String password; //密码
+    private String userName; //员工名
+    private int deptId; //员工所在部门号
+    private String mobile; //手机号
+    private double salary; //薪水
+    private String email; //邮箱
+    private Date employDate; //就职日期
 
-    public EmployeePo(int eUserId, String password, String userName, int deptId,
+    /**
+     * 默认构造方法
+     * 用于更新员工信息, 只需提供需要修改的信息
+     */
+    public EmployeePo() {
+
+    }
+
+    /**
+     * 构造方法
+     * 用于添加, 删除, 查询员工信息
+     * @param userId 员工号
+     * @param password 密码
+     * @param userName 员工名
+     * @param deptId 员工所在部门号
+     * @param mobile 手机号
+     * @param salary 薪水
+     * @param email 邮箱
+     * @param employDate 就职日期
+     */
+    public EmployeePo(int userId, String password, String userName, int deptId,
                       String mobile, double salary, String email, Date employDate) {
-        this.userId = eUserId;
+        this.userId = userId;
         this.password = password;
         this.userName = userName;
         this.deptId = deptId;
@@ -23,13 +46,6 @@ public class EmployeePo {
         this.salary = salary;
         this.email = email;
         this.employDate = employDate;
-    }
-
-    /**
-     * 作为默认构造函数，用于添加新员工
-     */
-    public EmployeePo() {
-
     }
 
     public int getUserId() {

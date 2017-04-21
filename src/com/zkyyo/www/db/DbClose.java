@@ -6,8 +6,16 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+/**
+ * 封装关闭数据库连接的操作
+ */
 public class DbClose {
 
+    /**
+     * 关闭数据库连接
+     * @param conn 待关闭的连接对象
+     * @param stmt 待关闭的Statement对象
+     */
     public static void close(Connection conn, Statement stmt) {
         try {
             if (conn != null) {
@@ -25,6 +33,12 @@ public class DbClose {
         }
     }
 
+    /**
+     * 关闭数据库连接
+     * @param conn 待关闭的连接对象
+     * @param stmt 待关闭的Statement对象
+     * @param rs 待关闭的结果集对象
+     */
     public static void close(Connection conn, Statement stmt, ResultSet rs) {
         try {
             if (conn != null) {
@@ -49,6 +63,11 @@ public class DbClose {
         }
     }
 
+    /**
+     * 关闭数据库连接
+     * @param conn 待关闭的连接对象
+     * @param pstmt 待关闭的PreparedStatement对象
+     */
     public static void close(Connection conn, PreparedStatement pstmt) {
         try {
             if (conn != null) {
@@ -66,6 +85,12 @@ public class DbClose {
         }
     }
 
+    /**
+     * 关闭数据库连接
+     * @param conn 待关闭的连接对象
+     * @param pstmt 待关闭的PreparedStatement对象
+     * @param rs 待关闭的结果集对象
+     */
     public static void close(Connection conn, PreparedStatement pstmt, ResultSet rs) {
         try {
             if (conn != null) {
