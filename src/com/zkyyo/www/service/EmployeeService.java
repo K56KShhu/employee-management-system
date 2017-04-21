@@ -18,19 +18,19 @@ import java.util.regex.Pattern;
  */
 public class EmployeeService {
     /**
-     * 作为排序方法的参数, 以用户ID作为排序依据
+     * 作为排序的标识符, 以用户ID作为排序依据
      */
     public static final int ORDER_BY_USER_ID = 1;
     /**
-     * 作为排序方法的参数, 以用户所在部门ID作为排序依据
+     * 作为排序的标识符, 以用户所在部门ID作为排序依据
      */
     public static final int ORDER_BY_DEPT_ID = 2;
     /**
-     * 作为排序方法的参数, 以用户的薪水作为排序依据
+     * 作为排序的标识符, 以用户的薪水作为排序依据
      */
     public static final int ORDER_BY_SALARY = 3;
     /**
-     * 作为排序方法的参数, 用户的就职日期作为排序依据
+     * 作为排序的标识符, 用户的就职日期作为排序依据
      */
     public static final int ORDER_BY_DATE = 4;
     /**

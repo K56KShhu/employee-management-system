@@ -19,7 +19,7 @@ import java.util.regex.Pattern;
  */
 public class EvaluationService {
     /**
-     * 作为排序方法的参数, 以评价等级为排序依据
+     * 作为排序的标识符, 以评价等级为排序依据
      */
     public static final int ORDER_BY_STARS = 1;
     /**

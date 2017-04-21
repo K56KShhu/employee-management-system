@@ -14,15 +14,15 @@ import java.util.regex.Pattern;
  */
 public class DepartmentService {
     /**
-     * 作为排序方法的参数, 以部门号为排序依据
+     * 作为排序的标识符, 以部门号为排序依据
      */
     public static final int ORDER_BY_ID = 1;
     /**
-     * 作为排序方法的参数, 以部门人数为排序依据
+     * 作为排序的标识符, 以部门人数为排序依据
      */
     public static final int ORDER_BY_POPULATION = 2;
     /**
-     * 作为排序方法的参数, 以建立日期为排序依据
+     * 作为排序的标识符, 以建立日期为排序依据
      */
     public static final int ORDER_BY_DATE = 3;
     /**

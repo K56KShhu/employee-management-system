@@ -11,14 +11,33 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.*;
 
+/**
+ * 该类包含与评价相关, 涉及数据库操作的代码
+ */
 public class EvaluationDao {
+    /**
+     * 更新评价等级的标识符
+     */
     public static final int UPDATE_STARS = 1;
+    /**
+     * 更新评价内容的标识符
+     */
     public static final int UPDATE_COMMENT = 2;
+    /**
+     * 用于创建懒汉模式下的一个单例, 默认为null
+     */
     private static volatile EvaluationDao INSTANCE = null;
 
+    /**
+     * 禁止实例化新的对象
+     */
     private EvaluationDao() {
     }
 
+    /**
+     * 创建一个该类的实例
+     * @return 返回这个类的一个实例
+     */
     public static EvaluationDao getInstance() {
         if (INSTANCE == null) {
             synchronized (EvaluationDao.class) {
@@ -30,6 +49,11 @@ public class EvaluationDao {
         return INSTANCE;
     }
 
+    /**
+     * 向数据库中插入新评价
+     * @param newEval 待插入的评价对象
+     * @return 插入成功为true, 失败为false
+     */
     public boolean addEvaluation(EvaluationPo newEval) {
         Connection conn = null;
         PreparedStatement pstmt = null;
@@ -54,6 +78,11 @@ public class EvaluationDao {
         return isAdded;
     }
 
+    /**
+     * 删除数据中指定的评价
+     * @param evaluationId 待删除的评价号
+     * @return 删除成功为true, 失败为false
+     */
     public boolean deleteEvaluation(int evaluationId) {
         Connection conn = null;
         PreparedStatement pstmt = null;
@@ -77,6 +106,11 @@ public class EvaluationDao {
         return isDeleted;
     }
 
+    /**
+     * 查询数据库中员工发送的评价, 以发送者员工号为查询依据
+     * @param userId 发送者的员工号
+     * @return 发送的评价列表
+     */
     public List<EvaluationPo> selectSendedEvaluations(int userId) {
         Connection conn = null;
         PreparedStatement pstmt = null;
@@ -105,6 +139,11 @@ public class EvaluationDao {
         return evals;
     }
 
+    /**
+     * 查询数据库中员工收到的评价, 以接收者员工号为查询依据
+     * @param userId 接收者的员工号
+     * @return 接收的评价列表
+     */
     public List<EvaluationPo> selectReceivedEvaluations(int userId) {
         Connection conn = null;
         PreparedStatement pstmt = null;
@@ -133,6 +172,11 @@ public class EvaluationDao {
         return evals;
     }
 
+    /**
+     * 获取数据库中指定评价号的评价
+     * @param evalId 指定的评价号
+     * @return 查询成功返回该评价对象, 失败返回null
+     */
     public EvaluationPo selectEvaluation(int evalId) {
         Connection conn = null;
         PreparedStatement pstmt = null;
@@ -161,6 +205,10 @@ public class EvaluationDao {
         return eval;
     }
 
+    /**
+     * 查询数据库中的所有评价
+     * @return 包含所有评价对象的列表
+     */
     public List<EvaluationPo> selectEvaluations() {
         Connection conn = null;
         Statement stmt = null;
@@ -224,6 +272,11 @@ public class EvaluationDao {
     }
     */
 
+    /**
+     * 模糊查询数据库中的评价, 查询依据为评价内容的关键字
+     * @param keys 评价内容的关键字集合
+     * @return 符合的评价列表
+     */
     public Set<EvaluationPo> selectEvaluationsByKeyWords(Set<String> keys) {
         Connection conn = null;
         PreparedStatement pstmt = null;
@@ -256,6 +309,12 @@ public class EvaluationDao {
         return evals;
     }
 
+    /**
+     * 更新数据库中评价
+     * @param updatedTypes 待更新类型的标识符列表
+     * @param eval 包含最新评价信息的评价对象
+     * @return 更新成功为true, 失败为false
+     */
     public boolean updateEvaluation(List<Integer> updatedTypes, EvaluationPo eval) {
         Connection conn = null;
         PreparedStatement pstmt = null;
