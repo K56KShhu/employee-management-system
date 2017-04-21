@@ -140,7 +140,7 @@ public class DepartmentService {
     public DepartmentPo addDepartment(String name, String deptId, String buildDate, String desc) {
         int id = Integer.valueOf(deptId);
         java.sql.Date date = java.sql.Date.valueOf(buildDate);
-        desc = CleanUtil.cleanText(desc); //数据清洗
+        desc = CleanUtil.cleanTextToHtml(desc); //数据清洗
 
         DepartmentPo newDept = new DepartmentPo(id, name, desc, date);
         DepartmentDao departmentDao = DepartmentDao.getInstance();
@@ -263,7 +263,7 @@ public class DepartmentService {
         }
         //更新部门描述
         if (updatedDept.getDescription() != null && !updatedDept.getDescription().equals(initialDept.getDescription())) {
-            updatedDept.setDescription(CleanUtil.cleanText(updatedDept.getDescription())); //数据清洗
+            updatedDept.setDescription(CleanUtil.cleanTextToHtml(updatedDept.getDescription())); //数据清洗
             updatedTypes.add(DepartmentDao.UPDATE_DESC);
         }
         boolean isUpdated = departmentDao.updateDept(updatedTypes, updatedDept);

@@ -34,12 +34,11 @@ public class EvaluationAddServlet extends HttpServlet {
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.setCharacterEncoding("UTF-8");
-        Integer loginId = (Integer) request.getSession().getAttribute("login");
-        int userId = (Integer) request.getSession().getAttribute("login");
-        String evaluatorId = request.getParameter("evaluatorId");
-        String beEvaluatedId = request.getParameter("beEvaluatedId");
-        String stars = request.getParameter("stars");
-        String comment = request.getParameter("comment");
+        Integer loginId = (Integer) request.getSession().getAttribute("login"); //登录用户号
+        String evaluatorId = request.getParameter("evaluatorId"); //评价者员工号
+        String beEvaluatedId = request.getParameter("beEvaluatedId"); //被评价者员工号
+        String stars = request.getParameter("stars"); //评价等级
+        String comment = request.getParameter("comment"); //评价内容
 
         List<String> errors = new ArrayList<>(); //错误列表
         //检查是否遗漏参数 !未解决!
@@ -50,7 +49,7 @@ public class EvaluationAddServlet extends HttpServlet {
         EmployeeService employeeService = EmployeeService.getInstance();
         EvaluationService evaluationService = EvaluationService.getInstance();
         //校验评价人是否为当前登录的用户
-        if (evaluatorId != null && Integer.valueOf(evaluatorId) != userId) {
+        if (evaluatorId != null && Integer.valueOf(evaluatorId) != loginId) {
             //评价人不是当前用户, 重定向为功能页面
             response.sendRedirect("functions.jsp");
         }

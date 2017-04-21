@@ -34,8 +34,8 @@ public class EvaluationDeleteServlet extends HttpServlet {
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String evalId = request.getParameter("evalId");
-        Integer loginId = (Integer) request.getSession().getAttribute("login");
+        Integer loginId = (Integer) request.getSession().getAttribute("login"); //登录用户号
+        String evalId = request.getParameter("evalId"); //评论号
 
         String page = ERROR_VIEW;
         EvaluationService evaluationService = EvaluationService.getInstance();

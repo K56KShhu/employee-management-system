@@ -34,8 +34,8 @@ public class EmployeeDeleteServlet extends HttpServlet {
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        Integer loginId = (Integer) request.getSession().getAttribute("login");
-        int userId = Integer.valueOf(request.getParameter("userId"));
+        Integer loginId = (Integer) request.getSession().getAttribute("login"); //登录用户号
+        int userId = Integer.valueOf(request.getParameter("userId")); //待删除的员工号
 
         EmployeeService employeeService = EmployeeService.getInstance();
         EmployeePo deletedEp = employeeService.deleteEmployee(userId);

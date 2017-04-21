@@ -34,8 +34,8 @@ public class DepartmentDeleteServlet extends HttpServlet {
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        Integer loginId = (Integer) request.getSession().getAttribute("login");
-        int deptId = Integer.valueOf(request.getParameter("deptId"));
+        Integer loginId = (Integer) request.getSession().getAttribute("login"); //登录用户号
+        int deptId = Integer.valueOf(request.getParameter("deptId")); //待删除的部门号
 
         DepartmentService employeeService = DepartmentService.getInstance();
         DepartmentPo deletedDept = employeeService.deleteDepartment(deptId);

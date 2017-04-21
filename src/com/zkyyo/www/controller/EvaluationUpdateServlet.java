@@ -33,10 +33,10 @@ public class EvaluationUpdateServlet extends HttpServlet {
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.setCharacterEncoding("UTF-8");
-        Integer loginId = (Integer) request.getSession().getAttribute("login");
-        String evalId = request.getParameter("evalId");
-        String stars = request.getParameter("stars");
-        String comment = request.getParameter("comment");
+        Integer loginId = (Integer) request.getSession().getAttribute("login"); //登录员工号
+        String evalId = request.getParameter("evalId"); //评价号
+        String stars = request.getParameter("stars"); //评价等级
+        String comment = request.getParameter("comment"); //评价内容
 
         List<String> errors = new ArrayList<>(); //错误列表
         //检查是否遗漏参数 !未解决!

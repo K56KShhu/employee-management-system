@@ -1,6 +1,7 @@
 package com.zkyyo.www.controller;
 
 import com.zkyyo.www.po.EmployeePo;
+import com.zkyyo.www.service.DepartmentService;
 import com.zkyyo.www.service.EmployeeService;
 import com.zkyyo.www.util.LogUtil;
 
@@ -33,15 +34,15 @@ public class EmployeeAddServlet extends HttpServlet {
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.setCharacterEncoding("UTF-8");
-        Integer loginId = (Integer) request.getSession().getAttribute("login");
-        String name = request.getParameter("name");
-        String mobile = request.getParameter("mobile");
-        String email = request.getParameter("email");
-        String password = request.getParameter("password");
-        String confirmedPsw = request.getParameter("confirmedPsw");
-        String deptId = request.getParameter("deptId");
-        String salary = request.getParameter("salary");
-        String date = request.getParameter("date");
+        Integer loginId = (Integer) request.getSession().getAttribute("login"); //登录用户号
+        String name = request.getParameter("name"); //员工名
+        String mobile = request.getParameter("mobile"); //手机号
+        String email = request.getParameter("email"); //邮箱
+        String password = request.getParameter("password"); //密码
+        String confirmedPsw = request.getParameter("confirmedPsw"); //二次验证密码
+        String deptId = request.getParameter("deptId"); //部门号
+        String salary = request.getParameter("salary"); //薪水
+        String date = request.getParameter("date"); //就职日期
 
         List<String> errors = new ArrayList<>(); //获取错误信息
         //检查是否遗漏参数 !未解决!
@@ -51,6 +52,7 @@ public class EmployeeAddServlet extends HttpServlet {
         }
 
         EmployeeService employeeService = EmployeeService.getInstance();
+        DepartmentService departmentService = DepartmentService.getInstance();
         //校验姓名
         if (!employeeService.isValidName(name)) {
             errors.add("姓名输入有误");
@@ -74,6 +76,9 @@ public class EmployeeAddServlet extends HttpServlet {
         //校验日期
         if (!employeeService.isValidDate(date)) {
             errors.add("就职日期输入有误");
+        }
+        if (deptId != null && departmentService.isAvailableId(Integer.valueOf(deptId))) {
+            errors.add("部门不存在");
         }
 
         String page = ERROR_VIEW;

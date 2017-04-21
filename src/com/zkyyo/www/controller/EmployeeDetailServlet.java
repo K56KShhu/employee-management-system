@@ -37,7 +37,7 @@ public class EmployeeDetailServlet extends HttpServlet {
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String userId = request.getParameter("userId");
+        String userId = request.getParameter("userId"); //查询的员工号
         EmployeeService employeeService = EmployeeService.getInstance();
         DepartmentService departmentService = DepartmentService.getInstance();
         EvaluationService evaluationService = EvaluationService.getInstance();

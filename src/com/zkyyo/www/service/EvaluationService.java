@@ -123,7 +123,7 @@ public class EvaluationService {
         int eEvaluatorId = Integer.valueOf(evaluatorId);
         int eBeEvaluatedId = Integer.valueOf(beEvaluatedId);
         int eStars = Integer.valueOf(stars);
-        String eComment = CleanUtil.cleanText(comment); //数据清洗
+        String eComment = CleanUtil.cleanTextToHtml(comment); //数据清洗
 
         EvaluationPo eval = new EvaluationPo(eEvaluatorId, eBeEvaluatedId, eStars, eComment);
         EvaluationDao evaluationDao = EvaluationDao.getInstance();
@@ -247,7 +247,7 @@ public class EvaluationService {
 
         //评价等级
         if (updatedEval.getStarLevel() != 0 && updatedEval.getStarLevel() != initialEval.getStarLevel()) {
-            updatedEval.setComment(CleanUtil.cleanText(updatedEval.getComment()));
+            updatedEval.setComment(CleanUtil.cleanTextToHtml(updatedEval.getComment()));
             updatedTypes.add(EvaluationDao.UPDATE_STARS);
         }
         //评价内容

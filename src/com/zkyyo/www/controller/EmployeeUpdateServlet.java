@@ -33,16 +33,16 @@ public class EmployeeUpdateServlet extends HttpServlet {
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.setCharacterEncoding("UTF-8");
-        Integer loginId = (Integer) request.getSession().getAttribute("login");
-        String userId = request.getParameter("userId");
-        String name = request.getParameter("name");
-        String mobile = request.getParameter("mobile");
-        String email = request.getParameter("email");
-        String password = request.getParameter("password");
-        String confirmedPsw = request.getParameter("confirmedPsw");
-        String deptId = request.getParameter("deptId");
-        String salary = request.getParameter("salary");
-        String date = request.getParameter("date");
+        Integer loginId = (Integer) request.getSession().getAttribute("login"); //登录用户名
+        String userId = request.getParameter("userId"); //员工号
+        String name = request.getParameter("name"); //员工名
+        String mobile = request.getParameter("mobile"); //手机号
+        String email = request.getParameter("email"); //邮箱号
+        String password = request.getParameter("password"); //第一次密码
+        String confirmedPsw = request.getParameter("confirmedPsw"); //第二次密码
+        String deptId = request.getParameter("deptId"); //部门号
+        String salary = request.getParameter("salary"); //薪水
+        String date = request.getParameter("date"); //就职日期
 
         List<String> errors = new ArrayList<>(); //获取错误信息
         //检查是否遗漏参数 !未解决!

@@ -36,11 +36,11 @@ public class DepartmentAddServlet extends HttpServlet {
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.setCharacterEncoding("UTF-8");
-        Integer loginId = (Integer) request.getSession().getAttribute("login");
-        String name = request.getParameter("name");
-        String departmentId = request.getParameter("departmentId");
-        String buildDate = request.getParameter("buildDate");
-        String desc = request.getParameter("description");
+        Integer loginId = (Integer) request.getSession().getAttribute("login"); //登陆用户号
+        String name = request.getParameter("name"); //部门名
+        String departmentId = request.getParameter("departmentId"); //部门号
+        String buildDate = request.getParameter("buildDate"); //建立日期
+        String desc = request.getParameter("description"); //描述
 
         List<String> errors = new ArrayList<>(); //记录错误内容
         DepartmentService departmentService = DepartmentService.getInstance();

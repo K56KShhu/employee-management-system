@@ -33,7 +33,7 @@ public class DepartmentDetailServlet extends HttpServlet {
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        Integer deptId = Integer.valueOf(request.getParameter("deptId"));
+        Integer deptId = Integer.valueOf(request.getParameter("deptId")); //查询的部门号
 
         DepartmentService departmentService = DepartmentService.getInstance();
         DepartmentPo dept = departmentService.findDepartment(deptId); //获得部门信息

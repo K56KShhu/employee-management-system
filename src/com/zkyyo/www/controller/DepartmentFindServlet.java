@@ -32,10 +32,10 @@ public class DepartmentFindServlet extends HttpServlet {
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String way = request.getParameter("way");
-        String info = request.getParameter("info");
-        String order = request.getParameter("order");
-        String reverse = request.getParameter("reverse");
+        String way = request.getParameter("way"); //查询方式
+        String info = request.getParameter("info"); //查询信息
+        String order = request.getParameter("order"); //排序依据
+        String reverse = request.getParameter("reverse"); //升序降序
         List<DepartmentPo> result = null;
         DepartmentService departmentService = DepartmentService.getInstance();
 

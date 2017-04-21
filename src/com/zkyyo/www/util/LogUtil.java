@@ -262,9 +262,11 @@ public class LogUtil {
             }
             //部门描述
             if (updatedDept.getDescription() != null && !updatedDept.getDescription().equals(initialDept.getDescription())) {
-                bw.write(PRE_SPACE + "原部门描述: " + initialDept.getDescription());
+                String initialDesc = CleanUtil.cleanTest(initialDept.getDescription());
+                String updatedDesc = CleanUtil.cleanTest(updatedDept.getDescription());
+                bw.write(PRE_SPACE + "原部门描述: " + initialDesc);
                 bw.newLine();
-                bw.write(PRE_SPACE + "现部门描述: " + updatedDept.getDescription());
+                bw.write(PRE_SPACE + "现部门描述: " + updatedDesc);
                 bw.newLine();
             }
             //建立时间
@@ -309,9 +311,11 @@ public class LogUtil {
             }
             //评价内容
             if (updatedEval.getComment() != null && !updatedEval.getComment().equals(initialEval.getComment())) {
-                bw.write(PRE_SPACE + "原评价: " + initialEval.getComment());
+                String initialComment = CleanUtil.cleanTest(initialEval.getComment());
+                String updatedComment = CleanUtil.cleanTest(updatedEval.getComment());
+                bw.write(PRE_SPACE + "原评价: " + initialComment);
                 bw.newLine();
-                bw.write(PRE_SPACE + "现评价: " + updatedEval.getComment());
+                bw.write(PRE_SPACE + "现评价: " + updatedComment);
                 bw.newLine();
             }
             bw.close();
