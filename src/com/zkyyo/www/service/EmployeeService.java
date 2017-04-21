@@ -33,12 +33,14 @@ public class EmployeeService {
      * 作为排序方法的参数, 用户的就职日期作为排序依据
      */
     public static final int ORDER_BY_DATE = 4;
-
     /**
      * 用于创建懒汉模式下的一个单例, 默认为null
      */
     private static volatile EmployeeService INSTANCE = null;
 
+    /**
+     * 禁止实例化新的对象
+     */
     private EmployeeService() {
     }
 

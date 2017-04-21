@@ -35,6 +35,9 @@ public class EvaluationService {
      */
     private static volatile EvaluationService INSTANCE = null;
 
+    /**
+     * 禁止实例化新的对象
+     */
     private EvaluationService() {
     }
 
