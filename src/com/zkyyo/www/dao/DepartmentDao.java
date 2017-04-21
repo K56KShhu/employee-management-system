@@ -42,6 +42,7 @@ public class DepartmentDao {
 
     /**
      * 创建一个该类的实例
+     *
      * @return 返回这个类的一个实例
      */
     public static DepartmentDao getInstance() {
@@ -57,6 +58,7 @@ public class DepartmentDao {
 
     /**
      * 检测数据库中是否存在指定部门号
+     *
      * @param id 待检测的部门号
      * @return 存在为true, 不存在为false
      */
@@ -82,6 +84,7 @@ public class DepartmentDao {
 
     /**
      * 检测数据库中是否存在指定部门名
+     *
      * @param name 待检测的部门名
      * @return 存在为true, 不存在为false
      */
@@ -107,6 +110,7 @@ public class DepartmentDao {
 
     /**
      * 向数据库中插入新部门
+     *
      * @param newDept 待插入的部门
      * @return 插入成功为true, 失败为false
      */
@@ -125,11 +129,8 @@ public class DepartmentDao {
             pstmt.setInt(3, newDept.getPopulation());
             pstmt.setString(4, newDept.getDescription());
             pstmt.setDate(5, newDept.getBuildDate());
-
-            int effects = pstmt.executeUpdate();
-            if (effects > 0) {
-                isAdded = true;
-            }
+            pstmt.executeUpdate();
+            isAdded = true;
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
@@ -140,6 +141,7 @@ public class DepartmentDao {
 
     /**
      * 删除数据库中的指定部门
+     *
      * @param deletedDeptId 待删除的部门号
      * @return 删除成功为true, 失败为false
      */
@@ -157,12 +159,11 @@ public class DepartmentDao {
             stmt.setInt(1, deletedDeptId);
             stmt.executeUpdate();
 
-            //相应员工的部门号设为-1,表示待业
+            //相应员工的部门号设为-1,表示未加入任何部门
             sql = "UPDATE employee SET dept_id = -1 WHERE dept_id=?";
             stmt = conn.prepareStatement(sql);
             stmt.setInt(1, deletedDeptId);
             stmt.executeUpdate();
-
             conn.commit();
             isDeleted = true;
         } catch (SQLException e) {
@@ -182,6 +183,7 @@ public class DepartmentDao {
 
     /**
      * 通过部门号查询数据库中的部门
+     *
      * @param searchedDeptId 待查询的部门号
      * @return 找到返回该部门对象, 否则返回nul
      */
@@ -204,8 +206,7 @@ public class DepartmentDao {
                 String description = rs.getString("description");
                 java.sql.Date buildDate = rs.getDate("build_date");
 
-                return new DepartmentPo(deptId, deptName,
-                        deptPopulation, description, buildDate);
+                return new DepartmentPo(deptId, deptName, deptPopulation, description, buildDate);
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -247,11 +248,7 @@ public class DepartmentDao {
     }
     */
 
-    /**
-     * 通过员工号查询该员工所在的部门
-     * @param userId 员工号
-     * @return 若找到返回该部门对象, 否则返回bull
-     */
+    /*
     public DepartmentPo selectDepartmentByUserId(int userId) {
         Connection conn = null;
         PreparedStatement pstmt = null;
@@ -289,6 +286,7 @@ public class DepartmentDao {
         }
         return null;
     }
+    */
 
     /*
     public DepartmentPo selectDepartmentByUserName(String userName) {
@@ -332,6 +330,7 @@ public class DepartmentDao {
 
     /**
      * 模糊查询数据库中的部门, 以部门号为查询依据
+     *
      * @param searchedDeptId 可能的部门号
      * @return 符合的部门列表
      */
@@ -367,6 +366,7 @@ public class DepartmentDao {
 
     /**
      * 模糊查询数据库中的部门, 以部门名为查询依据
+     *
      * @param searcheDdeptName 可能的部门名
      * @return 符合的部门列表
      */
@@ -402,6 +402,7 @@ public class DepartmentDao {
 
     /**
      * 获得数据库中的所有部门
+     *
      * @return 包含所有部门对象的列表
      */
     public List<DepartmentPo> selectDepartments() {
@@ -423,9 +424,7 @@ public class DepartmentDao {
                 String description = rs.getString("description");
                 java.sql.Date buildDate = rs.getDate("build_date");
 
-                DepartmentPo dept = new DepartmentPo(deptId, deptName,
-                        deptPopulation, description, buildDate);
-                depts.add(dept);
+                depts.add(new DepartmentPo(deptId, deptName, deptPopulation, description, buildDate));
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -485,8 +484,9 @@ public class DepartmentDao {
 
     /**
      * 更新数据库中的指定部门
+     *
      * @param updatedTypes 待更新类型的标识符列表
-     * @param updatedDept 包含最新部门信息的部门对象
+     * @param updatedDept  包含最新部门信息的部门对象
      * @return 更新成功为true, 失败为false
      */
     public boolean updateDept(List<Integer> updatedTypes, DepartmentPo updatedDept) {
@@ -498,6 +498,7 @@ public class DepartmentDao {
             conn = DbConn.getConn();
             conn.setAutoCommit(false);
             String sql = null;
+            //更新每一个指定的类型
             for (int updatedType : updatedTypes) {
                 switch (updatedType) {
                     //部门名

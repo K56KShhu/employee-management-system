@@ -161,13 +161,16 @@ public class EmployeeService {
             p = Pattern.compile(regex);
             m = p.matcher(date);
             if (m.matches()) {
+                //将日期拆分为年, 月, 日
                 String[] yearMonthDay = date.split("-");
                 int year = Integer.valueOf(yearMonthDay[0]);
                 int month = Integer.valueOf(yearMonthDay[1]);
                 int day = Integer.valueOf(yearMonthDay[2]);
+                //校验月份
                 if (month >= 1 && month <= 12) {
                     Calendar mycal = new GregorianCalendar(year, month - 1, 1); //起始月份为0
                     int daysInMonth = mycal.getActualMaximum(Calendar.DAY_OF_MONTH);
+                    //校验对应月份的日数
                     if (day < daysInMonth) {
                         return true;
                     }
@@ -260,6 +263,7 @@ public class EmployeeService {
         java.sql.Date eDate = java.sql.Date.valueOf(date);
         EmployeePo newEp = new EmployeePo(employeeId, password, name, deptId, mobile, eSalary, email, eDate);
         boolean isAdded = employeeDao.addEmployee(newEp);
+
         if (isAdded) {
             return newEp;
         } else {
@@ -275,6 +279,7 @@ public class EmployeeService {
     public EmployeePo deleteEmployee(int userId) {
         EmployeeDao employeeDao = EmployeeDao.getInstance();
         EmployeePo deletedEp = employeeDao.selectEmployeeByUserId(userId);
+
         if (deletedEp == null) {
             return null;
         } else {
@@ -344,22 +349,28 @@ public class EmployeeService {
      * @return 排序完成工员工列表
      */
     public List<EmployeePo> sort(List<EmployeePo> list, int orderType, boolean isReverse) {
+        //根据排序依据进行排序
         switch (orderType) {
+            //通过员工号排序
             case ORDER_BY_USER_ID:
                 Collections.sort(list, new UserIdCompare());
                 break;
+            //通过部门号排序
             case ORDER_BY_DEPT_ID:
                 Collections.sort(list, new DeptIdCompare());
                 break;
+            //通过薪水排序
             case ORDER_BY_SALARY:
                 Collections.sort(list, new SalaryCompare());
                 break;
+            //通过就职日期排序
             case ORDER_BY_DATE:
                 Collections.sort(list, new DateCompare());
                 break;
             default:
                 break;
         }
+        //根据升降序排序
         if (isReverse) {
             Collections.reverse(list);
         }

@@ -61,6 +61,7 @@ public class EmployeeDao {
 
     /**
      * 创建一个该类的实例
+     *
      * @return 返回这个类的一个实例
      */
     public static EmployeeDao getInstance() {
@@ -76,6 +77,7 @@ public class EmployeeDao {
 
     /**
      * 获取指定员工在数据库的密码
+     *
      * @param enterUserId 指定的员工号
      * @return 正确的密码字符串
      */
@@ -105,12 +107,14 @@ public class EmployeeDao {
 
     /**
      * 随机生成指定长度的员工号
+     *
      * @return 生成的员工号
      */
     public Integer createEmployeeId() {
         Connection conn = null;
         PreparedStatement stmt = null;
         ResultSet rs = null;
+        //设置员工号最大长度
         int largestNum = (int) Math.pow(10, USER_ID_LENGTH);
 
         try {
@@ -118,8 +122,10 @@ public class EmployeeDao {
             String sql = "SELECT user_id FROM employee WHERE user_id=?";
             stmt = conn.prepareStatement(sql);
             for (int i = 0; i < largestNum; i++) {
+                //生成一个员工号
                 int newUserId = (int) (largestNum * Math.random());
                 if (newUserId != 0) {
+                    //检测数据库中是否存在
                     stmt.setInt(1, newUserId);
                     rs = stmt.executeQuery();
                     if (!rs.next()) {
@@ -137,6 +143,7 @@ public class EmployeeDao {
 
     /**
      * 向数据库中插入新员工
+     *
      * @param newEp 待插入的员工对象
      * @return 插入成功为true, 失败为false
      */
@@ -149,8 +156,7 @@ public class EmployeeDao {
             conn = DbConn.getConn();
             conn.setAutoCommit(false);
             String sql = "INSERT INTO employee (user_id, user_pwd, user_name, dept_id," +
-                    " mobile, salary, email, employee_date)" +
-                    "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+                    " mobile, salary, email, employee_date) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
             pstmt = conn.prepareStatement(sql);
             pstmt.setInt(1, newEp.getUserId());
             pstmt.setString(2, newEp.getPassword());
@@ -188,6 +194,7 @@ public class EmployeeDao {
 
     /**
      * 删除数据库中指定的员工
+     *
      * @param deletedUserId 待删除的员工号
      * @return 删除成功为true, 失败为false
      */
@@ -199,11 +206,13 @@ public class EmployeeDao {
         try {
             conn = DbConn.getConn();
             conn.setAutoCommit(false);
+            //删除员工
             String sql = "DELETE FROM employee WHERE user_id=?";
             pstmt = conn.prepareStatement(sql);
             pstmt.setInt(1, deletedUserId);
             pstmt.executeUpdate();
 
+            //该员工部门人数减1
             sql = "UPDATE department SET dept_population = dept_population - 1" +
                     " WHERE dept_id = (SELECT dept_id FROM employee WHERE user_id=?)";
             pstmt = conn.prepareStatement(sql);
@@ -222,6 +231,7 @@ public class EmployeeDao {
 
     /**
      * 精确获得数据库中的员工信息, 以员工号为查询依据
+     *
      * @param searchedUserId 待查询的员工号
      * @return 查询成功返回该员工对象, 失败返回null
      */
@@ -259,6 +269,7 @@ public class EmployeeDao {
 
     /**
      * 获得数据库中的所有员工
+     *
      * @return 包含所有员工的列表
      */
     public List<EmployeePo> selectEmployees() {
@@ -283,8 +294,7 @@ public class EmployeeDao {
                 String eEmail = rs.getString("email");
                 java.sql.Date eEmployDate = rs.getDate("employee_date");
 
-                eps.add(new EmployeePo(eUserId, ePassword, eName, eDeptId,
-                        eMobile, eSalary, eEmail, eEmployDate));
+                eps.add(new EmployeePo(eUserId, ePassword, eName, eDeptId, eMobile, eSalary, eEmail, eEmployDate));
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -296,6 +306,7 @@ public class EmployeeDao {
 
     /**
      * 模糊查询数据中的员工, 以员工号为查询依据
+     *
      * @param userId 可能的员工号
      * @return 符合的员工列表
      */
@@ -322,8 +333,7 @@ public class EmployeeDao {
                 String eEmail = rs.getString("email");
                 java.sql.Date eEmployDate = rs.getDate("employee_date");
 
-                eps.add(new EmployeePo(eUserId, ePassword, eName, eDeptId,
-                        eMobile, eSalary, eEmail, eEmployDate));
+                eps.add(new EmployeePo(eUserId, ePassword, eName, eDeptId, eMobile, eSalary, eEmail, eEmployDate));
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -335,6 +345,7 @@ public class EmployeeDao {
 
     /**
      * 模糊查询数据库中员工, 以员工名为查询依据
+     *
      * @param userName 可能的员工名
      * @return 符合的员工列表
      */
@@ -361,8 +372,7 @@ public class EmployeeDao {
                 String eEmail = rs.getString("email");
                 java.sql.Date eEmployDate = rs.getDate("employee_date");
 
-                eps.add(new EmployeePo(eUserId, ePassword, eName, eDeptId,
-                        eMobile, eSalary, eEmail, eEmployDate));
+                eps.add(new EmployeePo(eUserId, ePassword, eName, eDeptId, eMobile, eSalary, eEmail, eEmployDate));
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -374,6 +384,7 @@ public class EmployeeDao {
 
     /**
      * 查询制定部门的所有员工
+     *
      * @param deptId 指定的部门号
      * @return 同一部门的员工列表
      */
@@ -400,8 +411,7 @@ public class EmployeeDao {
                 String eEmail = rs.getString("email");
                 java.sql.Date eEmployDate = rs.getDate("employee_date");
 
-                eps.add(new EmployeePo(eUserId, ePassword, eName, eDeptId,
-                        eMobile, eSalary, eEmail, eEmployDate));
+                eps.add(new EmployeePo(eUserId, ePassword, eName, eDeptId, eMobile, eSalary, eEmail, eEmployDate));
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -413,8 +423,9 @@ public class EmployeeDao {
 
     /**
      * 更新数据库中的员工信息
+     *
      * @param updatedTypes 待更新类型的标识符列表
-     * @param newEp 包含最新员工信息的员工对象
+     * @param newEp        包含最新员工信息的员工对象
      * @return 更新成功为true, 失败为false
      */
     public boolean updateEmployee(List<Integer> updatedTypes, EmployeePo newEp) {
@@ -426,6 +437,7 @@ public class EmployeeDao {
             conn = DbConn.getConn();
             conn.setAutoCommit(false);
             String sql = null;
+            //更新每一个指定的类型
             for (int updatedType : updatedTypes) {
                 switch (updatedType) {
                     //部门号

@@ -32,6 +32,7 @@ public class LogUtil {
      */
     public static void add(int operatorId, EmployeePo newEp) {
         EmployeeDao employeeDao = EmployeeDao.getInstance();
+        //操作者
         EmployeePo operator = employeeDao.selectEmployeeByUserId(operatorId);
         String timeStamp = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(Calendar.getInstance().getTime());
 
@@ -53,13 +54,14 @@ public class LogUtil {
      */
     public static void add(int operatorId, EvaluationPo newEval) {
         EmployeeDao employeeDao = EmployeeDao.getInstance();
+        //操作者兼评价者
         EmployeePo operator = employeeDao.selectEmployeeByUserId(operatorId);
         String timeStamp = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(Calendar.getInstance().getTime());
 
         try {
             BufferedWriter bw = new BufferedWriter(new FileWriter(PATH, true));
-            EmployeeDao empd = EmployeeDao.getInstance();
-            EmployeePo ep = empd.selectEmployeeByUserId(newEval.getBeEvaluatedId());
+            //被评价者对象
+            EmployeePo ep = employeeDao.selectEmployeeByUserId(newEval.getBeEvaluatedId());
             bw.write("* " + timeStamp + " - 评价" + ep.getUserName() + "(" + ep.getUserId() + ")"
                     + " <" + operator.getUserName() + "(" + operator.getUserId() + ")>");
             bw.newLine();
@@ -76,6 +78,7 @@ public class LogUtil {
      */
     public static void add(int operatorId, DepartmentPo newDept) {
         EmployeeDao employeeDao = EmployeeDao.getInstance();
+        //操作者
         EmployeePo operator = employeeDao.selectEmployeeByUserId(operatorId);
         String timeStamp = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(Calendar.getInstance().getTime());
 
@@ -97,6 +100,7 @@ public class LogUtil {
      */
     public static void delete(int operatorId, EmployeePo deletedEp) {
         EmployeeDao employeeDao = EmployeeDao.getInstance();
+        //操作者
         EmployeePo operator = employeeDao.selectEmployeeByUserId(operatorId);
         String timeStamp = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(Calendar.getInstance().getTime());
 
@@ -118,6 +122,7 @@ public class LogUtil {
      */
     public static void delete(int operatorId, DepartmentPo deletedDept) {
         EmployeeDao employeeDao = EmployeeDao.getInstance();
+        //操作者
         EmployeePo operator = employeeDao.selectEmployeeByUserId(operatorId);
         String timeStamp = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(Calendar.getInstance().getTime());
 
@@ -139,14 +144,16 @@ public class LogUtil {
      */
     public static void delete(int operatorId, EvaluationPo deletedEval) {
         EmployeeDao employeeDao = EmployeeDao.getInstance();
+        //操作者
         EmployeePo operator = employeeDao.selectEmployeeByUserId(operatorId);
         String timeStamp = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(Calendar.getInstance().getTime());
 
         try {
             BufferedWriter bw = new BufferedWriter(new FileWriter(PATH, true));
-            EmployeeDao empd = EmployeeDao.getInstance();
-            EmployeePo employee = empd.selectEmployeeByUserId(deletedEval.getBeEvaluatedId());
-            EmployeePo evaluator = empd.selectEmployeeByUserId(deletedEval.getEvaluatorId());
+            //评价者
+            EmployeePo employee = employeeDao.selectEmployeeByUserId(deletedEval.getBeEvaluatedId());
+            //被评价者
+            EmployeePo evaluator = employeeDao.selectEmployeeByUserId(deletedEval.getEvaluatorId());
             bw.write("* " + timeStamp + " - 删除评价(" + deletedEval.getEvaluationId() + ") "
                     + employee.getUserName() + "(" + employee.getUserId() + ")"
                     + "<<<" + evaluator.getUserName() + "(" + evaluator.getUserId() + ")"
@@ -166,6 +173,7 @@ public class LogUtil {
      */
     public static void update(int operatorId, EmployeePo initialEp, EmployeePo updatedEp) {
         EmployeeDao employeeDao = EmployeeDao.getInstance();
+        //操作者
         EmployeePo operator = employeeDao.selectEmployeeByUserId(operatorId);
         String timeStamp = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(Calendar.getInstance().getTime());
 
@@ -174,42 +182,49 @@ public class LogUtil {
             bw.write("* " + timeStamp + " - 修改员工" + initialEp.getUserName() + "(" + initialEp.getUserId() + ")"
                     + " <" + operator.getUserName() + "(" + operator.getUserId() + ")>");
             bw.newLine();
+            //姓名
             if (updatedEp.getUserName() != null && !updatedEp.getUserName().equals(initialEp.getUserName())) {
                 bw.write(PRE_SPACE + "原姓名: " + initialEp.getUserName());
                 bw.newLine();
                 bw.write(PRE_SPACE + "现姓名: " + updatedEp.getUserName());
                 bw.newLine();
             }
+            //部门号
             if (updatedEp.getDeptId() != 0 && updatedEp.getDeptId() != initialEp.getDeptId()) {
                 bw.write(PRE_SPACE + "原部门号: " + initialEp.getDeptId());
                 bw.newLine();
                 bw.write(PRE_SPACE + "现部门号: " + updatedEp.getDeptId());
                 bw.newLine();
             }
+            //手机号
             if (updatedEp.getMobile() != null && !updatedEp.getMobile().equals(initialEp.getMobile())) {
                 bw.write(PRE_SPACE + "原手机号: " + initialEp.getMobile());
                 bw.newLine();
                 bw.write(PRE_SPACE + "现手机号: " + updatedEp.getMobile());
                 bw.newLine();
             }
+            //薪水
             if (updatedEp.getSalary() != 0.0 && updatedEp.getSalary() != initialEp.getSalary()) {
                 bw.write(PRE_SPACE + "原薪水: " + initialEp.getSalary());
                 bw.newLine();
                 bw.write(PRE_SPACE + "现薪水: " + updatedEp.getSalary());
                 bw.newLine();
             }
+            //邮箱
             if (updatedEp.getEmail() != null && !updatedEp.getEmail().equals(initialEp.getEmail())) {
                 bw.write(PRE_SPACE + "原邮箱: " + initialEp.getEmail());
                 bw.newLine();
                 bw.write(PRE_SPACE + "现邮箱: " + updatedEp.getEmail());
                 bw.newLine();
             }
+            //就职日期
             if (updatedEp.getEmployDate() != null && !updatedEp.getEmployDate().equals(initialEp.getEmployDate())) {
                 bw.write(PRE_SPACE + "原就职日期: " + initialEp.getEmployDate());
                 bw.newLine();
                 bw.write(PRE_SPACE + "现就职日期: " + updatedEp.getEmployDate());
                 bw.newLine();
             }
+            //密码
             if (updatedEp.getPassword() != null && !updatedEp.getPassword().equals(initialEp.getPassword())) {
                 bw.write(PRE_SPACE + "修改密码");
                 bw.newLine();
@@ -229,6 +244,7 @@ public class LogUtil {
      */
     public static void update(int operatorId, DepartmentPo initialDept, DepartmentPo updatedDept) {
         EmployeeDao employeeDao = EmployeeDao.getInstance();
+        //操作者
         EmployeePo operator = employeeDao.selectEmployeeByUserId(operatorId);
         String timeStamp = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(Calendar.getInstance().getTime());
 
@@ -237,18 +253,21 @@ public class LogUtil {
             bw.write("* " + timeStamp + " - 修改部门" + initialDept.getName() + "("
                     + initialDept.getDeptId() + ") <" + operator.getUserName() + "(" + operator.getUserId() + ")>");
             bw.newLine();
+            //部门名
             if (updatedDept.getName() != null && !updatedDept.getName().equals(initialDept.getName())) {
                 bw.write(PRE_SPACE + "原部门名: " + initialDept.getName());
                 bw.newLine();
                 bw.write(PRE_SPACE + "现部门名: " + updatedDept.getName());
                 bw.newLine();
             }
+            //部门描述
             if (updatedDept.getDescription() != null && !updatedDept.getDescription().equals(initialDept.getDescription())) {
                 bw.write(PRE_SPACE + "原部门描述: " + initialDept.getDescription());
                 bw.newLine();
                 bw.write(PRE_SPACE + "现部门描述: " + updatedDept.getDescription());
                 bw.newLine();
             }
+            //建立时间
             if (updatedDept.getBuildDate() != null && !updatedDept.getBuildDate().equals(initialDept.getBuildDate())) {
                 bw.write(PRE_SPACE + "原部门建立时间: " + initialDept.getBuildDate());
                 bw.newLine();
@@ -281,12 +300,14 @@ public class LogUtil {
                     + "<<<" + evaluator.getUserName() + "(" + evaluator.getUserId() + ")"
                     + " <" + operator.getUserName() + "(" + operator.getUserId() + ")>");
             bw.newLine();
+            //评价等级
             if (updatedEval.getStarLevel() != 0 && updatedEval.getStarLevel() != initialEval.getStarLevel()) {
                 bw.write(PRE_SPACE + "原评价等级: " + initialEval.getStarLevel());
                 bw.newLine();
                 bw.write(PRE_SPACE + "现评价等级: " + updatedEval.getStarLevel());
                 bw.newLine();
             }
+            //评价内容
             if (updatedEval.getComment() != null && !updatedEval.getComment().equals(initialEval.getComment())) {
                 bw.write(PRE_SPACE + "原评价: " + initialEval.getComment());
                 bw.newLine();

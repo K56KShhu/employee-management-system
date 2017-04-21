@@ -86,13 +86,16 @@ public class DepartmentService {
             p = Pattern.compile(regex);
             m = p.matcher(date);
             if (m.matches()) {
+                //将日期拆分为年, 月, 日
                 String[] yearMonthDay = date.split("-");
                 int year = Integer.valueOf(yearMonthDay[0]);
                 int month = Integer.valueOf(yearMonthDay[1]);
                 int day = Integer.valueOf(yearMonthDay[2]);
+                //校验月份
                 if (month >= 1 && month <= 12) {
                     Calendar mycal = new GregorianCalendar(year, month - 1, 1); //起始月份为0
                     int daysInMonth = mycal.getActualMaximum(Calendar.DAY_OF_MONTH);
+                    //校验对应月份的天数
                     if (day < daysInMonth) {
                         return true;
                     }
@@ -137,7 +140,7 @@ public class DepartmentService {
     public DepartmentPo addDepartment(String name, String deptId, String buildDate, String desc) {
         int id = Integer.valueOf(deptId);
         java.sql.Date date = java.sql.Date.valueOf(buildDate);
-        desc = CleanUtil.cleanText(desc);
+        desc = CleanUtil.cleanText(desc); //数据清洗
 
         DepartmentPo newDept = new DepartmentPo(id, name, desc, date);
         DepartmentDao departmentDao = DepartmentDao.getInstance();
@@ -216,19 +219,24 @@ public class DepartmentService {
      * @return 排序后的部门列表
      */
     public List<DepartmentPo> sort(List<DepartmentPo> list, int orderType, boolean isReverse) {
+        //根据排序依据进行排序
         switch (orderType) {
+            //通过部门号排序
             case ORDER_BY_ID:
                 Collections.sort(list, new IdCompare());
                 break;
+            //通过部门人数排序
             case ORDER_BY_POPULATION:
                 Collections.sort(list, new PopulationCompare());
                 break;
+            //通过创建日期排序
             case ORDER_BY_DATE:
                 Collections.sort(list, new BuildDateCompare());
                 break;
             default:
                 break;
         }
+        //根据升降序排序
         if (isReverse) {
             Collections.reverse(list);
         }
@@ -245,14 +253,17 @@ public class DepartmentService {
         DepartmentPo initialDept = departmentDao.selectDepartmentByDeptId(updatedDept.getDeptId());
         List<Integer> updatedTypes = new ArrayList<>();
 
+        //更新部门名
         if (updatedDept.getName() != null && !updatedDept.getName().equals(initialDept.getName())) {
             updatedTypes.add(DepartmentDao.UPDATE_NAME);
         }
+        //更新创建日期
         if (updatedDept.getBuildDate() != null && !updatedDept.getBuildDate().equals(initialDept.getBuildDate())) {
             updatedTypes.add(DepartmentDao.UPDATE_BUILD_DATE);
         }
+        //更新部门描述
         if (updatedDept.getDescription() != null && !updatedDept.getDescription().equals(initialDept.getDescription())) {
-            updatedDept.setDescription(CleanUtil.cleanText(updatedDept.getDescription()));
+            updatedDept.setDescription(CleanUtil.cleanText(updatedDept.getDescription())); //数据清洗
             updatedTypes.add(DepartmentDao.UPDATE_DESC);
         }
         boolean isUpdated = departmentDao.updateDept(updatedTypes, updatedDept);

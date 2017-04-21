@@ -92,6 +92,7 @@ public class EvaluationService {
             m = p.matcher(stars);
             if (m.matches()) {
                 int eStars = Integer.valueOf(stars);
+                //薪水限制
                 if (eStars >= MIN_STARS && eStars <= MAX_STARS) {
                     return true;
                 }
@@ -122,7 +123,7 @@ public class EvaluationService {
         int eEvaluatorId = Integer.valueOf(evaluatorId);
         int eBeEvaluatedId = Integer.valueOf(beEvaluatedId);
         int eStars = Integer.valueOf(stars);
-        String eComment = CleanUtil.cleanText(comment);
+        String eComment = CleanUtil.cleanText(comment); //数据清洗
 
         EvaluationPo eval = new EvaluationPo(eEvaluatorId, eBeEvaluatedId, eStars, eComment);
         EvaluationDao evaluationDao = EvaluationDao.getInstance();
@@ -142,6 +143,7 @@ public class EvaluationService {
     public EvaluationPo deleteEvaluation(int evalId) {
         EvaluationDao evaluationDao = EvaluationDao.getInstance();
         EvaluationPo deletedEval = evaluationDao.selectEvaluation(evalId);
+
         if (deletedEval == null) {
             return null;
         } else {
@@ -191,11 +193,13 @@ public class EvaluationService {
     public List<EvaluationPo> findEvaluationsByKeyWords(String keys) {
         String regex = "\\s+";
         Set<String> keySet = new HashSet<>();
-        Collections.addAll(keySet, keys.trim().split(regex));
+        Collections.addAll(keySet, keys.trim().split(regex)); //将字符串拆分为关键字
 
         EvaluationDao evaluationDao = EvaluationDao.getInstance();
+        //获得结果集
         Set<EvaluationPo> resultSet = evaluationDao.selectEvaluationsByKeyWords(keySet);
         List<EvaluationPo> resultList = new ArrayList<>();
+        //转换为列表
         resultList.addAll(resultSet);
         return resultList;
     }
@@ -239,12 +243,14 @@ public class EvaluationService {
     public EvaluationPo updateEvaluation(EvaluationPo updatedEval) {
         EvaluationDao evaluationDao = EvaluationDao.getInstance();
         EvaluationPo initialEval = evaluationDao.selectEvaluation(updatedEval.getEvaluationId());
-
         List<Integer> updatedTypes = new ArrayList<>();
+
+        //评价等级
         if (updatedEval.getStarLevel() != 0 && updatedEval.getStarLevel() != initialEval.getStarLevel()) {
             updatedEval.setComment(CleanUtil.cleanText(updatedEval.getComment()));
             updatedTypes.add(EvaluationDao.UPDATE_STARS);
         }
+        //评价内容
         if (updatedEval.getComment() != null && !updatedEval.getComment().equals(initialEval.getComment())) {
             updatedTypes.add(EvaluationDao.UPDATE_COMMENT);
         }

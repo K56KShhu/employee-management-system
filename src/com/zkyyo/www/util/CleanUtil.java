@@ -12,9 +12,9 @@ public class CleanUtil {
      */
     public static String cleanText(String dirtyStr) {
         String cleanStr = dirtyStr.trim();
-        cleanStr = cleanStr.replaceAll("\\n{2,}", "\n");
-        cleanStr = cleanStr.replaceAll("[\\f\\t\\v\\r ]{2,}", " ");
-        cleanStr = cleanStr.replaceAll("(\\r\\n|\\r|\\n|\\n\\r)", "<br>");
+        cleanStr = cleanStr.replaceAll("\\n{2,}", "\n"); //最多允许间隔一行
+        cleanStr = cleanStr.replaceAll("[\\f\\t\\v\\r ]{2,}", " "); //其他多余的空白字符替换为一个空格
+        cleanStr = cleanStr.replaceAll("(\\r\\n|\\r|\\n|\\n\\r)", "<br>"); //替换换行符, 方便数据库储存
         return cleanStr;
     }
 }
