@@ -3,7 +3,7 @@
 
 ![employee_find](https://github.com/zkyyo/manage-system/blob/master/image/employee_find.png?raw=true)
 
-manage-system is a simple java web application developed by zkyyo. you used to manage the the employees, departments 
+manage-system is a simple java web application developed by zkyyo. you used it to manage the the employees, departments 
 and evaluations. this project just use some basic grammar in java 7, so you can use it for a simple pratice.
 
 
@@ -23,7 +23,7 @@ and evaluations. this project just use some basic grammar in java 7, so you can 
 ## Install
 Clone from github.com:
 ```
-git@github.com:zkyyo/manage-system.git
+git clone git@github.com:zkyyo/manage-system.git
 ```
 
 ## Configurations
