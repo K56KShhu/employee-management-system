@@ -1,7 +1,7 @@
 # manage-system
-![functions]()
+![functions](https://github.com/zkyyo/manage-system/blob/master/image/functions.png?raw=true)
 
-![employee_find]()
+![employee_find](https://github.com/zkyyo/manage-system/blob/master/image/employee_find.png?raw=true)
 
 manage-system is a simple java web application developed by zkyyo. you used to manage the the employees, departments 
 and evaluations. this project just use some basic grammar in java 7, so you can use it for a simple pratice.
