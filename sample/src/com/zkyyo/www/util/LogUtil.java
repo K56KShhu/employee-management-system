@@ -19,7 +19,7 @@ public class LogUtil {
     /**
      * 日志文件的存放地址
      */
-    private static final String PATH = "/home/xu/java_new_place/log.txt";
+    private static final String PATH = "/home/xu/java-new-land/log.txt";
     /**
      * 用于格式化日志输出, 美化目的
      */

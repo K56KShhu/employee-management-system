@@ -27,6 +27,10 @@ git clone git@github.com:zkyyo/manage-system.git
 ```
 
 ## Configurations
+- **SQL_EXAMPLE:** test.268.sql is placeed at the test directory
+```
+mysql -u your_account -p < test268.sql path
+```
 - **DATEBASE:** com.zkyyo.www.db.DbConn
 ```
 private static String USER = "root";
@@ -36,6 +40,7 @@ private static String PASS = "qaws";
 ```
 private static final String PATH = "/home/xu/java_new_place/log.txt";
 ```
+- **LOGIN_ACCOUNT:** account `101` password `abc`
 
 ## License
 This software is licensed under MIT license. © 2017 zkyyo
